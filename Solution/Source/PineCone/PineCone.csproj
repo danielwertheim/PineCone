@@ -1,0 +1,131 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{D14FCD7E-6FE4-42EC-9084-27164A1F7D60}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>PineCone</RootNamespace>
+    <AssemblyName>PineCone</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>
+    </DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\PineCone.XML</DocumentationFile>
+    <NoWarn>1591</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="NCore, Version=0.1.0.27, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\NCore.0.1.0.27\lib\NCore.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\SharedAssemblyInfo.cs">
+      <Link>Properties\SharedAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="Annotations\UniqueAttribute.cs" />
+    <Compile Include="Annotations\UniqueModes.cs" />
+    <Compile Include="Dynamic\DynamicDescriptor.cs" />
+    <Compile Include="Dynamic\DynamicMember.cs" />
+    <Compile Include="Dynamic\DynamicStructure.cs" />
+    <Compile Include="Dynamic\DynamicStructureBuilder.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PineConizer.cs" />
+    <Compile Include="Resources\ExceptionMessages.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ExceptionMessages.resx</DependentUpon>
+    </Compile>
+    <Compile Include="SequentialGuid.cs" />
+    <Compile Include="PineConeException.cs" />
+    <Compile Include="Serializers\ISerializer.cs" />
+    <Compile Include="Serializers\EmptySerializer.cs" />
+    <Compile Include="Structures\IStructure.cs" />
+    <Compile Include="Structures\IStructureBuilder.cs" />
+    <Compile Include="Structures\IStructureIndex.cs" />
+    <Compile Include="Structures\IStructureIndexesFactory.cs" />
+    <Compile Include="Structures\Schemas\Builders\AutoSchemaBuilder.cs" />
+    <Compile Include="Structures\Schemas\Builders\ISchemaBuilder.cs" />
+    <Compile Include="Structures\Schemas\Configuration\IStructureTypeConfig.cs" />
+    <Compile Include="Structures\Schemas\Configuration\IStructureTypeConfigurations.cs" />
+    <Compile Include="Structures\Schemas\Configuration\StructureTypeConfig.cs" />
+    <Compile Include="Structures\Schemas\Configuration\StructureTypeConfigurations.cs" />
+    <Compile Include="Structures\Schemas\DynamicPropertyFactory.cs" />
+    <Compile Include="Structures\Schemas\IStructureProperty.cs" />
+    <Compile Include="Structures\Schemas\IStructureSchema.cs" />
+    <Compile Include="Structures\Schemas\IStructureSchemas.cs" />
+    <Compile Include="Structures\Schemas\IStructureType.cs" />
+    <Compile Include="Structures\Schemas\IStructureTypeFactory.cs" />
+    <Compile Include="Structures\Schemas\IStructureTypeReflecter.cs" />
+    <Compile Include="Structures\Schemas\MemberAccessors\IdAccessor.cs" />
+    <Compile Include="Structures\Schemas\MemberAccessors\IIdAccessor.cs" />
+    <Compile Include="Structures\Schemas\MemberAccessors\IIndexAccessor.cs" />
+    <Compile Include="Structures\Schemas\MemberAccessors\IMemberAccessor.cs" />
+    <Compile Include="Structures\Schemas\MemberAccessors\IndexAccessor.cs" />
+    <Compile Include="Structures\Schemas\MemberAccessors\MemberAccessorBase.cs" />
+    <Compile Include="Structures\Schemas\PropertyPathBuilder.cs" />
+    <Compile Include="Structures\Schemas\StructureProperty.cs" />
+    <Compile Include="Structures\Schemas\StructureSchema.cs" />
+    <Compile Include="Structures\Schemas\StructureSchemas.cs" />
+    <Compile Include="Structures\Schemas\StructureType.cs" />
+    <Compile Include="Structures\Schemas\StructureTypeFactory.cs" />
+    <Compile Include="Structures\Schemas\StructureTypeReflecter.cs" />
+    <Compile Include="Structures\StructureIdGenerator.cs" />
+    <Compile Include="Structures\Structure.cs" />
+    <Compile Include="Structures\StructureBuilder.cs" />
+    <Compile Include="Structures\StructureIndex.cs" />
+    <Compile Include="Structures\StructureIndexesFactory.cs" />
+    <Compile Include="Structures\StructureIndexType.cs" />
+    <Compile Include="Structures\UniqueModesExtensions.cs" />
+    <Compile Include="Sys.cs" />
+    <Compile Include="TypeFor.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\ExceptionMessages.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ExceptionMessages.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\License-PineCone.txt">
+      <Link>License-PineCone.txt</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

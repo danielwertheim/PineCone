@@ -85,7 +85,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Source\PineCone\PineCone.csproj">
+    <ProjectReference Include="..\..\Projects\PineCone\PineCone.csproj">
       <Project>{D14FCD7E-6FE4-42EC-9084-27164A1F7D60}</Project>
       <Name>PineCone</Name>
     </ProjectReference>

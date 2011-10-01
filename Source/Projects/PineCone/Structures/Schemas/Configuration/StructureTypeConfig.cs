@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using EnsureThat;
 using NCore.Expressions;
-using NCore.Validation;
 
 namespace PineCone.Structures.Schemas.Configuration
 {
@@ -32,7 +32,8 @@ namespace PineCone.Structures.Schemas.Configuration
 
         public StructureTypeConfig(Type type)
         {
-            Ensure.Param(type, "type").IsNotNull();
+            Ensure.That(type, "type").IsNotNull();
+            
             Type = type;
 
             _memberPathsBeingIndexed = new HashSet<string>();

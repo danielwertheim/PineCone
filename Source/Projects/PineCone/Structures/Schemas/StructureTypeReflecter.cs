@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using NCore;
+using EnsureThat;
 using NCore.Reflections;
-using NCore.Validation;
 
 namespace PineCone.Structures.Schemas
 {
@@ -37,23 +36,23 @@ namespace PineCone.Structures.Schemas
 
         public IEnumerable<IStructureProperty> GetIndexableProperties(IReflect type)
         {
-            Ensure.Param(type, "type").IsNotNull();
+            Ensure.That(type, "type").IsNotNull();
 
             return GetIndexableProperties(type, null, NonIndexableSystemMembers, null);
         }
 
         public IEnumerable<IStructureProperty> GetIndexablePropertiesExcept(IReflect type, ICollection<string> nonIndexablePaths)
         {
-            Ensure.Param(type, "type").IsNotNull();
-            Ensure.Param((ICollection)nonIndexablePaths, "nonIndexablePaths").HasItems();
+            Ensure.That(type, "type").IsNotNull();
+            Ensure.That((ICollection)nonIndexablePaths, "nonIndexablePaths").HasItems();
 
             return GetIndexableProperties(type, null, NonIndexableSystemMembers.Union(nonIndexablePaths).ToArray(), null);
         }
 
         public IEnumerable<IStructureProperty> GetSpecificIndexableProperties(IReflect type, ICollection<string> indexablePaths)
         {
-            Ensure.Param(type, "type").IsNotNull();
-            Ensure.Param((ICollection)indexablePaths, "indexablePaths").HasItems();
+            Ensure.That(type, "type").IsNotNull();
+            Ensure.That((ICollection)indexablePaths, "indexablePaths").HasItems();
 
             return GetIndexableProperties(type, null, NonIndexableSystemMembers, indexablePaths);
         }

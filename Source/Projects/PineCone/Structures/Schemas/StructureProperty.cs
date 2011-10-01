@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
+using EnsureThat;
 using NCore.Reflections;
-using NCore.Validation;
 using PineCone.Annotations;
-using NCore;
 using PineCone.Resources;
 
 namespace PineCone.Structures.Schemas
@@ -55,21 +54,17 @@ namespace PineCone.Structures.Schemas
 
         private StructureProperty(IStructureProperty parent, string name, Type propertyType, DynamicGetter getter, DynamicSetter setter, bool isUnique = false)
         {
+            Ensure.That(name, "name").IsNotNullOrWhiteSpace();
+            Ensure.That(propertyType, "propertyType").IsNotNull();
+            Ensure.That(getter, "getter").IsNotNull();
+            Ensure.That(setter, "setter").IsNotNull();
+
             Parent = parent;
             IsRootMember = parent == null;
-            
-            Ensure.Param(name, "name").HasNonWhiteSpaceValue();
             Name = name;
-
-            Ensure.Param(propertyType, "propertyType").IsNotNull();
             PropertyType = propertyType;
-            
-            Ensure.Param(getter, "getter").IsNotNull();
             _getter = getter;
-
-            Ensure.Param(setter, "setter").IsNotNull();
             _setter = setter;
-
             IsUnique = isUnique;
 
             var isSimpleType = PropertyType.IsSimpleType();

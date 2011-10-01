@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using PineCone.Structures.Schemas.Configuration;
 
 namespace PineCone.Structures.Schemas
@@ -29,14 +30,14 @@ namespace PineCone.Structures.Schemas
                 return new StructureType(
                     type.Name,
                     Reflecter.GetIdProperty(type),
-                    Reflecter.GetIndexableProperties(type));
+                    Reflecter.GetIndexableProperties(type).ToArray());
 
             return new StructureType(
                 type.Name,
                 Reflecter.GetIdProperty(type),
-                (config.MemberPathsNotBeingIndexed.Count > 0)
+                ((config.MemberPathsNotBeingIndexed.Count > 0)
                 ? Reflecter.GetIndexablePropertiesExcept(type, config.MemberPathsNotBeingIndexed) //Scenario: Index ALL EXCEPT
-                : Reflecter.GetSpecificIndexableProperties(type, config.MemberPathsBeingIndexed));//Scenario: Index only THIS
+                : Reflecter.GetSpecificIndexableProperties(type, config.MemberPathsBeingIndexed)).ToArray());//Scenario: Index only THIS
         }
     }
 }

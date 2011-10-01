@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using EnsureThat;
 using NCore;
-using NCore.Validation;
 using PineCone.Resources;
 
 namespace PineCone.Structures
@@ -28,14 +28,12 @@ namespace PineCone.Structures
 
         public Structure(string name, Guid id, ICollection<IStructureIndex> indexes, dynamic data = null)
         {
-            Ensure.Param(name, "name").HasNonWhiteSpaceValue();
-            Name = name;
-
-            Ensure.Param(id, "id").IsNotEmpty();
-            Id = id;
+            Ensure.That(name, "name").IsNotNullOrWhiteSpace();
+            Ensure.That(id, "id").IsNotEmpty();
             
+            Name = name;
+            Id = id;
             Data = data;
-
             Indexes = new List<IStructureIndex>(indexes);
             Uniques = new List<IStructureIndex>(indexes.Where(i => i.IsUnique));
 

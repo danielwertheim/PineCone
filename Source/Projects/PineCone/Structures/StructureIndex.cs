@@ -1,5 +1,5 @@
 ﻿using System;
-using NCore.Validation;
+using EnsureThat;
 using PineCone.Resources;
 
 namespace PineCone.Structures
@@ -22,14 +22,12 @@ namespace PineCone.Structures
             if (value != null && !valueIsOkType)
                 throw new ArgumentException(ExceptionMessages.StructureIndex_ValueArgument_IncorrectType);
 
-            Ensure.Param(structureId, "structureId").IsNotEmpty();
+            Ensure.That(structureId, "structureId").IsNotEmpty();
+            Ensure.That(name, "name").IsNotNullOrWhiteSpace();
+
             StructureId = structureId;
-
-            Ensure.Param(name, "name").HasNonWhiteSpaceValue();
             Path = name;
-            
             Value = value;
-
             IsUnique = isUnique;
         }
 

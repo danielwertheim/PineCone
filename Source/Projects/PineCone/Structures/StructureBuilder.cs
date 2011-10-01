@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using NCore.Validation;
+using EnsureThat;
 using PineCone.Serializers;
 using PineCone.Structures.Schemas;
 
@@ -22,9 +22,9 @@ namespace PineCone.Structures
 
         public StructureBuilder(IStructureIndexesFactory structureIndexesFactory)
         {
-            Ensure.Param(structureIndexesFactory, "structureIndexesFactory").IsNotNull();
+            Ensure.That(structureIndexesFactory, "structureIndexesFactory").IsNotNull();
+            
             IndexesFactory = structureIndexesFactory;
-
             Serializer = new EmptySerializer();
         }
 

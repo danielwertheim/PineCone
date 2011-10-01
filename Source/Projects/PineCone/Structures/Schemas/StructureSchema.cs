@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using NCore.Validation;
+using EnsureThat;
 using PineCone.Structures.Schemas.MemberAccessors;
 
 namespace PineCone.Structures.Schemas
@@ -19,10 +19,10 @@ namespace PineCone.Structures.Schemas
         
         public StructureSchema(string name, IIdAccessor idAccessor, ICollection<IIndexAccessor> indexAccessors = null)
         {
-            Ensure.Param(name, "name").HasNonWhiteSpaceValue();
-            Name = name;
+            Ensure.That(name, "name").IsNotNullOrWhiteSpace();
+            Ensure.That(idAccessor, "idAccessor").IsNotNull();
 
-            Ensure.Param(idAccessor, "idAccessor").IsNotNull();
+            Name = name;
             IdAccessor = idAccessor;
             
             IndexAccessors = indexAccessors != null ? new List<IIndexAccessor>(indexAccessors) 

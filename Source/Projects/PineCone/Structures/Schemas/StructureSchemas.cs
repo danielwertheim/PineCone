@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using NCore.Validation;
+using EnsureThat;
 using PineCone.Structures.Schemas.Builders;
 
 namespace PineCone.Structures.Schemas
@@ -15,12 +15,11 @@ namespace PineCone.Structures.Schemas
         
         public StructureSchemas(IStructureTypeFactory structureTypeFactory, ISchemaBuilder schemaBuilder)
         {
-            Ensure.Param(structureTypeFactory, "structureTypeFactory").IsNotNull();
+            Ensure.That(structureTypeFactory, "structureTypeFactory").IsNotNull();
+            Ensure.That(schemaBuilder, "schemaBuilder").IsNotNull();
+
             StructureTypeFactory = structureTypeFactory;
-
-            Ensure.Param(schemaBuilder, "schemaBuilder").IsNotNull();
             SchemaBuilder = schemaBuilder;
-
             _schemas = new Dictionary<string, IStructureSchema>();
         }
 
@@ -31,7 +30,7 @@ namespace PineCone.Structures.Schemas
 
         public IStructureSchema GetSchema(Type type)
         {
-            Ensure.Param(type, "type").IsNotNull();
+            Ensure.That(type, "type").IsNotNull();
 
             if (!_schemas.ContainsKey(type.Name))
                 Register(type);
@@ -41,7 +40,7 @@ namespace PineCone.Structures.Schemas
 
         public void RemoveSchema(Type type)
         {
-            Ensure.Param(type, "type").IsNotNull();
+            Ensure.That(type, "type").IsNotNull();
 
             _schemas.Remove(type.Name);
         }

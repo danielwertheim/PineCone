@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using NCore.Validation;
+using EnsureThat;
 
 namespace PineCone.Structures.Schemas
 {
@@ -13,15 +13,14 @@ namespace PineCone.Structures.Schemas
 
         public IEnumerable<IStructureProperty> IndexableProperties { get; private set; }
 
-        public StructureType(string name, IStructureProperty idProperty, IEnumerable<IStructureProperty> indexableProperties)
+        public StructureType(string name, IStructureProperty idProperty, IStructureProperty[] indexableProperties)
         {
-            Ensure.Param(name, "name").HasNonWhiteSpaceValue();
+            Ensure.That(name, "name").IsNotNullOrWhiteSpace();
+            Ensure.That(idProperty, "idProperty").IsNotNull();
+            Ensure.That(indexableProperties, "indexableProperties").IsNotNull();
+            
             Name = name;
-
-            Ensure.Param(idProperty, "idProperty").IsNotNull();
             IdProperty = idProperty;
-
-            Ensure.Param(indexableProperties, "indexableProperties").IsNotNull();
             IndexableProperties = indexableProperties;
         }
     }

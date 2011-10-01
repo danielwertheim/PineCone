@@ -1,7 +1,7 @@
 ﻿using System.Linq;
+using EnsureThat;
 using NCore;
 using NCore.Reflections;
-using NCore.Validation;
 using PineCone.Resources;
 using PineCone.Structures.Schemas.MemberAccessors;
 
@@ -11,7 +11,7 @@ namespace PineCone.Structures.Schemas.Builders
     {
         public IStructureSchema CreateSchema(IStructureType structureType)
         {
-            Ensure.Param(structureType, "structureType").IsNotNull();
+            Ensure.That(structureType, "structureType").IsNotNull();
 
             var idAccessor = GetIdAccessor(structureType);
             var indexAccessors = GetIndexAccessors(structureType);

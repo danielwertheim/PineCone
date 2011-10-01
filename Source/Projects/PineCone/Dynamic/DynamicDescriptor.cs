@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using NCore.Validation;
+using EnsureThat;
 
 namespace PineCone.Dynamic
 {
@@ -14,9 +14,9 @@ namespace PineCone.Dynamic
 
         public DynamicDescriptor(string name)
         {
-            Ensure.Param(name, "name").HasNonWhiteSpaceValue();
-            Name = name;
+            Ensure.That(name, "name").IsNotNullOrWhiteSpace();
 
+            Name = name;
             _state = new Dictionary<string, DynamicMember>();
         }
 

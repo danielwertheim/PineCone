@@ -15,7 +15,7 @@ namespace PineCone.Structures
 
         public bool IsUnique { get; private set; }
 
-        public StructureIndex(Guid structureId, string name, object value, bool isUnique = false)
+        public StructureIndex(Guid structureId, string path, object value, bool isUnique = false)
         {
             var valueIsOkType = value is string || value is ValueType;
 
@@ -23,10 +23,10 @@ namespace PineCone.Structures
                 throw new ArgumentException(ExceptionMessages.StructureIndex_ValueArgument_IncorrectType);
 
             Ensure.That(structureId, "structureId").IsNotEmpty();
-            Ensure.That(name, "name").IsNotNullOrWhiteSpace();
+            Ensure.That(path, "path").IsNotNullOrWhiteSpace();
 
             StructureId = structureId;
-            Path = name;
+            Path = path;
             Value = value;
             IsUnique = isUnique;
         }

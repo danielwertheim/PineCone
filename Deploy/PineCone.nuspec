@@ -13,7 +13,7 @@
 		.Net types in the object-graph using some IL-Emits and then turns this to a key-value structure with paths and values.
 	</description>
 	<projectUrl>http://github.com/danielwertheim/pinecone</projectUrl>
-	<licenseUrl>http://github.com/danielwertheim/pinecone/blob/master/Solution/License-PineCone.txt</licenseUrl>
+	<licenseUrl>http://github.com/danielwertheim/pinecone/blob/master/Source/License.txt</licenseUrl>
 	<requireLicenseAcceptance>false</requireLicenseAcceptance>
 	<tags>indexing,structures</tags>
   </metadata>

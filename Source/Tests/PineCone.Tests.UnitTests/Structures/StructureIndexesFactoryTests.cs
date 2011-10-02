@@ -53,7 +53,7 @@ namespace PineCone.Tests.UnitTests.Structures
             var factory = new StructureIndexesFactory();
             var indexes = factory.CreateIndexes(schema, item, StructureIdGenerator.CreateId()).ToList();
 
-            Assert.AreEqual(42, indexes[1].Value);
+            Assert.AreEqual(42, indexes[0].Value);
         }
 
         [Test]
@@ -78,8 +78,8 @@ namespace PineCone.Tests.UnitTests.Structures
             var factory = new StructureIndexesFactory();
             var indexes = factory.CreateIndexes(schemaStub, item, StructureIdGenerator.CreateId()).ToList();
 
-            Assert.AreEqual(42, indexes[1].Value);
-            Assert.AreEqual(43, indexes[2].Value);
+            Assert.AreEqual(42, indexes[0].Value);
+            Assert.AreEqual(43, indexes[1].Value);
         }
 
         [Test]
@@ -104,8 +104,8 @@ namespace PineCone.Tests.UnitTests.Structures
             var factory = new StructureIndexesFactory();
             var indexes = factory.CreateIndexes(schemaStub, item, StructureIdGenerator.CreateId()).ToList();
 
+            Assert.AreEqual(42, indexes[0].Value);
             Assert.AreEqual(42, indexes[1].Value);
-            Assert.AreEqual(42, indexes[2].Value);
         }
 
         private class WithNoArray

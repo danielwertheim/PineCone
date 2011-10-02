@@ -82,6 +82,17 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.Builders
         }
 
         [Test]
+        public void CreateSchema_WhenThirdLevelIndexableEnumerablePropertiesExists_IndexAccessorsAreCreated()
+        {
+            var structureType = GetStructureTypeFor<WithFirstSecondAndThirdLevelMembers>();
+
+            var schema = _schemaBuilder.CreateSchema(structureType);
+
+            var hasThirdLevelAccessors = schema.IndexAccessors.Any(iac => HasLevel(iac, 2) && iac.Path == "SecondLevelItem.ThirdLevelItem.Numbers");
+            Assert.IsTrue(hasThirdLevelAccessors);
+        }
+
+        [Test]
         public void CreateSchema_WhenItemHasNoIdMember_ThrowsMissingKeyMemberException()
         {
             var structureTypeStub = new Mock<IStructureType>();
@@ -260,6 +271,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.Builders
         {
             public int AreaCode { get; set; }
             public int Number { get; set; }
+            public int[] Numbers { get; set; }
         }
 
         private class WithBytes

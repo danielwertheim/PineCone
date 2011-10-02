@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,38 +16,39 @@ namespace PineCone.Structures
         {
             var indexes = new IEnumerable<IStructureIndex>[structureSchema.IndexAccessors.Count];
 
-            Parallel.For(0, indexes.Length,
-                c =>
+            Parallel.For(0, indexes.Length, c =>
+            {
+                var indexAccessor = structureSchema.IndexAccessors[c];
+                var values = indexAccessor.GetValues(item);
+                var valuesExists = values != null && values.Count > 0;
+                var isCollectionOfValues = indexAccessor.IsEnumerable || indexAccessor.IsElement || (values != null && values.Count > 1);
+
+                if (!valuesExists)
                 {
-                    var indexAccessor = structureSchema.IndexAccessors[c];
-                    var values = indexAccessor.GetValues(item);
-                    if (values == null || values.Count < 1)
-                    {
-                        if (indexAccessor.IsUnique)
-                            throw new PineConeException(ExceptionMessages.StructureIndexesFactory_UniqueIndex_IsNull.Inject(indexAccessor.Path, indexAccessor.Name));
+                    if (indexAccessor.IsUnique)
+                        throw new PineConeException(ExceptionMessages.StructureIndexesFactory_UniqueIndex_IsNull.Inject(indexAccessor.Path, indexAccessor.Name));
 
-                        indexes[c] = new[] {
-                            new StructureIndex(structureId, indexAccessor.Name, null, indexAccessor.IsUnique)};
-                    }
-                    else
-                    {
-                        if (values.Count > 1 || indexAccessor.IsEnumerable || indexAccessor.IsElement)
-                        {
-                            var subIndexes = new IStructureIndex[values.Count];
-                            Parallel.For(0, subIndexes.Length,
-                                subC =>
-                                {
-                                    subIndexes[subC] = new StructureIndex(structureId, indexAccessor.Name, values[subC], indexAccessor.IsUnique);
-                                });
-                            indexes[c] = subIndexes;
-                        }
-                        else
-                            indexes[c] = new[]{
-                                new StructureIndex(structureId, indexAccessor.Name, values[0], indexAccessor.IsUnique)};
-                    }
-                });
+                    if(!isCollectionOfValues)
+                        indexes[c] = new[] { new StructureIndex(structureId, indexAccessor.Path, null, indexAccessor.IsUnique) };
+                    
+                    return;
+                }
 
-            return indexes.SelectMany(i => i).ToArray();
+                if (!isCollectionOfValues)
+                    indexes[c] = new[] { new StructureIndex(structureId, indexAccessor.Path, values[0], indexAccessor.IsUnique) };
+                else
+                {
+                    var pathFormat = indexAccessor.Name + "[{0}]";
+                    var subIndexes = new IStructureIndex[values.Count];
+                    Parallel.For(0, subIndexes.Length, subC =>
+                    {
+                        subIndexes[subC] = new StructureIndex(structureId, pathFormat.Inject(subC), values[subC], indexAccessor.IsUnique);
+                    });
+                    indexes[c] = subIndexes;
+                }
+            });
+
+            return indexes.Where(i => i != null).SelectMany(i => i).ToArray();
         }
     }
 }

@@ -74,12 +74,24 @@ namespace PineCone.Structures.Schemas.MemberAccessors
                 var isLastProperty = c == (_callstack.Count - 1);
                 if (isLastProperty)
                 {
-                    if (!(currentNode is ICollection))
-                        return new[] { currentProperty.GetValue(currentNode) };
-
-                    return ExtractValuesForEnumerableOfComplex(
+                    if(currentNode is ICollection)
+                        return ExtractValuesForEnumerableOfComplex(
                         (ICollection)currentNode,
                         currentProperty);
+
+                    if(!currentProperty.IsEnumerable)
+                        return new[] { currentProperty.GetValue(currentNode) };
+
+                    var tmp = currentProperty.GetValue(currentNode) as ICollection;
+                    if (tmp == null)
+                        return null;
+
+                    var values = new List<object>();
+
+                    foreach (var value in tmp)
+                        values.Add(value);
+
+                    return values;
                 }
 
                 if (!(currentNode is ICollection))
@@ -87,13 +99,9 @@ namespace PineCone.Structures.Schemas.MemberAccessors
                 else
                 {
                     var values = new List<object>();
-                    foreach (var node in (ICollection)currentNode)
-                    {
+                    foreach (var node in (ICollection) currentNode)
                         values.AddRange(
-                            EvaluateCallstack(
-                            currentProperty.GetValue(node),
-                            startIndex: c + 1));
-                    }
+                            EvaluateCallstack(currentProperty.GetValue(node),startIndex: c + 1));
                     return values;
                 }
             }

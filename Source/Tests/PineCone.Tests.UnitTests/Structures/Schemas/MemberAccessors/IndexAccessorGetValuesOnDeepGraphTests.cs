@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using PineCone.Structures.Schemas;
 using PineCone.Structures.Schemas.MemberAccessors;
@@ -20,23 +21,29 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.MemberAccessors
             var prodNoPropertyInfo = typeof(TestOrderLine).GetProperty("ProductNo");
             var prodNoProperty = StructureProperty.CreateFrom(linesProperty, prodNoPropertyInfo);
 
-            var graph = new TestCustomer
-                        {
-                            Orders = 
-                                {
-                                    new TestOrder
-                                    {
-                                        Lines =
-                                            {
-                                                new TestOrderLine { ProductNo = "P1", Quantity = 1 }, 
-                                                new TestOrderLine { ProductNo = "P2", Quantity = 2 }
-                                            }
-                                    }
-                                }
-                        };
-            var values = new IndexAccessor(prodNoProperty).GetValues(graph);
+            var pricesPropertyInfo = typeof(TestOrderLine).GetProperty("Prices");
+            var pricesProperty = StructureProperty.CreateFrom(linesProperty, pricesPropertyInfo);
 
-            CollectionAssert.AreEqual(new[] { "P1", "P2" }, values);
+            var graph = new TestCustomer
+            {
+                Orders = 
+                {
+                    new TestOrder
+                    {
+                        Lines =
+                        {
+                            new TestOrderLine { ProductNo = "P1", Quantity = 1, Prices = new[] { 42, 4242 }}, 
+                            new TestOrderLine { ProductNo = "P2", Quantity = 2, Prices = new[] { 43, 4343 }}
+                        }
+                    }
+                }
+            };
+
+            var productNos = new IndexAccessor(prodNoProperty).GetValues(graph);
+            var prices = new IndexAccessor(pricesProperty).GetValues(graph);
+
+            CollectionAssert.AreEqual(new[] { "P1", "P2" }, productNos);
+            CollectionAssert.AreEqual(new[] { 42, 4242, 43, 4343 }, prices);
         }
 
         private class TestCustomer
@@ -68,7 +75,10 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.MemberAccessors
         private class TestOrderLine
         {
             public string ProductNo { get; set; }
+
             public int Quantity { get; set; }
+
+            public int[] Prices { get; set; }
         }
     }
 }

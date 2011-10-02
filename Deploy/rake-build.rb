@@ -11,8 +11,8 @@ require 'albacore'
 #--------------------------------------
 @env_solutionname = 'PineCone'
 @env_projectname = 'PineCone'
-@env_solutionfolderpath = "../Solution/"
-@env_buildversion = "0.1.0" + (ENV['env_buildnumber'].to_s.empty? ? "" : ".#{ENV['env_buildnumber'].to_s}")
+@env_solutionfolderpath = "../Source/"
+@env_buildversion = "0.2.0" + (ENV['env_buildnumber'].to_s.empty? ? "" : ".#{ENV['env_buildnumber'].to_s}")
 @env_buildconfigname = ENV['env_buildconfigname'].to_s.empty? ? "Release" : ENV['env_buildconfigname'].to_s
 @env_buildname = "#{@env_solutionname}-v#{@env_buildversion}-#{@env_buildconfigname}"
 @env_buildfolderpath = "#{ENV['env_buildfolderpath']}builds/#{@env_buildname}/"
@@ -25,7 +25,7 @@ require 'albacore'
 #--------------------------------------
 # Albacore flow controlling tasks
 #--------------------------------------
-task :ci => [:installMissingNuGets, :buildIt, :testIt, :packageIt, :deployIt]
+task :ci => [:buildIt, :testIt, :packageIt, :deployIt]
 
 task :local => [:buildIt, :testIt, :packageIt]
 #--------------------------------------
@@ -39,13 +39,6 @@ task :deployIt => [:publishNuGet]
 #--------------------------------------
 # Albacore tasks
 #--------------------------------------
-exec :installMissingNuGets do |cmd|
-  FileList["#{@env_solutionfolderpath}**/packages.config"].each { |filepath|
-    cmd.command = "NuGet.exe"
-    cmd.parameters = "i #{filepath} -o #{@env_solutionfolderpath}/packages -s #{@env_nugetSourceUrl}"
-  }
-end
-
 assemblyinfo :versionIt do |asm|
   sharedAssemblyInfoPath = "#{@env_solutionfolderpath}SharedAssemblyInfo.cs"
   
@@ -67,7 +60,7 @@ msbuild :compileIt => [:createCleanBuildFolders] do |msb|
 end
 
 task :copyBinaries do
-  FileUtils.cp_r(FileList["#{@env_solutionfolderpath}Source/#{@env_projectname}/bin/#{@env_buildconfigname}/*.*"], @env_binariesfolderpath)
+  FileUtils.cp_r(FileList["#{@env_solutionfolderpath}Projects/#{@env_projectname}/bin/#{@env_buildconfigname}/*.*"], @env_binariesfolderpath)
 end
 
 nunit :runUnitTests do |nunit|

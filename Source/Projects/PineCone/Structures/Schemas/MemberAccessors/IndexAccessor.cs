@@ -52,14 +52,9 @@ namespace PineCone.Structures.Schemas.MemberAccessors
             if (firstLevelPropValue == null)
                 return null;
 
-            if (!IsEnumerable)
-                return new[] { firstLevelPropValue };
-
-            var values = new List<object>();
-            foreach (var value in (ICollection)firstLevelPropValue)
-                values.Add(value);
-
-            return values;
+            return IsEnumerable
+                ? CollectionOfValuesToList((ICollection)firstLevelPropValue)
+                : new[] { firstLevelPropValue };
         }
 
         private IList<object> EvaluateCallstack<T>(T startNode, int startIndex)
@@ -73,35 +68,17 @@ namespace PineCone.Structures.Schemas.MemberAccessors
                 var currentProperty = _callstack[c];
                 var isLastProperty = c == (_callstack.Count - 1);
                 if (isLastProperty)
-                {
-                    if(currentNode is ICollection)
-                        return ExtractValuesForEnumerableOfComplex(
-                        (ICollection)currentNode,
-                        currentProperty);
-
-                    if(!currentProperty.IsEnumerable)
-                        return new[] { currentProperty.GetValue(currentNode) };
-
-                    var tmp = currentProperty.GetValue(currentNode) as ICollection;
-                    if (tmp == null)
-                        return null;
-
-                    var values = new List<object>();
-
-                    foreach (var value in tmp)
-                        values.Add(value);
-
-                    return values;
-                }
+                    return currentNode is ICollection
+                        ? ExtractValuesForEnumerableNode((ICollection)currentNode, currentProperty)
+                        : ExtractValuesForSimpleNode(currentNode, currentProperty);
 
                 if (!(currentNode is ICollection))
                     currentNode = currentProperty.GetValue(currentNode);
                 else
                 {
                     var values = new List<object>();
-                    foreach (var node in (ICollection) currentNode)
-                        values.AddRange(
-                            EvaluateCallstack(currentProperty.GetValue(node),startIndex: c + 1));
+                    foreach (var node in (ICollection)currentNode)
+                        values.AddRange(EvaluateCallstack(currentProperty.GetValue(node), startIndex: c + 1));
                     return values;
                 }
             }
@@ -109,7 +86,7 @@ namespace PineCone.Structures.Schemas.MemberAccessors
             return null;
         }
 
-        private static IList<object> ExtractValuesForEnumerableOfComplex(ICollection nodes, IStructureProperty property)
+        private static IList<object> ExtractValuesForEnumerableNode(ICollection nodes, IStructureProperty property)
         {
             var values = new List<object>();
             foreach (var node in nodes)
@@ -125,9 +102,31 @@ namespace PineCone.Structures.Schemas.MemberAccessors
                 if (nodeValue == null || !(nodeValue is ICollection))
                     values.Add(nodeValue);
                 else
-                    foreach (var nodeValueElement in (ICollection)nodeValue)
-                        values.Add(nodeValueElement);
+                    values.AddRange(CollectionOfValuesToList((ICollection)nodeValue));
             }
+
+            return values;
+        }
+
+        private static IList<object> ExtractValuesForSimpleNode(object node, IStructureProperty property)
+        {
+            var currentValue = property.GetValue(node);
+
+            if (currentValue == null)
+                return null;
+
+            if (!property.IsEnumerable)
+                return new[] { currentValue };
+
+            return CollectionOfValuesToList((ICollection)currentValue);
+        }
+
+        private static IList<object> CollectionOfValuesToList(ICollection collection)
+        {
+            var values = new List<object>(collection.Count);
+
+            foreach (var element in collection)
+                values.Add(element);
 
             return values;
         }
@@ -143,7 +142,7 @@ namespace PineCone.Structures.Schemas.MemberAccessors
             EnumerateToLastProperty(item, startIndex: 0, onLastPropertyFound: (lastProperty, currentNode) => lastProperty.SetValue(currentNode, value));
         }
 
-        private void EnumerateToLastProperty<T>(T startNode, int startIndex, OnLastPropertyFound onLastPropertyFound) where T : class 
+        private void EnumerateToLastProperty<T>(T startNode, int startIndex, OnLastPropertyFound onLastPropertyFound) where T : class
         {
             object currentNode = startNode;
             for (var c = startIndex; c < _callstack.Count; c++)

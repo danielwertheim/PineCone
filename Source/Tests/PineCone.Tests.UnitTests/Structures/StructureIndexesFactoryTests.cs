@@ -29,7 +29,7 @@ namespace PineCone.Tests.UnitTests.Structures
             var factory = new StructureIndexesFactory();
             var indexes = factory.CreateIndexes(schemaStub, item, StructureIdGenerator.CreateId()).ToList();
 
-            Assert.AreEqual(42, indexes[1].Value);
+            Assert.AreEqual(42, indexes[0].Value);
         }
 
         [Test]

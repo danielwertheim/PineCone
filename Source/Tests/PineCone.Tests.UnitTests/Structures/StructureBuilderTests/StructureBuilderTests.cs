@@ -71,6 +71,19 @@ namespace PineCone.Tests.UnitTests.Structures.StructureBuilderTests
         }
 
         [Test]
+        public void CreateStructure_WhenEnumerableIntsOnFirstLevelAreNull_ReturnsNoIndex()
+        {
+            var schema = StructureSchemaTestFactory.CreateRealFrom<TestItemForFirstLevel>();
+            var item = new TestItemForFirstLevel { IntArray = null };
+
+            var structure = Builder.CreateStructure(item, schema);
+
+            var actual = structure.Indexes.SingleOrDefault(si => si.Path.StartsWith("IntArray"));
+            Assert.IsNull(actual);
+            Assert.AreEqual(1, structure.Indexes.Count);
+        }
+
+        [Test]
         public void CreateStructure_WhenIntOnSecondLevel_ReturnsSimpleValue()
         {
             var schema = StructureSchemaTestFactory.CreateRealFrom<TestItemForSecondLevel>();
@@ -86,12 +99,13 @@ namespace PineCone.Tests.UnitTests.Structures.StructureBuilderTests
         public void CreateStructure_WhenEnumerableIntsOnSecondLevelAreNull_ReturnsNoIndex()
         {
             var schema = StructureSchemaTestFactory.CreateRealFrom<TestItemForSecondLevel>();
-            var item = new TestItemForSecondLevel { Container = new Container() };
+            var item = new TestItemForSecondLevel { Container = new Container { IntArray = null } };
 
             var structure = Builder.CreateStructure(item, schema);
 
             var actual = structure.Indexes.SingleOrDefault(si => si.Path.StartsWith("Container.IntArray"));
             Assert.IsNull(actual);
+            Assert.AreEqual(1, structure.Indexes.Count);
         }
 
         [Test]

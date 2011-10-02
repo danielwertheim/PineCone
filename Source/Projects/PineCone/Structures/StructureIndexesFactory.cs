@@ -28,9 +28,6 @@ namespace PineCone.Structures
                     if (indexAccessor.IsUnique)
                         throw new PineConeException(ExceptionMessages.StructureIndexesFactory_UniqueIndex_IsNull.Inject(indexAccessor.Path, indexAccessor.Name));
 
-                    if(!isCollectionOfValues)
-                        indexes[c] = new[] { new StructureIndex(structureId, indexAccessor.Path, null, indexAccessor.IsUnique) };
-                    
                     return;
                 }
 

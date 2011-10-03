@@ -16,8 +16,14 @@
 	<licenseUrl>http://github.com/danielwertheim/pinecone/blob/master/Source/License.txt</licenseUrl>
 	<requireLicenseAcceptance>false</requireLicenseAcceptance>
 	<tags>indexing,structures</tags>
+	<dependencies>
+      <dependency id="Ensure.That" version="0.3.0" />
+	</dependencies>
   </metadata>
   <files>
-    <file src="*.*" target="lib" />
-  </files>
+    <file src="PineCone.dll" target="lib" />
+	<file src="PineCone.xml" target="lib" />
+	<file src="NCore.dll" target="lib" />
+	<file src="License.txt" />
+  </files>  
 </package>

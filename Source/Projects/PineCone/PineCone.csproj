@@ -117,7 +117,7 @@
   <ItemGroup>
     <Content Include="..\..\License.txt">
       <Link>License.txt</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>

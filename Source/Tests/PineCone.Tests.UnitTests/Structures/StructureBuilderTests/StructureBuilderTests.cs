@@ -54,20 +54,17 @@ namespace PineCone.Tests.UnitTests.Structures.StructureBuilderTests
         }
 
         [Test]
-        public void CreateStructure_WhenEnumerableIntsOnFirstLevel_ReturnsOneIndexPerElement()
+        public void CreateStructure_WhenEnumerableIntsOnFirstLevel_ReturnsOneIndexPerElementInCorrectOrder()
         {
             var schema = StructureSchemaTestFactory.CreateRealFrom<TestItemForFirstLevel>();
             var item = new TestItemForFirstLevel { IntArray = new[] { 5, 6, 7 } };
 
             var structure = Builder.CreateStructure(item, schema);
 
-            var firstIndex = structure.Indexes.Single(si => si.Path == "IntArray[0]").Value;
-            var secondIndex = structure.Indexes.Single(si => si.Path == "IntArray[1]").Value;
-            var lastIndex = structure.Indexes.Single(si => si.Path == "IntArray[2]").Value;
-
-            Assert.AreEqual(5, firstIndex);
-            Assert.AreEqual(6, secondIndex);
-            Assert.AreEqual(7, lastIndex);
+            var indices = structure.Indexes.Where(i => i.Path == "IntArray").ToList();
+            Assert.AreEqual(5, indices[0].Value);
+            Assert.AreEqual(6, indices[1].Value);
+            Assert.AreEqual(7, indices[2].Value);
         }
 
         [Test]
@@ -109,20 +106,17 @@ namespace PineCone.Tests.UnitTests.Structures.StructureBuilderTests
         }
 
         [Test]
-        public void CreateStructure_WhenEnumerableIntsOnSecondLevel_ReturnsOneIndexPerElement()
+        public void CreateStructure_WhenEnumerableIntsOnSecondLevel_ReturnsOneIndexPerElementInCorrectOrder()
         {
             var schema = StructureSchemaTestFactory.CreateRealFrom<TestItemForSecondLevel>();
             var item = new TestItemForSecondLevel { Container = new Container { IntArray = new[] { 5, 6, 7 } } };
 
             var structure = Builder.CreateStructure(item, schema);
 
-            var firstIndex = structure.Indexes.Single(si => si.Path == "Container.IntArray[0]").Value;
-            var secondIndex = structure.Indexes.Single(si => si.Path == "Container.IntArray[1]").Value;
-            var lastIndex = structure.Indexes.Single(si => si.Path == "Container.IntArray[2]").Value;
-
-            Assert.AreEqual(5, firstIndex);
-            Assert.AreEqual(6, secondIndex);
-            Assert.AreEqual(7, lastIndex);
+            var indices = structure.Indexes.Where(i => i.Path == "Container.IntArray").ToList();
+            Assert.AreEqual(5, indices[0].Value);
+            Assert.AreEqual(6, indices[1].Value);
+            Assert.AreEqual(7, indices[2].Value);
         }
 
         private class TestItemForFirstLevel

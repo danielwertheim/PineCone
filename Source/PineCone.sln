@@ -5,8 +5,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{DE508E74
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PineCone.TestUtils", "Tests\PineCone.TestUtils\PineCone.TestUtils.csproj", "{5CAC205F-5470-44A6-878F-F33768415D25}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{09A45B8C-AD04-4E4A-9B5A-D33A886D5DAA}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PineCone.Tests.UnitTests", "Tests\PineCone.Tests.UnitTests\PineCone.Tests.UnitTests.csproj", "{73C5C30B-36DE-4A5E-A64D-CD06A63A601C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PineCone", "Projects\PineCone\PineCone.csproj", "{D14FCD7E-6FE4-42EC-9084-27164A1F7D60}"

@@ -27,5 +27,10 @@ namespace PineCone
         {
             return Builder.CreateStructures(items, Schemas.GetSchema<T>());
         }
+
+        public IEnumerable<IStructure[]> CreateStructureBatches<T>(ICollection<T> items, int maxBatchSize) where T : class
+        {
+            return Builder.CreateStructureBatches(items, Schemas.GetSchema<T>(), maxBatchSize);
+        }
     }
 }

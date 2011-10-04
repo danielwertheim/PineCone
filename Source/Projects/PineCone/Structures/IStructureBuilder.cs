@@ -36,6 +36,7 @@ namespace PineCone.Structures
 
         /// <summary>
         /// Yields each item as an <see cref="IStructure"/>.
+        /// All items will be assigned a new Sequential Guid Id as StructureId.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="items"></param>
@@ -53,7 +54,7 @@ namespace PineCone.Structures
         /// <param name="structureSchema"></param>
         /// <param name="maxBatchSize"></param>
         /// <returns></returns>
-        IEnumerable<IStructure[]> CreateStructures<T>(ICollection<T> items, IStructureSchema structureSchema, int maxBatchSize) 
+        IEnumerable<IStructure[]> CreateStructureBatches<T>(ICollection<T> items, IStructureSchema structureSchema, int maxBatchSize) 
             where T : class;
     }
 }

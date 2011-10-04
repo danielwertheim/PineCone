@@ -14,7 +14,7 @@ namespace PineCone.Structures
 
         public string Name { get; private set; }
 
-        public dynamic Data { get; set; }
+        public string Data { get; set; }
 
         public IList<IStructureIndex> Indexes { get; private set; }
 
@@ -26,7 +26,7 @@ namespace PineCone.Structures
             Uniques = new List<IStructureIndex>();
         }
 
-        public Structure(string name, Guid id, ICollection<IStructureIndex> indexes, dynamic data = null)
+        public Structure(string name, Guid id, ICollection<IStructureIndex> indexes, string data = null)
         {
             Ensure.That(name, "name").IsNotNullOrWhiteSpace();
             Ensure.That(id, "id").IsNotEmpty();

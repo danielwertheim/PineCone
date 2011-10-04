@@ -9,7 +9,7 @@ namespace PineCone.Structures
 
         string Name { get; }
 
-        dynamic Data { get; set; }
+        string Data { get; set; }
         
         IList<IStructureIndex> Indexes { get; }
 

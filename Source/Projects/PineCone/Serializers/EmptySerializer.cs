@@ -2,7 +2,7 @@
 {
     public class EmptySerializer : ISerializer
     {
-        public dynamic Serialize<T>(T item)
+        public string Serialize<T>(T item)
         {
             return null;
         }

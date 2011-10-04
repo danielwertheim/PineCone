@@ -1,22 +1,21 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace PineCone.Structures
 {
-    internal static class StructureIdGenerator
+    public class GuidStructureIdGenerator : IStructureIdGenerator
     {
-        internal static Guid CreateId()
+        private static Type DataType = typeof (Guid);
+
+        public StructureId CreateId()
         {
-            return SequentialGuid.NewSqlCompatibleGuid();
+            return new StructureId(SequentialGuid.NewSqlCompatibleGuid(), DataType);
         }
 
-        internal static Guid[] CreateIds(int numOfIds)
+        public IEnumerable<StructureId> CreateIds(int numOfIds)
         {
-            var ids = new Guid[numOfIds];
-
             for (var c = 0; c < numOfIds; c++)
-                ids[c] = SequentialGuid.NewSqlCompatibleGuid();
-
-            return ids;
+                yield return new StructureId(SequentialGuid.NewSqlCompatibleGuid(), DataType);
         }
     }
 }

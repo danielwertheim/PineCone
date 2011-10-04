@@ -18,12 +18,6 @@ namespace PineCone.Structures
         ISerializer Serializer { get; set; }
 
         /// <summary>
-        /// Factory for creating <see cref="IStructureIndex"/> for each
-        /// indexable member of the Items.
-        /// </summary>
-        IStructureIndexesFactory IndexesFactory { get; }
-
-        /// <summary>
         /// Creates a single <see cref="IStructure"/> for sent <typeparamref name="T"/> item.
         /// The item will be assigned a new Sequential Guid Id as StructureId.
         /// </summary>

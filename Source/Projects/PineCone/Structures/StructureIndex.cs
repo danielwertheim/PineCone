@@ -7,7 +7,7 @@ namespace PineCone.Structures
     [Serializable]
     public class StructureIndex : IStructureIndex
     {
-        public Guid StructureId { get; private set; }
+        public StructureId StructureId { get; private set; }
 
         public string Path { get; private set; }
 
@@ -15,14 +15,14 @@ namespace PineCone.Structures
 
         public bool IsUnique { get; private set; }
 
-        public StructureIndex(Guid structureId, string path, object value, bool isUnique = false)
+        public StructureIndex(StructureId structureId, string path, object value, bool isUnique = false)
         {
             var valueIsOkType = value is string || value is ValueType;
 
             if (value != null && !valueIsOkType)
                 throw new ArgumentException(ExceptionMessages.StructureIndex_ValueArgument_IncorrectType);
 
-            Ensure.That(structureId, "structureId").IsNotEmpty();
+            Ensure.That(structureId, "structureId").IsNotNull();
             Ensure.That(path, "path").IsNotNullOrWhiteSpace();
 
             StructureId = structureId;

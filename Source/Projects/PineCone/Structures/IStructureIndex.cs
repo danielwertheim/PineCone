@@ -4,7 +4,7 @@ namespace PineCone.Structures
 {
     public interface IStructureIndex : IEquatable<IStructureIndex>
     {
-        Guid StructureId { get;  }
+        StructureId StructureId { get; }
 
         string Path { get;  }
         

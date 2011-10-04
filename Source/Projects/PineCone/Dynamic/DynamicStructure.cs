@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Dynamic;
+using PineCone.Structures;
 
 namespace PineCone.Dynamic
 {
@@ -12,7 +13,7 @@ namespace PineCone.Dynamic
 
         public DynamicDescriptor Descriptor { get; private set; }
 
-        public Guid StructureId { get; set; }
+        public StructureId StructureId { get; set; }
 
         public string Name
         {

@@ -15,7 +15,7 @@ namespace PineCone
         {
             Schemas = new StructureSchemas(new StructureTypeFactory(), new AutoSchemaBuilder());
 
-            Builder = new StructureBuilder(new StructureIndexesFactory());
+            Builder = new StructureBuilder(new GuidStructureIdGenerator(), new StructureIndexesFactory());
         }
 
         public IStructure CreateStructureFor<T>(T item) where T : class

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using PineCone.Dynamic;
+using PineCone.Structures;
 
 namespace PineCone.Tests.UnitTests.Structures.StructureBuilderTests
 {
@@ -13,7 +14,7 @@ namespace PineCone.Tests.UnitTests.Structures.StructureBuilderTests
 
         protected override void OnTestInitialize()
         {
-            _builder = new DynamicStructureBuilder();
+            _builder = new DynamicStructureBuilder(new GuidStructureIdGenerator());
         }
 
         [Test]

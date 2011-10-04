@@ -1,6 +1,7 @@
 using System;
 using NUnit.Framework;
 using PineCone.Resources;
+using PineCone.Structures;
 using PineCone.Structures.Schemas;
 using PineCone.Structures.Schemas.MemberAccessors;
 
@@ -19,7 +20,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.MemberAccessors
             var idAccessor = new IdAccessor(property);
             var idViaAccessor = idAccessor.GetValue<GuidDummy>(item);
 
-            Assert.AreEqual(id, idViaAccessor);
+            Assert.AreEqual(id, idViaAccessor.Value);
         }
 
         [Test]
@@ -32,7 +33,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.MemberAccessors
             var idAccessor = new IdAccessor(property);
             var idViaAccessor = idAccessor.GetValue(item);
 
-            Assert.AreEqual(id, idViaAccessor);
+            Assert.AreEqual(id, idViaAccessor.Value);
         }
 
         [Test]
@@ -44,7 +45,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.MemberAccessors
             var idAccessor = new IdAccessor(property);
             var idViaAccessor = idAccessor.GetValue(item);
 
-            Assert.IsNull(idViaAccessor);
+            Assert.IsFalse(idViaAccessor.HasValue);
         }
 
         [Test]
@@ -78,27 +79,27 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.MemberAccessors
         [Test]
         public void SetValue_ToGuidProperty_ValueIsAssigned()
         {
-            var id = Guid.Parse("fc47a673-5a5b-419b-9a40-a756591aa7bf");
+            var id = new StructureId(Guid.Parse("fc47a673-5a5b-419b-9a40-a756591aa7bf"), typeof(Guid));
             var item = new GuidDummy();
 
             var property = StructurePropertyTestFactory.GetIdProperty<GuidDummy>();
             var idAccessor = new IdAccessor(property);
             idAccessor.SetValue(item, id);
 
-            Assert.AreEqual(id, item.StructureId);
+            Assert.AreEqual(id.Value, item.StructureId);
         }
 
        [Test]
         public void SetValue_ToNullableGuidProperty_ValueIsAssigned()
         {
-            var id = Guid.Parse("fc47a673-5a5b-419b-9a40-a756591aa7bf");
+            var id = new StructureId(Guid.Parse("fc47a673-5a5b-419b-9a40-a756591aa7bf"), typeof(Guid));
             var item = new NullableGuidDummy();
 
             var property = StructurePropertyTestFactory.GetIdProperty<NullableGuidDummy>();
             var idAccessor = new IdAccessor(property);
             idAccessor.SetValue(item, id);
 
-            Assert.AreEqual(id, item.StructureId);
+            Assert.AreEqual(id.Value, item.StructureId);
         }
 
         private class Container

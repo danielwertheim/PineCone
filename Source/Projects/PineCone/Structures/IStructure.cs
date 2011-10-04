@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace PineCone.Structures
 {
     public interface IStructure
     {
-        Guid Id { get; }
+        StructureId Id { get; }
 
         string Name { get; }
 

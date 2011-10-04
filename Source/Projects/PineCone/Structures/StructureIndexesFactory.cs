@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using NCore;
@@ -10,7 +9,7 @@ namespace PineCone.Structures
 {
     public class StructureIndexesFactory : IStructureIndexesFactory
     {
-        public ICollection<IStructureIndex> CreateIndexes<T>(IStructureSchema structureSchema, T item, Guid structureId)
+        public ICollection<IStructureIndex> CreateIndexes<T>(IStructureSchema structureSchema, T item, StructureId structureId)
             where T : class
         {
             var indexes = new IEnumerable<IStructureIndex>[structureSchema.IndexAccessors.Count];

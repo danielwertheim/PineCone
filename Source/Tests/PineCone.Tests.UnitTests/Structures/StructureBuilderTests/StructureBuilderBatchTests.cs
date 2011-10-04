@@ -17,7 +17,7 @@ namespace PineCone.Tests.UnitTests.Structures.StructureBuilderTests
             var previousTotalStructuresRead = 0;
             foreach (var structuresBatch in structuresBatches)
             {
-                var structuresIds = structuresBatch.Select(s => s.Id).ToArray();
+                var structuresIds = structuresBatch.Select(s => s.Id.Value).ToArray();
                 var itemIds = items.Skip(previousTotalStructuresRead).Take(structuresIds.Length).Select(i => i.StructureId).ToArray();
 
                 previousTotalStructuresRead += structuresIds.Length;

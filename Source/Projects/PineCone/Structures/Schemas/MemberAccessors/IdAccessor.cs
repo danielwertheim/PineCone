@@ -20,16 +20,16 @@ namespace PineCone.Structures.Schemas.MemberAccessors
                     ExceptionMessages.IdAccessor_UnsupportedPropertyType.Inject(Property.PropertyType.Name));
         }
 
-        public Guid? GetValue<T>(T item)
+        public StructureId GetValue<T>(T item)
             where T : class
         {
-            return (Guid?)Property.GetValue(item);
+            return new StructureId((ValueType)Property.GetValue(item), Property.PropertyType);
         }
         
-        public void SetValue<T>(T item, Guid value)
+        public void SetValue<T>(T item, StructureId value)
             where T : class
         {
-            Property.SetValue(item, value);
+            Property.SetValue(item, value.Value);
         }
     }
 }

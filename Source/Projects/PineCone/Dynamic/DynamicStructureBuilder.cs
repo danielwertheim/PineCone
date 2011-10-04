@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using NCore;
+using EnsureThat;
 using NCore.Reflections;
 using PineCone.Structures;
 
@@ -8,12 +8,21 @@ namespace PineCone.Dynamic
 {
     public class DynamicStructureBuilder
     {
+        private readonly IStructureIdGenerator _structureIdGenerator;
+
+        public DynamicStructureBuilder(IStructureIdGenerator structureIdGenerator)
+        {
+            Ensure.That(structureIdGenerator).IsNotNull();
+
+            _structureIdGenerator = structureIdGenerator;
+        }
+
         public IStructure CreateStructure(DynamicStructure dynamicStructure)
         {
             var ts = dynamicStructure.Descriptor;
             var kvs = dynamicStructure.ToDictionary();
 
-            var id = StructureIdGenerator.CreateId();
+            var id = _structureIdGenerator.CreateId();
             dynamicStructure.StructureId = id;
 
             var indexes = new List<IStructureIndex>();
@@ -34,7 +43,7 @@ namespace PineCone.Dynamic
                 }
             }
 
-            return new Structure(dynamicStructure.Name, id, indexes, dynamicStructure);
+            return new Structure(dynamicStructure.Name, id, indexes);
         }
     }
 }

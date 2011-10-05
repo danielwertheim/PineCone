@@ -10,10 +10,10 @@ namespace PineCone.Tests.UnitTests.Structures
         [Test]
         public void Equals_WhenSameStructureIdNameAndValue_ReturnsTrue()
         {
-            var guid = Guid.Parse("06E2FC67-AB9F-4E65-A2C8-5FC897597887");
+            var structureId = new StructureId(Guid.Parse("06E2FC67-AB9F-4E65-A2C8-5FC897597887"), typeof(Guid));
 
-            var structure1 = new StructureIndex(guid, "TheName", "TheValue");
-            var structure2 = new StructureIndex(guid, "TheName", "TheValue");
+            var structure1 = new StructureIndex(structureId, "TheName", "TheValue");
+            var structure2 = new StructureIndex(structureId, "TheName", "TheValue");
 
             Assert.AreEqual(structure1, structure2);
         }
@@ -21,11 +21,11 @@ namespace PineCone.Tests.UnitTests.Structures
         [Test]
         public void Equals_WhenDifferentGuidStructureId_ReturnsFalse()
         {
-            var guid1 = Guid.Parse("06E2FC67-AB9F-4E65-A2C8-5FC897597887");
-            var guid2 = Guid.Parse("14D4D3EC-6E1E-4839-ACC7-EA3B4653CF96");
+            var structureId1 = new StructureId(Guid.Parse("06E2FC67-AB9F-4E65-A2C8-5FC897597887"), typeof(Guid));
+            var structureId2 = new StructureId(Guid.Parse("14D4D3EC-6E1E-4839-ACC7-EA3B4653CF96"), typeof(Guid));
 
-            var structure1 = new StructureIndex(guid1, "TheName", "TheValue");
-            var structure2 = new StructureIndex(guid2, "TheName", "TheValue");
+            var structure1 = new StructureIndex(structureId1, "TheName", "TheValue");
+            var structure2 = new StructureIndex(structureId2, "TheName", "TheValue");
 
             Assert.AreNotEqual(structure1, structure2);
         }
@@ -33,10 +33,10 @@ namespace PineCone.Tests.UnitTests.Structures
         [Test]
         public void Equals_WhenDifferentName_ReturnsFalse()
         {
-            var guid1 = Guid.Parse("06E2FC67-AB9F-4E65-A2C8-5FC897597887");
+            var structureId = new StructureId(Guid.Parse("06E2FC67-AB9F-4E65-A2C8-5FC897597887"), typeof(Guid));
 
-            var structure1 = new StructureIndex(guid1, "TheName", "TheValue");
-            var structure2 = new StructureIndex(guid1, "OtherName", "TheValue");
+            var structure1 = new StructureIndex(structureId, "TheName", "TheValue");
+            var structure2 = new StructureIndex(structureId, "OtherName", "TheValue");
 
             Assert.AreNotEqual(structure1, structure2);
         }
@@ -44,10 +44,10 @@ namespace PineCone.Tests.UnitTests.Structures
         [Test]
         public void Equals_WhenDifferentValue_ReturnsFalse()
         {
-            var guid1 = Guid.Parse("06E2FC67-AB9F-4E65-A2C8-5FC897597887");
+            var structureId = new StructureId(Guid.Parse("06E2FC67-AB9F-4E65-A2C8-5FC897597887"), typeof(Guid));
 
-            var structure1 = new StructureIndex(guid1, "TheName", "TheValue");
-            var structure2 = new StructureIndex(guid1, "TheName", "OtherValue");
+            var structure1 = new StructureIndex(structureId, "TheName", "TheValue");
+            var structure2 = new StructureIndex(structureId, "TheName", "OtherValue");
 
             Assert.AreNotEqual(structure1, structure2);
         }

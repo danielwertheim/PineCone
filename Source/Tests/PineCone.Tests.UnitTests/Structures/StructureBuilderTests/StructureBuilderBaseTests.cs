@@ -8,12 +8,13 @@ namespace PineCone.Tests.UnitTests.Structures.StructureBuilderTests
     [TestFixture]
     public abstract class StructureBuilderBaseTests : UnitTestBase
     {
+        protected IStructureIdGenerator StructureIdGenerator;
         protected StructureBuilder Builder;
 
         protected override void OnTestInitialize()
         {
-            Builder = new StructureBuilder(
-                new StructureIndexesFactory());
+            StructureIdGenerator = new GuidStructureIdGenerator();
+            Builder = new StructureBuilder(StructureIdGenerator, new StructureIndexesFactory());
         }
 
         protected static ICollection<GuidItem> CreateGuidItems(int numOfItems)

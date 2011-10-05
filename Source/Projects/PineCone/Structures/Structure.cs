@@ -10,11 +10,11 @@ namespace PineCone.Structures
     [Serializable]
     public class Structure : IStructure, IEquatable<IStructure>
     {
-        public Guid Id { get; private set; }
+        public StructureId Id { get; private set; }
 
         public string Name { get; private set; }
 
-        public dynamic Data { get; set; }
+        public string Data { get; set; }
 
         public IList<IStructureIndex> Indexes { get; private set; }
 
@@ -26,10 +26,10 @@ namespace PineCone.Structures
             Uniques = new List<IStructureIndex>();
         }
 
-        public Structure(string name, Guid id, ICollection<IStructureIndex> indexes, dynamic data = null)
+        public Structure(string name, StructureId id, ICollection<IStructureIndex> indexes, string data = null)
         {
             Ensure.That(name, "name").IsNotNullOrWhiteSpace();
-            Ensure.That(id, "id").IsNotEmpty();
+            Ensure.That(id, "id").IsNotNull();
             
             Name = name;
             Id = id;
@@ -43,7 +43,7 @@ namespace PineCone.Structures
                     Uniques.FirstOrDefault(u => indexes.Count(i => i.Path.Equals(u.Path)) > 1);
                 if (firstUniqueNotBeingUnique != null)
                 {
-                    var idValue = Sys.StringConverter.AsString(firstUniqueNotBeingUnique.StructureId);
+                    var idValue = Sys.StringConverter.AsString(firstUniqueNotBeingUnique.StructureId.Value);
                     var uniqueValue = Sys.StringConverter.AsString(firstUniqueNotBeingUnique.Value);
                     throw new PineConeException(
                         ExceptionMessages.Structure_DuplicateUniques.Inject(

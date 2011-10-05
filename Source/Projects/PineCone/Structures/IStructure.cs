@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace PineCone.Structures
 {
     public interface IStructure
     {
-        Guid Id { get; }
+        StructureId Id { get; }
 
         string Name { get; }
 
-        dynamic Data { get; set; }
+        string Data { get; set; }
         
         IList<IStructureIndex> Indexes { get; }
 

@@ -63,7 +63,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ExceptionMessages.resx</DependentUpon>
     </Compile>
-    <Compile Include="SequentialGuid.cs" />
+    <Compile Include="Structures\IStructureIdGenerator.cs" />
+    <Compile Include="Structures\SequentialGuid.cs" />
     <Compile Include="PineConeException.cs" />
     <Compile Include="Serializers\ISerializer.cs" />
     <Compile Include="Serializers\EmptySerializer.cs" />
@@ -97,9 +98,11 @@
     <Compile Include="Structures\Schemas\StructureType.cs" />
     <Compile Include="Structures\Schemas\StructureTypeFactory.cs" />
     <Compile Include="Structures\Schemas\StructureTypeReflecter.cs" />
+    <Compile Include="Structures\StructureId.cs" />
     <Compile Include="Structures\StructureIdGenerator.cs" />
     <Compile Include="Structures\Structure.cs" />
     <Compile Include="Structures\StructureBuilder.cs" />
+    <Compile Include="Structures\StructureIdTypes.cs" />
     <Compile Include="Structures\StructureIndex.cs" />
     <Compile Include="Structures\StructureIndexesFactory.cs" />
     <Compile Include="Structures\StructureIndexType.cs" />

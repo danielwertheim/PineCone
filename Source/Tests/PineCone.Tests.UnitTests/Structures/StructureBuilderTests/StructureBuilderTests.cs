@@ -15,7 +15,7 @@ namespace PineCone.Tests.UnitTests.Structures.StructureBuilderTests
         {
             var schema = StructureSchemaTestFactory.CreateRealFrom<GuidItem>();
             var initialId = StructureIdGenerator.CreateId();
-            var item = new GuidItem { StructureId = initialId };
+            var item = new GuidItem { StructureId = (Guid)initialId.Value };
 
             var structure = Builder.CreateStructure(item, schema);
 

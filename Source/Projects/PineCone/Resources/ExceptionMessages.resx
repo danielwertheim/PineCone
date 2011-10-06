@@ -130,22 +130,7 @@
     <value>Id values must lie on the root object.</value>
   </data>
   <data name="IdAccessor_UnsupportedPropertyType" xml:space="preserve">
-    <value>The Property.PropertyType '{0}' is not supported by the IdAccessor.</value>
-  </data>
-  <data name="StructureIdFactory_MissingGuidValue" xml:space="preserve">
-    <value>When using Guids the Id-property of the entity must be assigned before structure is created.</value>
-  </data>
-  <data name="StructureIdFactory_MissingIdentityValue" xml:space="preserve">
-    <value>When using Identities the Id-property of the entity must be assigned before structure is created.</value>
-  </data>
-  <data name="StructureIdFactory_UnSupportedIdentityType" xml:space="preserve">
-    <value>The identity type: '{0}' is not supported.</value>
-  </data>
-  <data name="StructureId_GuidIsMissingValue" xml:space="preserve">
-    <value>You must provide an unique guid to the GuidId.</value>
-  </data>
-  <data name="StructureId_IdentityIsOutOfRange" xml:space="preserve">
-    <value>You must provide a positive identity.</value>
+    <value>The Property.PropertyType '{0}' is not supported by the IdAccessor. Supported types are: Guid, Nullable-Guid, Int, Nullable-Int, Long and Nullable-Long.</value>
   </data>
   <data name="StructureIndexesFactory_UniqueIndex_IsNull" xml:space="preserve">
     <value>The Unique index '{0}':'{1}' is evaluated to Null. This is not alowed.</value>
@@ -161,5 +146,8 @@
   </data>
   <data name="UniqueModesCantBeMapped" xml:space="preserve">
     <value>The UniqueModes '{0}' is unknow and cant be mapped.</value>
+  </data>
+  <data name="StructureId_InvalidType" xml:space="preserve">
+    <value>The type '{0}' is not supported for StructureId. Only Guid, Nullable-Guid, Int, Nullable-Int, Long and Nullable-Long are supported.</value>
   </data>
 </root>

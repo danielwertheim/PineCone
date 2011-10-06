@@ -14,7 +14,7 @@ namespace PineCone.Tests.UnitTests.Structures.StructureBuilderTests
         public void CreateStructure_WhenIdIsAssigned_IdIsOverWritten()
         {
             var schema = StructureSchemaTestFactory.CreateRealFrom<GuidItem>();
-            var initialId = StructureIdGenerator.CreateId();
+            var initialId = GuidStructureIdGenerator.CreateId();
             var item = new GuidItem { StructureId = (Guid)initialId.Value };
 
             var structure = Builder.CreateStructure(item, schema);

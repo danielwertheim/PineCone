@@ -2,6 +2,8 @@
 {
     public interface IIdAccessor : IMemberAccessor
     {
+        StructureIdTypes IdType { get; }
+
         StructureId GetValue<T>(T item)
             where T : class;
 

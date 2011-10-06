@@ -1,5 +1,7 @@
 using System;
+using NCore;
 using NCore.Reflections;
+using PineCone.Resources;
 
 namespace PineCone.Structures
 {
@@ -36,15 +38,30 @@ namespace PineCone.Structures
             _value = value;
             _hasValue = value != null;
             _dataType = dataType;
+            _idType = GetIdTypeFrom(dataType);
+        }
 
-            if(dataType.IsGuidType() || dataType.IsNullableGuidType())
-                _idType = StructureIdTypes.Guid;
+        public static StructureIdTypes GetIdTypeFrom(Type type)
+        {
+            if (type.IsGuidType() || type.IsNullableGuidType())
+                return StructureIdTypes.Guid;
 
-            if(dataType.IsIntType() || dataType.IsNullableIntType())
-                _idType = StructureIdTypes.SmallIdentity;
+            if (type.IsIntType() || type.IsNullableIntType())
+                return StructureIdTypes.SmallIdentity;
 
-            if (dataType.IsLongType() || dataType.IsNullableLongType())
-                _idType = StructureIdTypes.BigIdentity;
+            if (type.IsLongType() || type.IsNullableLongType())
+                return StructureIdTypes.BigIdentity;
+
+            throw new PineConeException(ExceptionMessages.StructureId_InvalidType.Inject(type.Name));
+        }
+
+        public static bool IsValidDataType(Type type)
+        {
+            var isGuidType = type.IsGuidType() || type.IsNullableGuidType();
+            var isIntType = type.IsIntType() || type.IsNullableIntType();
+            var isLongType = type.IsLongType() || type.IsNullableLongType();
+
+            return isGuidType || isIntType || isLongType;
         }
 
         public override bool Equals(object obj)

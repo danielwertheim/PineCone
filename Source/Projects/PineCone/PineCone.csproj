@@ -38,9 +38,9 @@
     <Reference Include="EnsureThat">
       <HintPath>..\..\packages\Ensure.That.0.3.0\lib\EnsureThat.dll</HintPath>
     </Reference>
-    <Reference Include="NCore, Version=0.2.0.42, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="NCore, Version=0.3.0.44, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\NCore.0.2.0.42\lib\NCore.dll</HintPath>
+      <HintPath>..\..\packages\NCore.0.3.0.44\lib\NCore.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

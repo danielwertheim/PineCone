@@ -15,17 +15,27 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas
         {
             var idAccessorFake = new Mock<IIdAccessor>();
 
-            var ex = Assert.Throws<ArgumentException>(() => new StructureSchema(" ", idAccessorFake.Object));
+            var ex = Assert.Throws<ArgumentException>(() => new StructureSchema(" ", "FakeHash", idAccessorFake.Object));
 
-            Assert.IsNotNull(ex);
+            Assert.AreEqual("name", ex.ParamName);
+        }
+
+        [Test]
+        public void Ctor_WhenHashIsWhiteSpaceEmpty_ThrowsArgumentNullException()
+        {
+            var idAccessorFake = new Mock<IIdAccessor>();
+
+            var ex = Assert.Throws<ArgumentException>(() => new StructureSchema("FakeName", " ", idAccessorFake.Object));
+
+            Assert.AreEqual("hash", ex.ParamName);
         }
 
         [Test]
         public void Ctor_WhenIdAccessorIsNull_ThrowsArgumentNullException()
         {
-            var ex = Assert.Throws<ArgumentNullException>(() => new StructureSchema("FakeName", null));
-            
-            Assert.IsNotNull(ex);
+            var ex = Assert.Throws<ArgumentNullException>(() => new StructureSchema("FakeName", "FakeHash", null));
+
+            Assert.AreEqual("idAccessor", ex.ParamName);
         }
 
         [Test]
@@ -41,7 +51,9 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas
             uniqueIndexAccessorFake.Setup(x => x.Path).Returns("Unique");
             uniqueIndexAccessorFake.Setup(x => x.IsUnique).Returns(true);
 
-            var schema = new StructureSchema("FakeName",
+            var schema = new StructureSchema(
+                "FakeName",
+                "FakeHash",
                 idAccessorFake.Object,
                 new[] {indexAccessorFake.Object, uniqueIndexAccessorFake.Object});
 

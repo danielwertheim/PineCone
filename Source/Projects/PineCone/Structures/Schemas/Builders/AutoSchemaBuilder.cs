@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using EnsureThat;
 using NCore;
+using NCore.Cryptography;
 using NCore.Reflections;
 using PineCone.Resources;
 using PineCone.Structures.Schemas.MemberAccessors;
@@ -9,6 +10,13 @@ namespace PineCone.Structures.Schemas.Builders
 {
     public class AutoSchemaBuilder : ISchemaBuilder
     {
+        private readonly IHashService _hashService;
+
+        public AutoSchemaBuilder()
+        {
+            _hashService = new Crc32HashService();
+        }
+
         public IStructureSchema CreateSchema(IStructureType structureType)
         {
             Ensure.That(structureType, "structureType").IsNotNull();
@@ -18,10 +26,10 @@ namespace PineCone.Structures.Schemas.Builders
             if (indexAccessors == null || indexAccessors.Length < 1)
                 throw new PineConeException(ExceptionMessages.AutoSchemaBuilder_MissingIndexableMembers.Inject(structureType.Name));
 
-            return new StructureSchema(
-                structureType.Name, 
-                idAccessor, 
-                indexAccessors);
+            var schemaName = structureType.Name;
+            var schemaHash = _hashService.GenerateHash(schemaName);
+
+            return new StructureSchema(schemaName, schemaHash, idAccessor, indexAccessors);
         }
 
         private static IIdAccessor GetIdAccessor(IStructureType structureType)

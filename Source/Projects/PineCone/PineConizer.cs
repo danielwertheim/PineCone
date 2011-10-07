@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using EnsureThat;
+using NCore.Cryptography;
 using PineCone.Structures;
 using PineCone.Structures.Schemas;
 using PineCone.Structures.Schemas.Builders;
+using PineCone.Structures.Schemas.Configuration;
 
 namespace PineCone
 {
@@ -35,8 +37,10 @@ namespace PineCone
 
         public PineConizer()
         {
-            Schemas = new StructureSchemas(new StructureTypeFactory(), new AutoSchemaBuilder());
+            var structureTypeFactory = new StructureTypeFactory(new StructureTypeReflecter(), new StructureTypeConfigurations());
+            var schemaBuilder = new AutoSchemaBuilder();
 
+            Schemas = new StructureSchemas(structureTypeFactory, schemaBuilder);
             Builder = new StructureBuilder(new StructureIdGenerators(), new StructureIndexesFactory());
         }
 

@@ -25,7 +25,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas
                 return new[] { indexProperty.Object };
             });
 
-            var factory = new StructureTypeFactory { Reflecter = reflecterMock.Object };
+            var factory = new StructureTypeFactory(reflecterMock.Object);
             factory.CreateFor(type);
 
             reflecterMock.Verify(m => m.GetIndexableProperties(type));
@@ -49,7 +49,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas
                 return new[] { indexProperty.Object };
             });
 
-            var factory = new StructureTypeFactory { Reflecter = reflecterMock.Object };
+            var factory = new StructureTypeFactory(reflecterMock.Object);
             factory.Configurations.NewForType(type).DoNotIndexThis("ExcludeTEMP");
             factory.CreateFor(type);
 
@@ -74,7 +74,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas
                 return new[] { indexProperty.Object };
             });
 
-            var factory = new StructureTypeFactory { Reflecter = reflecterMock.Object };
+            var factory = new StructureTypeFactory(reflecterMock.Object);
             factory.Configurations.NewForType(type).OnlyIndexThis("IncludeTEMP");
             factory.CreateFor(type);
 

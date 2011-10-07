@@ -24,7 +24,7 @@ namespace PineCone.Structures
                 if (!valuesExists)
                 {
                     if (indexAccessor.IsUnique)
-                        throw new PineConeException(ExceptionMessages.StructureIndexesFactory_UniqueIndex_IsNull.Inject(indexAccessor.Path, indexAccessor.Name));
+                        throw new PineConeException(ExceptionMessages.StructureIndexesFactory_UniqueIndex_IsNull.Inject(structureSchema.Name, indexAccessor.Path));
 
                     return;
                 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using PineCone.Annotations;
 
 namespace PineCone.Structures.Schemas.MemberAccessors
 {
@@ -9,7 +10,9 @@ namespace PineCone.Structures.Schemas.MemberAccessors
         bool IsElement { get; }
 
         bool IsUnique { get; }
-        
+
+        UniqueModes? UniqueMode { get; }
+
         IList<object> GetValues<T>(T item) where T : class;
 
         void SetValue<T>(T item, object value) where T : class;

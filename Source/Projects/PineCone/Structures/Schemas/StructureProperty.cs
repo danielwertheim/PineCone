@@ -26,7 +26,12 @@ namespace PineCone.Structures.Schemas
 
         public bool IsRootMember { get; private set; }
 
-        public bool IsUnique { get; private set; }
+        public bool IsUnique 
+        {
+            get { return UniqueMode.HasValue; }
+        }
+
+        public UniqueModes? UniqueMode { get; private set; }
 
         public bool IsEnumerable { get; private set; }
 
@@ -42,17 +47,21 @@ namespace PineCone.Structures.Schemas
         public static StructureProperty CreateFrom(IStructureProperty parent, PropertyInfo propertyInfo)
         {
             var uniqueAttribute = (UniqueAttribute)propertyInfo.GetCustomAttributes(UniqueAttributeType, true).FirstOrDefault();
-            
+
+            UniqueModes? uniqueMode = null;
+            if (uniqueAttribute != null)
+                uniqueMode = uniqueAttribute.Mode;
+
             return new StructureProperty(
                 parent, 
                 propertyInfo.Name, 
                 propertyInfo.PropertyType,
                 DynamicPropertyFactory.CreateGetter(propertyInfo),
                 DynamicPropertyFactory.CreateSetter(propertyInfo),
-                uniqueAttribute != null);
+                uniqueMode);
         }
 
-        private StructureProperty(IStructureProperty parent, string name, Type propertyType, DynamicGetter getter, DynamicSetter setter, bool isUnique = false)
+        private StructureProperty(IStructureProperty parent, string name, Type propertyType, DynamicGetter getter, DynamicSetter setter, UniqueModes? uniqueMode = null)
         {
             Ensure.That(name, "name").IsNotNullOrWhiteSpace();
             Ensure.That(propertyType, "propertyType").IsNotNull();
@@ -65,7 +74,7 @@ namespace PineCone.Structures.Schemas
             PropertyType = propertyType;
             _getter = getter;
             _setter = setter;
-            IsUnique = isUnique;
+            UniqueMode = uniqueMode;
 
             var isSimpleType = PropertyType.IsSimpleType();
             IsEnumerable = !isSimpleType && PropertyType.IsEnumerableType();

@@ -1,4 +1,5 @@
 ﻿using System;
+using PineCone.Annotations;
 
 namespace PineCone.Structures.Schemas
 {
@@ -15,6 +16,8 @@ namespace PineCone.Structures.Schemas
         bool IsRootMember { get; }
 
         bool IsUnique { get; }
+
+        UniqueModes? UniqueMode { get; }
 
         bool IsEnumerable { get; }
 

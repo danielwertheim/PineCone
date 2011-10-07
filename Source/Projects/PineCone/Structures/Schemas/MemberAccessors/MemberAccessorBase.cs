@@ -6,8 +6,6 @@ namespace PineCone.Structures.Schemas.MemberAccessors
     {
         protected IStructureProperty Property { get; private set; }
 
-        public string Name { get; private set; }
-
         public string Path
         {
             get { return Property.Path; }
@@ -21,7 +19,6 @@ namespace PineCone.Structures.Schemas.MemberAccessors
         protected MemberAccessorBase(IStructureProperty property)
         {
             Property = property;
-            Name = property.Path;
         }
     }
 }

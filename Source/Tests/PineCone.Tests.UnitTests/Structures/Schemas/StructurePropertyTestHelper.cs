@@ -4,7 +4,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas
 {
     public class StructurePropertyTestHelper
     {
-        internal static StructureProperty GetProperty<T>(string name)
+        internal static IStructureProperty GetProperty<T>(string name)
         {
             var type = typeof(T);
             var propertyInfo = type.GetProperty(name);
@@ -14,7 +14,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas
             return property;
         }
 
-        internal static StructureProperty GetProperty<T>(string name, StructureProperty parent)
+        internal static IStructureProperty GetProperty<T>(string name, IStructureProperty parent)
         {
             var type = typeof(T);
             var propertyInfo = type.GetProperty(name);

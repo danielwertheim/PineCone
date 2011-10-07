@@ -3,6 +3,7 @@ using EnsureThat;
 using PineCone.Structures;
 using PineCone.Structures.Schemas;
 using PineCone.Structures.Schemas.Builders;
+using PineCone.Structures.Schemas.Configuration;
 
 namespace PineCone
 {
@@ -35,7 +36,7 @@ namespace PineCone
 
         public PineConizer()
         {
-            Schemas = new StructureSchemas(new StructureTypeFactory(), new AutoSchemaBuilder());
+            Schemas = new StructureSchemas(new StructureTypeFactory(new StructureTypeReflecter(), new StructureTypeConfigurations()), new AutoSchemaBuilder());
 
             Builder = new StructureBuilder(new StructureIdGenerators(), new StructureIndexesFactory());
         }

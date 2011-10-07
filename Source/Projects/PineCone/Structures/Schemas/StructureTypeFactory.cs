@@ -6,14 +6,14 @@ namespace PineCone.Structures.Schemas
 {
     public class StructureTypeFactory : IStructureTypeFactory
     {
-        public IStructureTypeReflecter Reflecter { get; set; }
+        public IStructureTypeReflecter Reflecter { get; private set; }
 
-        public IStructureTypeConfigurations Configurations { get; set; }
+        public IStructureTypeConfigurations Configurations { get; private set; }
 
-        public StructureTypeFactory()
+        public StructureTypeFactory(IStructureTypeReflecter reflecter = null, IStructureTypeConfigurations configurations = null)
         {
-            Reflecter = new StructureTypeReflecter();
-            Configurations = new StructureTypeConfigurations();
+            Reflecter = reflecter ?? new StructureTypeReflecter();
+            Configurations = configurations ?? new StructureTypeConfigurations();
         }
 
         public IStructureType CreateFor<T>() where T : class 

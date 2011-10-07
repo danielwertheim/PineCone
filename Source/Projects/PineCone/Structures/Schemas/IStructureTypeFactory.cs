@@ -5,9 +5,9 @@ namespace PineCone.Structures.Schemas
 {
     public interface IStructureTypeFactory
     {
-        IStructureTypeReflecter Reflecter { get; set; }
+        IStructureTypeReflecter Reflecter { get; }
 
-        IStructureTypeConfigurations Configurations { get; set; }
+        IStructureTypeConfigurations Configurations { get; }
 
         IStructureType CreateFor<T>() where T : class;
 

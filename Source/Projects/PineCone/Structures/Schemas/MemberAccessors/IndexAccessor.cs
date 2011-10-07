@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using PineCone.Annotations;
 
 namespace PineCone.Structures.Schemas.MemberAccessors
 {
@@ -22,6 +23,11 @@ namespace PineCone.Structures.Schemas.MemberAccessors
         public bool IsUnique
         {
             get { return Property.IsUnique; }
+        }
+
+        public UniqueModes? UniqueMode
+        {
+            get { return Property.UniqueMode; }
         }
 
         public IndexAccessor(IStructureProperty property)

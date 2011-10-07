@@ -6,7 +6,7 @@ using PineCone.Structures.Schemas.Builders;
 
 namespace PineCone
 {
-    public class PineConizer
+    public class PineConizer : IPineConizer
     {
         private IStructureSchemas _schemas;
         private IStructureBuilder _builder;

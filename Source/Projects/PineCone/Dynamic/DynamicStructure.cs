@@ -13,7 +13,7 @@ namespace PineCone.Dynamic
 
         public DynamicDescriptor Descriptor { get; private set; }
 
-        public StructureId StructureId { get; set; }
+        public IStructureId StructureId { get; set; }
 
         public string Name
         {

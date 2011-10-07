@@ -6,7 +6,7 @@ using PineCone.Resources;
 namespace PineCone.Structures
 {
     [Serializable]
-    public class StructureId : IEquatable<StructureId>
+    public class StructureId : IStructureId
     {
         private readonly StructureIdTypes _idType;
         private readonly ValueType _value;
@@ -66,14 +66,14 @@ namespace PineCone.Structures
 
         public override bool Equals(object obj)
         {
-            return Equals(obj as StructureId);
+            return Equals(obj as IStructureId);
         }
 
-        public bool Equals(StructureId other)
+        public bool Equals(IStructureId other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return Equals(other._value, _value);
+            return Equals(other.Value, Value);
         }
 
         public override int GetHashCode()

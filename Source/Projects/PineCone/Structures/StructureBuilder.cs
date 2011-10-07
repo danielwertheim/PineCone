@@ -73,7 +73,7 @@ namespace PineCone.Structures
             }
         }
 
-        private IStructure CreateStructure<T>(T item, IStructureSchema structureSchema, StructureId structureId)
+        private IStructure CreateStructure<T>(T item, IStructureSchema structureSchema, IStructureId structureId)
             where T : class
         {
             structureSchema.IdAccessor.SetValue(item, structureId);

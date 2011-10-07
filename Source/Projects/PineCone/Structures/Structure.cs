@@ -10,7 +10,7 @@ namespace PineCone.Structures
     [Serializable]
     public class Structure : IStructure, IEquatable<IStructure>
     {
-        public StructureId Id { get; private set; }
+        public IStructureId Id { get; private set; }
 
         public string Name { get; private set; }
 
@@ -26,7 +26,7 @@ namespace PineCone.Structures
             Uniques = new List<IStructureIndex>();
         }
 
-        public Structure(string name, StructureId id, ICollection<IStructureIndex> indexes, string data = null)
+        public Structure(string name, IStructureId id, ICollection<IStructureIndex> indexes, string data = null)
         {
             Ensure.That(name, "name").IsNotNullOrWhiteSpace();
             Ensure.That(id, "id").IsNotNull();

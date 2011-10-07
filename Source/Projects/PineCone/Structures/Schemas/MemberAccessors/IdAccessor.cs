@@ -20,13 +20,13 @@ namespace PineCone.Structures.Schemas.MemberAccessors
             IdType = StructureId.GetIdTypeFrom(property.PropertyType);
         }
 
-        public StructureId GetValue<T>(T item)
+        public IStructureId GetValue<T>(T item)
             where T : class
         {
             return new StructureId((ValueType)Property.GetValue(item), Property.PropertyType);
         }
         
-        public void SetValue<T>(T item, StructureId value)
+        public void SetValue<T>(T item, IStructureId value)
             where T : class
         {
             Property.SetValue(item, value.Value);

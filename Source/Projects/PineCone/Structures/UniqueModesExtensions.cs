@@ -6,6 +6,14 @@ namespace PineCone.Structures
 {
     internal static class UniqueModesExtensions
     {
+        internal static StructureIndexType ToStructureIndexType(this UniqueModes? uniqueMode)
+        {
+            if (uniqueMode == null)
+                return StructureIndexType.Normal;
+
+            return uniqueMode.Value.ToStructureIndexType();
+        }
+
         internal static StructureIndexType ToStructureIndexType(this UniqueModes uniqueModes)
         {
             if (uniqueModes == UniqueModes.PerInstance)

@@ -8,6 +8,8 @@ namespace PineCone.Structures
     public class StructureIndex : IStructureIndex
     {
         public IStructureId StructureId { get; private set; }
+        
+        public StructureIndexType IndexType { get; private set; }
 
         public string Path { get; private set; }
 
@@ -15,7 +17,7 @@ namespace PineCone.Structures
 
         public bool IsUnique { get; private set; }
 
-        public StructureIndex(IStructureId structureId, string path, object value, bool isUnique = false)
+        public StructureIndex(IStructureId structureId, string path, object value, StructureIndexType indexType = StructureIndexType.Normal)
         {
             var valueIsOkType = value is string || value is ValueType;
 
@@ -28,7 +30,8 @@ namespace PineCone.Structures
             StructureId = structureId;
             Path = path;
             Value = value;
-            IsUnique = isUnique;
+            IndexType = indexType;
+            IsUnique = indexType.IsUnique();
         }
 
         public override bool Equals(object obj)

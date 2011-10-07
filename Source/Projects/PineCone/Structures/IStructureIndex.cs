@@ -6,6 +6,8 @@ namespace PineCone.Structures
     {
         IStructureId StructureId { get; }
 
+        StructureIndexType IndexType { get; }
+
         string Path { get;  }
         
         object Value { get; }

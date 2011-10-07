@@ -43,6 +43,11 @@ namespace PineCone.Structures
             return new StructureId(value, typeof(T?));
         }
 
+        public static StructureId Create(ValueType value)
+        {
+            return new StructureId(value, value.GetType());
+        }
+
         public static StructureId Create(ValueType value, Type dataType)
         {
             return new StructureId(value, dataType);

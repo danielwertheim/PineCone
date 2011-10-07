@@ -13,8 +13,8 @@ namespace PineCone.Tests.UnitTests.Structures
             var structureId = StructureId.Create(1);
             var indexes = new List<IStructureIndex>
             {
-                new StructureIndex(structureId, "UniqueIndex1", "Value1", true),
-                new StructureIndex(structureId, "UniqueIndex1", "Value1", true)
+                new StructureIndex(structureId, "UniqueIndex1", "Value1", StructureIndexType.UniquePerInstance),
+                new StructureIndex(structureId, "UniqueIndex1", "Value1", StructureIndexType.UniquePerInstance)
             };
             
             Assert.Throws<PineConeException>(() => new Structure("Name", structureId, indexes));

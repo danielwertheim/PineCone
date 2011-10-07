@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Linq;
+using Moq;
 using NUnit.Framework;
 using PineCone.Structures;
+using PineCone.Structures.Schemas;
 
 namespace PineCone.Tests.UnitTests.Structures
 {
@@ -9,10 +11,12 @@ namespace PineCone.Tests.UnitTests.Structures
     public class GuidStructureIdGeneratorTests : UnitTestBase
     {
         private IStructureIdGenerator _structureIdGenerator;
+        private IStructureSchema _structureSchema;
 
         protected override void OnFixtureInitialize()
         {
             _structureIdGenerator = new GuidStructureIdGenerator();
+            _structureSchema = new Mock<IStructureSchema>().Object;
         }
 
         [Test]
@@ -20,7 +24,7 @@ namespace PineCone.Tests.UnitTests.Structures
         {
             var numOfIds = 10;
 
-            var ids = _structureIdGenerator.CreateIds(numOfIds)
+            var ids = _structureIdGenerator.CreateIds(numOfIds, _structureSchema)
                 .Select(id => id.Value)
                 .Cast<Guid>()
                 .Select(id => id.ToString("D"))
@@ -35,7 +39,7 @@ namespace PineCone.Tests.UnitTests.Structures
         [Test]
         public void CreateIds_WhenZeroIsPassedForNumOfIds_ReturnsZeroLenghtArray()
         {
-            var ids = _structureIdGenerator.CreateIds(0).ToArray();
+            var ids = _structureIdGenerator.CreateIds(0, _structureSchema).ToArray();
 
             Assert.AreEqual(0, ids.Length);
         }
@@ -43,7 +47,7 @@ namespace PineCone.Tests.UnitTests.Structures
         [Test]
         public void CreateIds_ReturnsGuids()
         {
-            var ids = _structureIdGenerator.CreateIds(10).Select(id => id.Value);
+            var ids = _structureIdGenerator.CreateIds(10, _structureSchema).Select(id => id.Value);
 
             CollectionAssert.AllItemsAreInstancesOfType(ids, typeof(Guid));
         }

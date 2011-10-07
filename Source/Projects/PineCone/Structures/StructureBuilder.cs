@@ -38,7 +38,7 @@ namespace PineCone.Structures
         public IStructure CreateStructure<T>(T item, IStructureSchema structureSchema)
             where T : class
         {
-            return CreateStructure(item, structureSchema, StructureIdGenerators.Get(structureSchema.IdAccessor.IdType).CreateId());
+            return CreateStructure(item, structureSchema, StructureIdGenerators.Get(structureSchema.IdAccessor.IdType).CreateId(structureSchema));
         }
 
         public IEnumerable<IStructure> CreateStructures<T>(ICollection<T> items, IStructureSchema structureSchema) where T : class
@@ -59,7 +59,7 @@ namespace PineCone.Structures
                     yield break;
 
                 var structures = new IStructure[sourceBatch.Length];
-                var ids = structureIdGenerator.CreateIds(sourceBatch.Length).ToArray();
+                var ids = structureIdGenerator.CreateIds(sourceBatch.Length, structureSchema).ToArray();
 
                 Parallel.For(0, sourceBatch.Length,
                     i =>

@@ -22,7 +22,7 @@ namespace PineCone.Dynamic
             var ts = dynamicStructure.Descriptor;
             var kvs = dynamicStructure.ToDictionary();
 
-            var id = _structureIdGenerator.CreateId();
+            var id = _structureIdGenerator.CreateId(null);
             dynamicStructure.StructureId = id;
 
             var indexes = new List<IStructureIndex>();

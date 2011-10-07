@@ -11,6 +11,13 @@ namespace PineCone.Structures
     public interface IStructureBuilder
     {
         /// <summary>
+        /// Collection of <see cref="IStructureIdGenerator"/> that is used
+        /// to generate StructureIds. As default, only <see cref="GuidStructureIdGenerator"/>
+        /// is registrered.
+        /// </summary>
+        IStructureIdGenerators StructureIdGenerators { get; }
+
+        /// <summary>
         /// Optional serializer. If specified,
         /// the <see cref="IStructure.Data"/> member
         /// will be filled with the serialization result.

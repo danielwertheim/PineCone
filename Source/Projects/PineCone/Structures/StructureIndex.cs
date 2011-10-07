@@ -7,7 +7,7 @@ namespace PineCone.Structures
     [Serializable]
     public class StructureIndex : IStructureIndex
     {
-        public StructureId StructureId { get; private set; }
+        public IStructureId StructureId { get; private set; }
 
         public string Path { get; private set; }
 
@@ -15,7 +15,7 @@ namespace PineCone.Structures
 
         public bool IsUnique { get; private set; }
 
-        public StructureIndex(StructureId structureId, string path, object value, bool isUnique = false)
+        public StructureIndex(IStructureId structureId, string path, object value, bool isUnique = false)
         {
             var valueIsOkType = value is string || value is ValueType;
 

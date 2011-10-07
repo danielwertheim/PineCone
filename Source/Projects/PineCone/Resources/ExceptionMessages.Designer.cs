@@ -97,7 +97,7 @@ namespace PineCone.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The Property.PropertyType &apos;{0}&apos; is not supported by the IdAccessor..
+        ///   Looks up a localized string similar to The Property.PropertyType &apos;{0}&apos; is not supported by the IdAccessor. Supported types are: Guid, Nullable-Guid, Int, Nullable-Int, Long and Nullable-Long..
         /// </summary>
         internal static string IdAccessor_UnsupportedPropertyType {
             get {
@@ -115,47 +115,11 @@ namespace PineCone.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You must provide an unique guid to the GuidId..
+        ///   Looks up a localized string similar to The type &apos;{0}&apos; is not supported for StructureId. Only Guid, Nullable-Guid, Int, Nullable-Int, Long and Nullable-Long are supported..
         /// </summary>
-        internal static string StructureId_GuidIsMissingValue {
+        internal static string StructureId_InvalidType {
             get {
-                return ResourceManager.GetString("StructureId_GuidIsMissingValue", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to You must provide a positive identity..
-        /// </summary>
-        internal static string StructureId_IdentityIsOutOfRange {
-            get {
-                return ResourceManager.GetString("StructureId_IdentityIsOutOfRange", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to When using Guids the Id-property of the entity must be assigned before structure is created..
-        /// </summary>
-        internal static string StructureIdFactory_MissingGuidValue {
-            get {
-                return ResourceManager.GetString("StructureIdFactory_MissingGuidValue", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to When using Identities the Id-property of the entity must be assigned before structure is created..
-        /// </summary>
-        internal static string StructureIdFactory_MissingIdentityValue {
-            get {
-                return ResourceManager.GetString("StructureIdFactory_MissingIdentityValue", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The identity type: &apos;{0}&apos; is not supported..
-        /// </summary>
-        internal static string StructureIdFactory_UnSupportedIdentityType {
-            get {
-                return ResourceManager.GetString("StructureIdFactory_UnSupportedIdentityType", resourceCulture);
+                return ResourceManager.GetString("StructureId_InvalidType", resourceCulture);
             }
         }
         

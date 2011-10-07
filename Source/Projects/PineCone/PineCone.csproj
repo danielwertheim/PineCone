@@ -56,6 +56,9 @@
     <Compile Include="Dynamic\DynamicMember.cs" />
     <Compile Include="Dynamic\DynamicStructure.cs" />
     <Compile Include="Dynamic\DynamicStructureBuilder.cs" />
+    <Compile Include="IPineConizer.cs" />
+    <Compile Include="Structures\IStructureId.cs" />
+    <Compile Include="Structures\IStructureIdGenerators.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PineConizer.cs" />
     <Compile Include="Resources\ExceptionMessages.Designer.cs">
@@ -63,6 +66,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ExceptionMessages.resx</DependentUpon>
     </Compile>
+    <Compile Include="Structures\StructureIdGenerators.cs" />
     <Compile Include="Structures\IStructureIdGenerator.cs" />
     <Compile Include="Structures\SequentialGuid.cs" />
     <Compile Include="PineConeException.cs" />

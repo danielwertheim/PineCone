@@ -4,7 +4,7 @@ namespace PineCone.Structures
 {
     public interface IStructure
     {
-        StructureId Id { get; }
+        IStructureId Id { get; }
 
         string Name { get; }
 

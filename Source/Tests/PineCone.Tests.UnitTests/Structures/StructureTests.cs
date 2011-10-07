@@ -10,7 +10,7 @@ namespace PineCone.Tests.UnitTests.Structures
         [Test]
         public void Ctor_WhenIndexesContainsNonUniqueUniqueIndex_ThrowsPineConeException()
         {
-            var structureId = new StructureId(1, typeof(int));
+            var structureId = StructureId.Create(1);
             var indexes = new List<IStructureIndex>
             {
                 new StructureIndex(structureId, "UniqueIndex1", "Value1", true),

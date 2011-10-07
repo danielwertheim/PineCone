@@ -23,7 +23,7 @@ namespace PineCone.Structures.Schemas.MemberAccessors
         public IStructureId GetValue<T>(T item)
             where T : class
         {
-            return new StructureId((ValueType)Property.GetValue(item), Property.PropertyType);
+            return StructureId.Create((ValueType)Property.GetValue(item), Property.PropertyType);
         }
         
         public void SetValue<T>(T item, IStructureId value)

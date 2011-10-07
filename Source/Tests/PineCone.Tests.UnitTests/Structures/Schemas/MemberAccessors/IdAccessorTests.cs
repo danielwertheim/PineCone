@@ -79,7 +79,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.MemberAccessors
         [Test]
         public void SetValue_ToGuidProperty_ValueIsAssigned()
         {
-            var id = new StructureId(Guid.Parse("fc47a673-5a5b-419b-9a40-a756591aa7bf"), typeof(Guid));
+            var id = StructureId.Create(Guid.Parse("fc47a673-5a5b-419b-9a40-a756591aa7bf"));
             var item = new GuidDummy();
 
             var property = StructurePropertyTestFactory.GetIdProperty<GuidDummy>();
@@ -92,7 +92,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.MemberAccessors
        [Test]
         public void SetValue_ToNullableGuidProperty_ValueIsAssigned()
         {
-            var id = new StructureId(Guid.Parse("fc47a673-5a5b-419b-9a40-a756591aa7bf"), typeof(Guid));
+            var id = StructureId.Create(Guid.Parse("fc47a673-5a5b-419b-9a40-a756591aa7bf"));
             var item = new NullableGuidDummy();
 
             var property = StructurePropertyTestFactory.GetIdProperty<NullableGuidDummy>();

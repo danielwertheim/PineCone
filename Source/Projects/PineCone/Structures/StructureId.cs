@@ -33,7 +33,22 @@ namespace PineCone.Structures
             get { return _hasValue; }
         }
 
-        public StructureId(ValueType value, Type dataType)
+        public static StructureId Create<T>(T value) where T : struct
+        {
+            return new StructureId(value, typeof(T));
+        }
+
+        public static StructureId Create<T>(T? value) where T : struct 
+        {
+            return new StructureId(value, typeof(T?));
+        }
+
+        public static StructureId Create(ValueType value, Type dataType)
+        {
+            return new StructureId(value, dataType);
+        }
+
+        private StructureId(ValueType value, Type dataType)
         {
             _value = value;
             _hasValue = value != null;

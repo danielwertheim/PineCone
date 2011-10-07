@@ -10,89 +10,126 @@ namespace PineCone.Tests.UnitTests.Structures
     public class StructureIdTests : UnitTestBase
     {
         [Test]
-        public void Ctor_WhenGuid_ValueIsReflected()
+        public void Create_WhenGuid_ValuesAreReflected()
         {
-            var guid = Guid.Parse("46C72168-C637-416D-9736-751E2A17028A");
+            var value = Guid.Parse("46C72168-C637-416D-9736-751E2A17028A");
 
-            var id = new StructureId(guid, guid.GetType());
+            var id = StructureId.Create(value);
 
-            Assert.AreEqual(guid, id.Value);
-        }
-
-        [Test]
-        public void Ctor_WhenNullGuid_HasValueIsFalse()
-        {
-            var id = new StructureId(null, typeof(Guid));
-
-            Assert.AreEqual(null, id.Value);
-            Assert.IsFalse(id.HasValue);
-        }
-
-        [Test]
-        public void Ctor_WhenNullGuid_TypeIsCorrect()
-        {
-            var id = new StructureId(null, typeof(Guid));
-
-            Assert.AreEqual(StructureIdTypes.Guid, id.IdType);
+            Assert.IsTrue(id.HasValue);
+            Assert.AreEqual(value, id.Value);
             Assert.AreEqual(typeof(Guid), id.DataType);
+            Assert.AreEqual(StructureIdTypes.Guid, id.IdType);
         }
 
         [Test]
-        public void Ctor_WhenInt_ValueIsReflected()
+        public void Create_WhenNullableGuidNotNull_ValuesAreReflected()
         {
-            var id = new StructureId(1, typeof(int));
+            Guid? value = Guid.Parse("46C72168-C637-416D-9736-751E2A17028A");
 
-            Assert.AreEqual(1, id.Value);
+            var id = StructureId.Create(value);
+
+            Assert.IsTrue(id.HasValue);
+            Assert.AreEqual(value, id.Value);
+            Assert.AreEqual(typeof(Guid?), id.DataType);
+            Assert.AreEqual(StructureIdTypes.Guid, id.IdType);
         }
 
         [Test]
-        public void Ctor_WhenNullInt_HasValueIsFalse()
+        public void Create_WhenNullableGuidBeingNull_ValuesAreReflected()
         {
-            var id = new StructureId(null, typeof(int));
+            Guid? value = null;
 
-            Assert.AreEqual(null, id.Value);
+            var id = StructureId.Create(value);
+
             Assert.IsFalse(id.HasValue);
+            Assert.AreEqual(value, id.Value);
+            Assert.AreEqual(typeof(Guid?), id.DataType);
+            Assert.AreEqual(StructureIdTypes.Guid, id.IdType);
         }
 
         [Test]
-        public void Ctor_WhenNullInt_TypeIsCorrect()
+        public void Create_WhenInt_ValuesAreReflected()
         {
-            var id = new StructureId(null, typeof(int));
+            var value = int.MaxValue;
 
-            Assert.AreEqual(StructureIdTypes.SmallIdentity, id.IdType);
+            var id = StructureId.Create(value);
+
+            Assert.IsTrue(id.HasValue);
+            Assert.AreEqual(value, id.Value);
             Assert.AreEqual(typeof(int), id.DataType);
+            Assert.AreEqual(StructureIdTypes.SmallIdentity, id.IdType);
         }
 
         [Test]
-        public void Ctor_WhenLong_ValueIsReflected()
+        public void Create_WhenNullableIntNotNull_ValuesAreReflected()
         {
-            var id = new StructureId(long.MaxValue, typeof(long));
+            int? value = int.MaxValue;
 
-            Assert.AreEqual(long.MaxValue, id.Value);
+            var id = StructureId.Create(value);
+
+            Assert.IsTrue(id.HasValue);
+            Assert.AreEqual(value, id.Value);
+            Assert.AreEqual(typeof(int?), id.DataType);
+            Assert.AreEqual(StructureIdTypes.SmallIdentity, id.IdType);
         }
 
         [Test]
-        public void Ctor_WhenNullLong_HasValueIsFalse()
+        public void Create_WhenNullableIntBeingNull_ValuesAreReflected()
         {
-            var id = new StructureId(null, typeof(long));
+            int? value = null;
 
-            Assert.AreEqual(null, id.Value);
+            var id = StructureId.Create(value);
+
             Assert.IsFalse(id.HasValue);
+            Assert.AreEqual(value, id.Value);
+            Assert.AreEqual(typeof(int?), id.DataType);
+            Assert.AreEqual(StructureIdTypes.SmallIdentity, id.IdType);
         }
 
         [Test]
-        public void Ctor_WhenNullLong_TypeIsCorrect()
+        public void Create_WhenLong_ValuesAreReflected()
         {
-            var id = new StructureId(null, typeof(long));
+            var value = long.MaxValue;
 
-            Assert.AreEqual(StructureIdTypes.BigIdentity, id.IdType);
+            var id = StructureId.Create(value);
+
+            Assert.IsTrue(id.HasValue);
+            Assert.AreEqual(value, id.Value);
             Assert.AreEqual(typeof(long), id.DataType);
+            Assert.AreEqual(StructureIdTypes.BigIdentity, id.IdType);
+        }
+
+        [Test]
+        public void Create_WhenNullableLongNotNull_ValuesAreReflected()
+        {
+            long? value = long.MaxValue;
+
+            var id = StructureId.Create(value);
+
+            Assert.IsTrue(id.HasValue);
+            Assert.AreEqual(value, id.Value);
+            Assert.AreEqual(typeof(long?), id.DataType);
+            Assert.AreEqual(StructureIdTypes.BigIdentity, id.IdType);
+        }
+
+        [Test]
+        public void Create_WhenNullableLongBeingNull_ValuesAreReflected()
+        {
+            long? value = null;
+
+            var id = StructureId.Create(value);
+
+            Assert.IsFalse(id.HasValue);
+            Assert.AreEqual(value, id.Value);
+            Assert.AreEqual(typeof(long?), id.DataType);
+            Assert.AreEqual(StructureIdTypes.BigIdentity, id.IdType);
         }
 
         [Test]
         public void Ctor_WhenRefType_ThrowsException()
         {
-            var ex = Assert.Throws<PineConeException>(() => new StructureId(null, typeof(string)));
+            var ex = Assert.Throws<PineConeException>(() => StructureId.Create(null, typeof(string)));
 
             Assert.AreEqual(ExceptionMessages.StructureId_InvalidType.Inject(typeof(string).Name), ex.Message);
         }

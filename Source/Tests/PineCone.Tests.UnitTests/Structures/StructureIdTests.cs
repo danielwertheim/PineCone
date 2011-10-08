@@ -58,7 +58,7 @@ namespace PineCone.Tests.UnitTests.Structures
             Assert.IsTrue(id.HasValue);
             Assert.AreEqual(value, id.Value);
             Assert.AreEqual(typeof(int), id.DataType);
-            Assert.AreEqual(StructureIdTypes.SmallIdentity, id.IdType);
+            Assert.AreEqual(StructureIdTypes.Identity, id.IdType);
         }
 
         [Test]
@@ -71,7 +71,7 @@ namespace PineCone.Tests.UnitTests.Structures
             Assert.IsTrue(id.HasValue);
             Assert.AreEqual(value, id.Value);
             Assert.AreEqual(typeof(int?), id.DataType);
-            Assert.AreEqual(StructureIdTypes.SmallIdentity, id.IdType);
+            Assert.AreEqual(StructureIdTypes.Identity, id.IdType);
         }
 
         [Test]
@@ -84,7 +84,7 @@ namespace PineCone.Tests.UnitTests.Structures
             Assert.IsFalse(id.HasValue);
             Assert.AreEqual(value, id.Value);
             Assert.AreEqual(typeof(int?), id.DataType);
-            Assert.AreEqual(StructureIdTypes.SmallIdentity, id.IdType);
+            Assert.AreEqual(StructureIdTypes.Identity, id.IdType);
         }
 
         [Test]
@@ -97,7 +97,7 @@ namespace PineCone.Tests.UnitTests.Structures
             Assert.IsTrue(id.HasValue);
             Assert.AreEqual(value, id.Value);
             Assert.AreEqual(typeof(long), id.DataType);
-            Assert.AreEqual(StructureIdTypes.BigIdentity, id.IdType);
+            Assert.AreEqual(StructureIdTypes.Identity, id.IdType);
         }
 
         [Test]
@@ -110,7 +110,7 @@ namespace PineCone.Tests.UnitTests.Structures
             Assert.IsTrue(id.HasValue);
             Assert.AreEqual(value, id.Value);
             Assert.AreEqual(typeof(long?), id.DataType);
-            Assert.AreEqual(StructureIdTypes.BigIdentity, id.IdType);
+            Assert.AreEqual(StructureIdTypes.Identity, id.IdType);
         }
 
         [Test]
@@ -123,7 +123,7 @@ namespace PineCone.Tests.UnitTests.Structures
             Assert.IsFalse(id.HasValue);
             Assert.AreEqual(value, id.Value);
             Assert.AreEqual(typeof(long?), id.DataType);
-            Assert.AreEqual(StructureIdTypes.BigIdentity, id.IdType);
+            Assert.AreEqual(StructureIdTypes.Identity, id.IdType);
         }
 
         [Test]
@@ -147,27 +147,27 @@ namespace PineCone.Tests.UnitTests.Structures
         }
 
         [Test]
-        public void GetIdTypeFrom_WhenInt_ReturnsIdTypeOfSmallIdentity()
+        public void GetIdTypeFrom_WhenInt_ReturnsIdTypeOfIdentity()
         {
-            Assert.AreEqual(StructureIdTypes.SmallIdentity, StructureId.GetIdTypeFrom(typeof(int)));
+            Assert.AreEqual(StructureIdTypes.Identity, StructureId.GetIdTypeFrom(typeof(int)));
         }
 
         [Test]
-        public void GetIdTypeFrom_WhenNullableInt_ReturnsIdTypeOfSmallIdentity()
+        public void GetIdTypeFrom_WhenNullableInt_ReturnsIdTypeOfIdentity()
         {
-            Assert.AreEqual(StructureIdTypes.SmallIdentity, StructureId.GetIdTypeFrom(typeof(int?)));
+            Assert.AreEqual(StructureIdTypes.Identity, StructureId.GetIdTypeFrom(typeof(int?)));
         }
 
         [Test]
-        public void GetIdTypeFrom_WhenLong_ReturnsIdTypeOfBigIdentity()
+        public void GetIdTypeFrom_WhenLong_ReturnsIdTypeOfIdentity()
         {
-            Assert.AreEqual(StructureIdTypes.BigIdentity, StructureId.GetIdTypeFrom(typeof(long)));
+            Assert.AreEqual(StructureIdTypes.Identity, StructureId.GetIdTypeFrom(typeof(long)));
         }
 
         [Test]
-        public void GetIdTypeFrom_WhenNullableLong_ReturnsIdTypeOfBigIdentity()
+        public void GetIdTypeFrom_WhenNullableLong_ReturnsIdTypeOfIdentity()
         {
-            Assert.AreEqual(StructureIdTypes.BigIdentity, StructureId.GetIdTypeFrom(typeof(long?)));
+            Assert.AreEqual(StructureIdTypes.Identity, StructureId.GetIdTypeFrom(typeof(long?)));
         }
 
         [Test]

@@ -36,7 +36,7 @@ namespace PineCone
 
         public PineConizer()
         {
-            var structureTypeFactory = new StructureTypeFactory(new StructureTypeReflecter(), new StructureTypeConfigurations());
+            var structureTypeFactory = new StructureTypeFactory();
             var schemaBuilder = new AutoSchemaBuilder();
 
             Schemas = new StructureSchemas(structureTypeFactory, schemaBuilder);

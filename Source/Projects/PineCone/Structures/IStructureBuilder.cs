@@ -11,11 +11,18 @@ namespace PineCone.Structures
     public interface IStructureBuilder
     {
         /// <summary>
-        /// Collection of <see cref="IStructureIdGenerator"/> that is used
-        /// to generate StructureIds. As default, only <see cref="GuidStructureIdGenerator"/>
-        /// is registrered.
+        /// Factory used for constructing <see cref="IStructureIndex"/>.
         /// </summary>
-        IStructureIdGenerators StructureIdGenerators { get; }
+        IStructureIndexesFactory IndexesFactory { get; set; }
+
+        /// <summary>
+        /// Default structure Id generator that will be used if
+        /// you dont call <see cref="CreateStructure{T}"/> or
+        /// <see cref="CreateStructures{T}"/> or
+        /// <see cref="CreateStructureBatches{T}"/> with a
+        /// specific <see cref="IStructureIdGenerator"/>.
+        /// </summary>
+        IStructureIdGenerator IdGenerator { get; set; }
 
         /// <summary>
         /// Optional serializer. If specified,
@@ -31,8 +38,9 @@ namespace PineCone.Structures
         /// <typeparam name="T"></typeparam>
         /// <param name="item"></param>
         /// <param name="structureSchema"></param>
+        /// <param name="structureIdGenerator">Optional</param>
         /// <returns></returns>
-        IStructure CreateStructure<T>(T item, IStructureSchema structureSchema)
+        IStructure CreateStructure<T>(T item, IStructureSchema structureSchema, IStructureIdGenerator structureIdGenerator = null)
             where T : class;
 
         /// <summary>
@@ -42,8 +50,9 @@ namespace PineCone.Structures
         /// <typeparam name="T"></typeparam>
         /// <param name="items"></param>
         /// <param name="structureSchema"></param>
+        /// <param name="structureIdGenerator">Optional</param>
         /// <returns></returns>
-        IEnumerable<IStructure> CreateStructures<T>(ICollection<T> items, IStructureSchema structureSchema)
+        IEnumerable<IStructure> CreateStructures<T>(ICollection<T> items, IStructureSchema structureSchema, IStructureIdGenerator structureIdGenerator = null)
             where T : class;
 
         /// <summary>
@@ -53,9 +62,10 @@ namespace PineCone.Structures
         /// <typeparam name="T"></typeparam>
         /// <param name="items"></param>
         /// <param name="structureSchema"></param>
+        /// <param name="structureIdGenerator">Optional</param>
         /// <param name="maxBatchSize"></param>
         /// <returns></returns>
-        IEnumerable<IStructure[]> CreateStructureBatches<T>(ICollection<T> items, IStructureSchema structureSchema, int maxBatchSize) 
+        IEnumerable<IStructure[]> CreateStructureBatches<T>(ICollection<T> items, IStructureSchema structureSchema, int maxBatchSize, IStructureIdGenerator structureIdGenerator = null) 
             where T : class;
     }
 }

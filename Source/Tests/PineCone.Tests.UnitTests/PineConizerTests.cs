@@ -20,7 +20,7 @@ namespace PineCone.Tests.UnitTests
             pineConizer.CreateStructureFor(item);
 
             schemasMock.Verify(m => m.GetSchema<X>(), Times.Once());
-            builderMock.Verify(m => m.CreateStructure(item, It.IsAny<IStructureSchema>()), Times.Once());
+            builderMock.Verify(m => m.CreateStructure(item, It.IsAny<IStructureSchema>(), It.IsAny<IStructureIdGenerator>()), Times.Once());
         }
         
         [Test]
@@ -34,7 +34,7 @@ namespace PineCone.Tests.UnitTests
             pineConizer.CreateStructuresFor(items);
 
             schemasMock.Verify(m => m.GetSchema<X>(), Times.Once());
-            builderMock.Verify(m => m.CreateStructures(items, It.IsAny<IStructureSchema>()), Times.Once());
+            builderMock.Verify(m => m.CreateStructures(items, It.IsAny<IStructureSchema>(), It.IsAny<IStructureIdGenerator>()), Times.Once());
         }
 
         private class X

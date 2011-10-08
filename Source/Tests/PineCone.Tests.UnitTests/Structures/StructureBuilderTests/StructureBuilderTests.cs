@@ -14,7 +14,7 @@ namespace PineCone.Tests.UnitTests.Structures.StructureBuilderTests
         public void CreateStructure_WhenIdIsAssigned_IdIsOverWritten()
         {
             var schema = StructureSchemaTestFactory.CreateRealFrom<GuidItem>();
-            var initialId = GuidStructureIdGenerator.CreateId(schema);
+            var initialId = Builder.IdGenerator.CreateId(schema);
             var item = new GuidItem { StructureId = (Guid)initialId.Value };
 
             var structure = Builder.CreateStructure(item, schema);
@@ -117,6 +117,50 @@ namespace PineCone.Tests.UnitTests.Structures.StructureBuilderTests
             Assert.AreEqual(5, indices[0].Value);
             Assert.AreEqual(6, indices[1].Value);
             Assert.AreEqual(7, indices[2].Value);
+        }
+
+        [Test]
+        public void CreateStructure_WhenSpecificIdGeneratorIsPassed_SpecificIdGeneratorIsConsumed()
+        {
+            var idValue = new Guid("A058FCDE-A3D9-4EAA-AA41-0CE9D4A3FB1E");
+            var schema = StructureSchemaTestFactory.CreateRealFrom<TestItemForFirstLevel>();
+            var idGeneratorMock = new Mock<IStructureIdGenerator>();
+            idGeneratorMock.Setup(m => m.CreateId(schema)).Returns(StructureId.Create(idValue));
+            var item = new TestItemForFirstLevel { IntValue = 42 };
+
+            var structure = Builder.CreateStructure(item, schema, idGeneratorMock.Object);
+
+            idGeneratorMock.Verify(m => m.CreateId(schema), Times.Once());
+        }
+
+        [Test]
+        public void CreateStructures_WhenSpecificIdGeneratorIsPassed_SpecificIdGeneratorIsConsumed()
+        {
+            var idValue = new Guid("A058FCDE-A3D9-4EAA-AA41-0CE9D4A3FB1E");
+            var schema = StructureSchemaTestFactory.CreateRealFrom<TestItemForFirstLevel>();
+            var idGeneratorMock = new Mock<IStructureIdGenerator>();
+            idGeneratorMock.Setup(m => m.CreateIds(1, schema)).Returns(new[] { StructureId.Create(idValue) });
+
+            var item = new TestItemForFirstLevel { IntValue = 42 };
+
+            var structures = Builder.CreateStructures(new[] { item }, schema, idGeneratorMock.Object).ToArray();
+
+            idGeneratorMock.Verify(m => m.CreateIds(1, schema), Times.Once());
+        }
+
+        [Test]
+        public void CreateStructureBatches_WhenSpecificIdGeneratorIsPassed_SpecificIdGeneratorIsConsumed()
+        {
+            var idValue = new Guid("A058FCDE-A3D9-4EAA-AA41-0CE9D4A3FB1E");
+            var schema = StructureSchemaTestFactory.CreateRealFrom<TestItemForFirstLevel>();
+            var idGeneratorMock = new Mock<IStructureIdGenerator>();
+            idGeneratorMock.Setup(m => m.CreateIds(1, schema)).Returns(new[] { StructureId.Create(idValue) });
+
+            var item = new TestItemForFirstLevel { IntValue = 42 };
+
+            var structures = Builder.CreateStructureBatches(new[] { item }, schema, 1, idGeneratorMock.Object).ToArray();
+
+            idGeneratorMock.Verify(m => m.CreateIds(1, schema), Times.Once());
         }
 
         private class TestItemForFirstLevel

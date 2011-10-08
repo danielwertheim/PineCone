@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using EnsureThat;
-using NCore.Cryptography;
 using PineCone.Structures;
 using PineCone.Structures.Schemas;
 using PineCone.Structures.Schemas.Builders;
@@ -37,16 +36,11 @@ namespace PineCone
 
         public PineConizer()
         {
-            var structureTypeFactory = new StructureTypeFactory(new StructureTypeReflecter(), new StructureTypeConfigurations());
+            var structureTypeFactory = new StructureTypeFactory();
             var schemaBuilder = new AutoSchemaBuilder();
 
             Schemas = new StructureSchemas(structureTypeFactory, schemaBuilder);
-            Builder = new StructureBuilder(new StructureIdGenerators(), new StructureIndexesFactory());
-        }
-
-        public void RegisterIdGenerator(StructureIdTypes structureIdType, IStructureIdGenerator structureIdGenerator)
-        {
-            Builder.StructureIdGenerators.Register(structureIdType, structureIdGenerator);
+            Builder = new StructureBuilder();
         }
 
         public IStructure CreateStructureFor<T>(T item) where T : class

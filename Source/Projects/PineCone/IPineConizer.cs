@@ -8,7 +8,6 @@ namespace PineCone
     {
         IStructureSchemas Schemas { get; set; }
         IStructureBuilder Builder { get; set; }
-        void RegisterIdGenerator(StructureIdTypes structureIdType, IStructureIdGenerator structureIdGenerator);
         IStructure CreateStructureFor<T>(T item) where T : class;
         IEnumerable<IStructure> CreateStructuresFor<T>(ICollection<T> items) where T : class;
         IEnumerable<IStructure[]> CreateStructureBatches<T>(ICollection<T> items, int maxBatchSize) where T : class;

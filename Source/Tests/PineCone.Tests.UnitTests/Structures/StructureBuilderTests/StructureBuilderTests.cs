@@ -3,7 +3,6 @@ using System.Linq;
 using Moq;
 using NUnit.Framework;
 using PineCone.Serializers;
-using PineCone.Structures;
 
 namespace PineCone.Tests.UnitTests.Structures.StructureBuilderTests
 {
@@ -14,7 +13,7 @@ namespace PineCone.Tests.UnitTests.Structures.StructureBuilderTests
         public void CreateStructure_WhenIdIsAssigned_IdIsOverWritten()
         {
             var schema = StructureSchemaTestFactory.CreateRealFrom<GuidItem>();
-            var initialId = GuidStructureIdGenerator.CreateId(schema);
+            var initialId = Builder.IdGenerator.CreateId(schema);
             var item = new GuidItem { StructureId = (Guid)initialId.Value };
 
             var structure = Builder.CreateStructure(item, schema);

@@ -67,10 +67,10 @@ namespace PineCone.Structures
                 return StructureIdTypes.Guid;
 
             if (type.IsIntType() || type.IsNullableIntType())
-                return StructureIdTypes.SmallIdentity;
+                return StructureIdTypes.Identity;
 
             if (type.IsLongType() || type.IsNullableLongType())
-                return StructureIdTypes.BigIdentity;
+                return StructureIdTypes.Identity;
 
             throw new PineConeException(ExceptionMessages.StructureId_InvalidType.Inject(type.Name));
         }

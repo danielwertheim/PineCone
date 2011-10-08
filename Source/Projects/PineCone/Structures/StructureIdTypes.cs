@@ -6,7 +6,6 @@ namespace PineCone.Structures
     public enum StructureIdTypes
     {
         Guid,
-        SmallIdentity,
-        BigIdentity
+        Identity
     }
 }

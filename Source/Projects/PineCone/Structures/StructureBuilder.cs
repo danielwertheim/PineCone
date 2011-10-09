@@ -10,8 +10,6 @@ namespace PineCone.Structures
     public class StructureBuilder : IStructureBuilder
     {
         private IStructureIndexesFactory _indexesFactory;
-        private IStructureIdGenerator _idGenerator;
-        private ISerializer _serializer;
 
         public IStructureIndexesFactory IndexesFactory
         {
@@ -24,50 +22,36 @@ namespace PineCone.Structures
             }
         }
 
-        public IStructureIdGenerator IdGenerator
-        {
-            get { return _idGenerator; }
-            set
-            {
-                Ensure.That(value, "IdGenerator").IsNotNull();
-
-                _idGenerator = value;
-            }
-        }
-
-        public ISerializer Serializer
-        {
-            get { return _serializer; }
-            set { _serializer = value ?? new EmptySerializer(); }
-        }
-
         public StructureBuilder()
         {
             _indexesFactory = new StructureIndexesFactory();
-            _idGenerator = new GuidStructureIdGenerator();
-
-            Serializer = new EmptySerializer();
         }
 
-        public IStructure CreateStructure<T>(T item, IStructureSchema structureSchema, IStructureIdGenerator structureIdGenerator = null)
+        public IStructure CreateStructure<T>(T item, IStructureSchema structureSchema, StructureBuilderOptions options = null)
             where T : class
         {
-            var id = (structureIdGenerator ?? IdGenerator).CreateId(structureSchema);
+            options = options ?? new StructureBuilderOptions();
 
-            return CreateStructure(item, structureSchema, id);
+            if (options.KeepStructureId)
+                return CreateStructureItemAndKeepId(item, structureSchema, options.Serializer);
+
+            var id = options.IdGenerator.CreateId(structureSchema);
+
+            return CreateStructureItemAndSetNewId(item, structureSchema, id, options.Serializer);
         }
 
-        public IEnumerable<IStructure> CreateStructures<T>(ICollection<T> items, IStructureSchema structureSchema, IStructureIdGenerator structureIdGenerator = null) where T : class
+        public IEnumerable<IStructure> CreateStructures<T>(ICollection<T> items, IStructureSchema structureSchema, StructureBuilderOptions options = null) where T : class
         {
-            return CreateStructureBatches(items, structureSchema, items.Count, structureIdGenerator).SelectMany(s => s);
+            return CreateStructureBatches(items, structureSchema, items.Count, options).SelectMany(s => s);
         }
 
-        public IEnumerable<IStructure[]> CreateStructureBatches<T>(ICollection<T> items, IStructureSchema structureSchema, int maxBatchSize, IStructureIdGenerator structureIdGenerator = null) where T : class
+        public IEnumerable<IStructure[]> CreateStructureBatches<T>(ICollection<T> items, IStructureSchema structureSchema, int maxBatchSize, StructureBuilderOptions options = null) where T : class
         {
-            var idGenerator = structureIdGenerator ?? IdGenerator;
+            options = options ?? new StructureBuilderOptions();
+            
             var batchSize = items.Count() > maxBatchSize ? maxBatchSize : items.Count();
-
             var batchNo = 0;
+            
             while (true)
             {
                 var sourceBatch = items.Skip(batchNo * batchSize).Take(batchSize).ToArray();
@@ -75,21 +59,42 @@ namespace PineCone.Structures
                     yield break;
 
                 var structures = new IStructure[sourceBatch.Length];
-                var ids = idGenerator.CreateIds(sourceBatch.Length, structureSchema).ToArray();
 
-                Parallel.For(0, sourceBatch.Length,
-                    i =>
+                if (options.KeepStructureId)
+                {
+                    Parallel.For(0, sourceBatch.Length, i =>
                     {
-                        structures[i] = CreateStructure(sourceBatch[i], structureSchema, ids[i]);
+                        structures[i] = CreateStructureItemAndKeepId(sourceBatch[i], structureSchema, options.Serializer);
                     });
+                }
+                else
+                {
+                    var ids = options.IdGenerator.CreateIds(sourceBatch.Length, structureSchema).ToArray();
 
+                    Parallel.For(0, sourceBatch.Length, i =>
+                    {
+                        structures[i] = CreateStructureItemAndSetNewId(sourceBatch[i], structureSchema, ids[i], options.Serializer);
+                    });
+                }
                 yield return structures;
 
                 batchNo++;
             }
         }
 
-        private IStructure CreateStructure<T>(T item, IStructureSchema structureSchema, IStructureId structureId)
+        private IStructure CreateStructureItemAndKeepId<T>(T item, IStructureSchema structureSchema, ISerializer serializer)
+            where T : class
+        {
+            var structureId = structureSchema.IdAccessor.GetValue(item);
+
+            return new Structure(
+                structureSchema.Name,
+                structureId,
+                IndexesFactory.CreateIndexes(structureSchema, item, structureId),
+                serializer.Serialize(item));
+        }
+
+        private IStructure CreateStructureItemAndSetNewId<T>(T item, IStructureSchema structureSchema, IStructureId structureId, ISerializer serializer)
             where T : class
         {
             structureSchema.IdAccessor.SetValue(item, structureId);
@@ -98,7 +103,7 @@ namespace PineCone.Structures
                 structureSchema.Name,
                 structureId,
                 IndexesFactory.CreateIndexes(structureSchema, item, structureId),
-                Serializer.Serialize(item));
+                serializer.Serialize(item));
         }
     }
 }

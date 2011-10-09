@@ -57,6 +57,7 @@
     <Compile Include="Dynamic\DynamicStructure.cs" />
     <Compile Include="Dynamic\DynamicStructureBuilder.cs" />
     <Compile Include="IPineConizer.cs" />
+    <Compile Include="Structures\StructureBuilderOptions.cs" />
     <Compile Include="Structures\IStructureId.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PineConizer.cs" />

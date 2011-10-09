@@ -11,29 +11,41 @@ namespace PineCone.Tests.UnitTests.Structures.StructureBuilderTests
     public class StructureBuilderTests : StructureBuilderBaseTests
     {
         [Test]
-        public void CreateStructure_WhenIdIsAssigned_IdIsOverWritten()
+        public void CreateStructure_WhenIdIsAssignedAndOptionsSaysOverrideId_IdIsOverWritten()
         {
-            var schema = StructureSchemaTestFactory.CreateRealFrom<GuidItem>();
-            var initialId = Builder.IdGenerator.CreateId(schema);
+            var initialId = StructureId.Create(Guid.Parse("B551349B-53BD-4455-A509-A9B68B58700A"));
             var item = new GuidItem { StructureId = (Guid)initialId.Value };
+            var schema = StructureSchemaTestFactory.CreateRealFrom<GuidItem>();
 
-            var structure = Builder.CreateStructure(item, schema);
+            var structure = Builder.CreateStructure(item, schema, new StructureBuilderOptions { KeepStructureId = false });
 
             Assert.AreNotEqual(initialId, structure.Id);
+            Assert.AreNotEqual(initialId.Value, item.StructureId);
+        }
+
+        [Test]
+        public void CreateStructure_WhenIdIsAssignedAndOptionsSaysKeepId_IdIsNotOverWritten()
+        {
+            var initialId = StructureId.Create(Guid.Parse("B551349B-53BD-4455-A509-A9B68B58700A"));
+            var item = new GuidItem { StructureId = (Guid)initialId.Value };
+            var schema = StructureSchemaTestFactory.CreateRealFrom<GuidItem>();
+
+            var structure = Builder.CreateStructure(item, schema, new StructureBuilderOptions { KeepStructureId = true });
+
+            Assert.AreEqual(initialId, structure.Id);
+            Assert.AreEqual(initialId.Value, item.StructureId);
         }
 
         [Test]
         public void CreateStructures_WhenSerializerIsSpecified_SerializerIsConsumed()
         {
             var schema = StructureSchemaTestFactory.CreateRealFrom<GuidItem>();
-
             var serializer = new Mock<ISerializer>();
             Func<GuidItem, object> serializerFunc = s => s.StructureId + ";" + s.Value;
             serializer.Setup<object>(s => s.Serialize(It.IsAny<GuidItem>())).Returns(serializerFunc);
-            Builder.Serializer = serializer.Object;
-
             var items = CreateGuidItems(3).ToArray();
-            var structures = Builder.CreateStructures(items, schema).ToList();
+
+            var structures = Builder.CreateStructures(items, schema, new StructureBuilderOptions { Serializer = serializer.Object }).ToList();
 
             Assert.AreEqual(3, structures.Count);
             Assert.AreEqual(items[0].StructureId + ";" + items[0].Value, structures[0].Data);
@@ -128,7 +140,7 @@ namespace PineCone.Tests.UnitTests.Structures.StructureBuilderTests
             idGeneratorMock.Setup(m => m.CreateId(schema)).Returns(StructureId.Create(idValue));
             var item = new TestItemForFirstLevel { IntValue = 42 };
 
-            var structure = Builder.CreateStructure(item, schema, idGeneratorMock.Object);
+            var structure = Builder.CreateStructure(item, schema, new StructureBuilderOptions { IdGenerator = idGeneratorMock.Object });
 
             idGeneratorMock.Verify(m => m.CreateId(schema), Times.Once());
         }
@@ -143,7 +155,7 @@ namespace PineCone.Tests.UnitTests.Structures.StructureBuilderTests
 
             var item = new TestItemForFirstLevel { IntValue = 42 };
 
-            var structures = Builder.CreateStructures(new[] { item }, schema, idGeneratorMock.Object).ToArray();
+            var structures = Builder.CreateStructures(new[] { item }, schema, new StructureBuilderOptions { IdGenerator = idGeneratorMock.Object }).ToArray();
 
             idGeneratorMock.Verify(m => m.CreateIds(1, schema), Times.Once());
         }
@@ -158,7 +170,7 @@ namespace PineCone.Tests.UnitTests.Structures.StructureBuilderTests
 
             var item = new TestItemForFirstLevel { IntValue = 42 };
 
-            var structures = Builder.CreateStructureBatches(new[] { item }, schema, 1, idGeneratorMock.Object).ToArray();
+            var structures = Builder.CreateStructureBatches(new[] { item }, schema, 1, new StructureBuilderOptions { IdGenerator = idGeneratorMock.Object }).ToArray();
 
             idGeneratorMock.Verify(m => m.CreateIds(1, schema), Times.Once());
         }

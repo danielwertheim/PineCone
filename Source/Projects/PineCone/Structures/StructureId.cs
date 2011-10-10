@@ -8,6 +8,13 @@ namespace PineCone.Structures
     [Serializable]
     public class StructureId : IStructureId
     {
+        private static readonly Type GuidType = typeof(Guid);
+        private static readonly Type NullableGuidType = typeof(Guid?);
+        private static readonly Type IntType = typeof(int);
+        private static readonly Type NullableIntType = typeof(int?);
+        private static readonly Type LongType = typeof(long);
+        private static readonly Type NullableLongType = typeof(long?);
+
         private readonly StructureIdTypes _idType;
         private readonly ValueType _value;
         private readonly Type _dataType;
@@ -32,25 +39,35 @@ namespace PineCone.Structures
         {
             get { return _hasValue; }
         }
-
-        public static StructureId Create<T>(T value) where T : struct
+        
+        public static StructureId Create(Guid value)
         {
-            return new StructureId(value, typeof(T));
+            return new StructureId(value, GuidType);
         }
 
-        public static StructureId Create<T>(T? value) where T : struct 
+        public static StructureId Create(Guid? value)
         {
-            return new StructureId(value, typeof(T?));
+            return new StructureId(value, NullableGuidType);
         }
 
-        public static StructureId Create(ValueType value)
+        public static StructureId Create(int value)
         {
-            return new StructureId(value, value.GetType());
+            return new StructureId(value, IntType);
         }
 
-        public static StructureId Create(ValueType value, Type dataType)
+        public static StructureId Create(int? value)
         {
-            return new StructureId(value, dataType);
+            return new StructureId(value, NullableIntType);
+        }
+
+        public static StructureId Create(long value)
+        {
+            return new StructureId(value, LongType);
+        }
+
+        public static StructureId Create(long? value)
+        {
+            return new StructureId(value, NullableLongType);
         }
 
         private StructureId(ValueType value, Type dataType)
@@ -70,7 +87,7 @@ namespace PineCone.Structures
                 return StructureIdTypes.Identity;
 
             if (type.IsLongType() || type.IsNullableLongType())
-                return StructureIdTypes.Identity;
+                return StructureIdTypes.BigIdentity;
 
             throw new PineConeException(ExceptionMessages.StructureId_InvalidType.Inject(type.Name));
         }

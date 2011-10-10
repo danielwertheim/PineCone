@@ -37,11 +37,7 @@ namespace PineCone.Structures.Schemas.Builders
             if (structureType.IdProperty == null)
                 throw new PineConeException(ExceptionMessages.AutoSchemaBuilder_MissingIdMember.Inject(structureType.Name));
 
-            if (structureType.IdProperty.PropertyType.IsGuidType() || structureType.IdProperty.PropertyType.IsNullableGuidType()
-                || (structureType.IdProperty.PropertyType.IsIntType() || structureType.IdProperty.PropertyType.IsNullableIntType()))
-                return new IdAccessor(structureType.IdProperty);
-
-            throw new PineConeException(ExceptionMessages.AutoSchemaBuilder_UnsupportedIdAccessorType.Inject(structureType.IdProperty.Name));
+            return new IdAccessor(structureType.IdProperty);
         }
 
         private static IIndexAccessor[] GetIndexAccessors(IStructureType structureType)

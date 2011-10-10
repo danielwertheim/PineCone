@@ -175,6 +175,20 @@ namespace PineCone.Tests.UnitTests.Structures.StructureBuilderTests
             idGeneratorMock.Verify(m => m.CreateIds(1, schema), Times.Once());
         }
 
+        private class TestItemWithIntAsId
+        {
+            public int StructureId { get; set; }
+
+            public int IntValue { get; set; }
+        }
+
+        private class TestItemWithLongAsId
+        {
+            public long StructureId { get; set; }
+
+            public int IntValue { get; set; }
+        }
+
         private class TestItemForFirstLevel
         {
             public Guid StructureId { get; set; }

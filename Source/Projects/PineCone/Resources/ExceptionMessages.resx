@@ -123,14 +123,11 @@
   <data name="AutoSchemaBuilder_MissingIndexableMembers" xml:space="preserve">
     <value>The Item of type '{0}' has no members that are indexable. There's no point in treating items that has nothing to index.</value>
   </data>
-  <data name="AutoSchemaBuilder_UnsupportedIdAccessorType" xml:space="preserve">
-    <value>The id property: '{0}'; is not of suported type. Only Guid and Int is accepted.</value>
-  </data>
   <data name="IdAccessor_GetIdValue_InvalidLevel" xml:space="preserve">
     <value>Id values must lie on the root object.</value>
   </data>
   <data name="IdAccessor_UnsupportedPropertyType" xml:space="preserve">
-    <value>The Property.PropertyType '{0}' is not supported by the IdAccessor. Supported types are: Guid, Nullable-Guid, Int, Nullable-Int, Long and Nullable-Long.</value>
+    <value>The Property.PropertyType '{0}' is not supported by the IdAccessor. Supported types are: Guid, Nullable-Guid, Int32, Nullable-Int32, Int64 and Nullable-Int64.</value>
   </data>
   <data name="StructureIndexesFactory_UniqueIndex_IsNull" xml:space="preserve">
     <value>The Unique index '{0}':'{1}' is evaluated to Null. This is not alowed.</value>
@@ -148,6 +145,6 @@
     <value>The UniqueModes '{0}' is unknow and cant be mapped.</value>
   </data>
   <data name="StructureId_InvalidType" xml:space="preserve">
-    <value>The type '{0}' is not supported for StructureId. Only Guid, Nullable-Guid, Int, Nullable-Int, Long and Nullable-Long are supported.</value>
+    <value>The type '{0}' is not supported for StructureId. Supported types are: Guid, Nullable-Guid, Int32, Nullable-Int32, Int64 and Nullable-Int64.</value>
   </data>
 </root>

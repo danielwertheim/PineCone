@@ -1,11 +1,14 @@
-using System;
 using NCore;
+using NCore.Reflections;
 using PineCone.Resources;
 
 namespace PineCone.Structures.Schemas.MemberAccessors
 {
     public class IdAccessor : MemberAccessorBase, IIdAccessor
     {
+        private readonly Getter.IGetter _getter;
+        private readonly Setter.ISetter _setter;
+
         public StructureIdTypes IdType { get; private set; }
 
         public IdAccessor(IStructureProperty property)
@@ -18,18 +21,26 @@ namespace PineCone.Structures.Schemas.MemberAccessors
                 throw new PineConeException(ExceptionMessages.IdAccessor_UnsupportedPropertyType.Inject(Property.PropertyType.Name));
 
             IdType = StructureId.GetIdTypeFrom(property.PropertyType);
+
+            var isNullable = 
+                property.PropertyType.IsNullableGuidType() ||
+                property.PropertyType.IsNullableIntType() ||
+                property.PropertyType.IsNullableLongType();
+
+            _getter = Getter.For(IdType, isNullable);
+            _setter = Setter.For(IdType, isNullable);
         }
 
         public IStructureId GetValue<T>(T item)
             where T : class
         {
-            return StructureId.Create((ValueType)Property.GetValue(item), Property.PropertyType);
+            return _getter.GetValue(item, Property);
         }
         
         public void SetValue<T>(T item, IStructureId value)
             where T : class
         {
-            Property.SetValue(item, value.Value);
+            _setter.SetValue(item, value, Property);
         }
     }
 }

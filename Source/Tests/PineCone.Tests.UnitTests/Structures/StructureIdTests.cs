@@ -97,7 +97,7 @@ namespace PineCone.Tests.UnitTests.Structures
             Assert.IsTrue(id.HasValue);
             Assert.AreEqual(value, id.Value);
             Assert.AreEqual(typeof(long), id.DataType);
-            Assert.AreEqual(StructureIdTypes.Identity, id.IdType);
+            Assert.AreEqual(StructureIdTypes.BigIdentity, id.IdType);
         }
 
         [Test]
@@ -110,7 +110,7 @@ namespace PineCone.Tests.UnitTests.Structures
             Assert.IsTrue(id.HasValue);
             Assert.AreEqual(value, id.Value);
             Assert.AreEqual(typeof(long?), id.DataType);
-            Assert.AreEqual(StructureIdTypes.Identity, id.IdType);
+            Assert.AreEqual(StructureIdTypes.BigIdentity, id.IdType);
         }
 
         [Test]
@@ -123,15 +123,7 @@ namespace PineCone.Tests.UnitTests.Structures
             Assert.IsFalse(id.HasValue);
             Assert.AreEqual(value, id.Value);
             Assert.AreEqual(typeof(long?), id.DataType);
-            Assert.AreEqual(StructureIdTypes.Identity, id.IdType);
-        }
-
-        [Test]
-        public void Ctor_WhenRefType_ThrowsException()
-        {
-            var ex = Assert.Throws<PineConeException>(() => StructureId.Create(null, typeof(string)));
-
-            Assert.AreEqual(ExceptionMessages.StructureId_InvalidType.Inject(typeof(string).Name), ex.Message);
+            Assert.AreEqual(StructureIdTypes.BigIdentity, id.IdType);
         }
 
         [Test]
@@ -161,13 +153,13 @@ namespace PineCone.Tests.UnitTests.Structures
         [Test]
         public void GetIdTypeFrom_WhenLong_ReturnsIdTypeOfIdentity()
         {
-            Assert.AreEqual(StructureIdTypes.Identity, StructureId.GetIdTypeFrom(typeof(long)));
+            Assert.AreEqual(StructureIdTypes.BigIdentity, StructureId.GetIdTypeFrom(typeof(long)));
         }
 
         [Test]
         public void GetIdTypeFrom_WhenNullableLong_ReturnsIdTypeOfIdentity()
         {
-            Assert.AreEqual(StructureIdTypes.Identity, StructureId.GetIdTypeFrom(typeof(long?)));
+            Assert.AreEqual(StructureIdTypes.BigIdentity, StructureId.GetIdTypeFrom(typeof(long?)));
         }
 
         [Test]

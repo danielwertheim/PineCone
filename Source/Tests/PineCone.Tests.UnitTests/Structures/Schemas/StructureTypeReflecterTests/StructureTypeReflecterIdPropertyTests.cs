@@ -102,6 +102,30 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
             Assert.IsNull(property);
         }
 
+        [Test]
+        public void GetIdProperty_WhenPublicLongIdProperty_ReturnsProperty()
+        {
+            var property = _reflecter.GetIdProperty(typeof(WithLongId));
+
+            Assert.IsNotNull(property);
+        }
+
+        [Test]
+        public void GetIdProperty_WhenPublicNullableLongIdProperty_ReturnsProperty()
+        {
+            var property = _reflecter.GetIdProperty(typeof(WithNullableLongId));
+
+            Assert.IsNotNull(property);
+        }
+
+        [Test]
+        public void GetIdProperty_WhenPrivateLongIdProperty_ReturnsNull()
+        {
+            var property = _reflecter.GetIdProperty(typeof(WithPrivateLongId));
+
+            Assert.IsNull(property);
+        }
+
         private class WithNoId
         {}
 
@@ -133,6 +157,21 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
         private class WithPrivateIntId
         {
             private int StructureId { get; set; }
+        }
+
+        private class WithLongId
+        {
+            public long StructureId { get; set; }
+        }
+
+        private class WithNullableLongId
+        {
+            public long? StructureId { get; set; }
+        }
+
+        private class WithPrivateLongId
+        {
+            private long StructureId { get; set; }
         }
     }
 }

@@ -6,6 +6,15 @@ namespace PineCone.Structures
     public enum StructureIdTypes
     {
         Guid,
-        Identity
+        Identity,
+        BigIdentity
+    }
+
+    public static class StructureIdTypesExtensions
+    {
+        public static bool IsIdentity(this StructureIdTypes structureIdType)
+        {
+            return structureIdType == StructureIdTypes.Identity || structureIdType == StructureIdTypes.BigIdentity;
+        }
     }
 }

@@ -79,15 +79,6 @@ namespace PineCone.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The id property: &apos;{0}&apos;; is not of suported type. Only Guid and Int is accepted..
-        /// </summary>
-        internal static string AutoSchemaBuilder_UnsupportedIdAccessorType {
-            get {
-                return ResourceManager.GetString("AutoSchemaBuilder_UnsupportedIdAccessorType", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Id values must lie on the root object..
         /// </summary>
         internal static string IdAccessor_GetIdValue_InvalidLevel {
@@ -97,7 +88,7 @@ namespace PineCone.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The Property.PropertyType &apos;{0}&apos; is not supported by the IdAccessor. Supported types are: Guid, Nullable-Guid, Int, Nullable-Int, Long and Nullable-Long..
+        ///   Looks up a localized string similar to The Property.PropertyType &apos;{0}&apos; is not supported by the IdAccessor. Supported types are: Guid, Nullable-Guid, Int32, Nullable-Int32, Int64 and Nullable-Int64..
         /// </summary>
         internal static string IdAccessor_UnsupportedPropertyType {
             get {
@@ -115,7 +106,7 @@ namespace PineCone.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The type &apos;{0}&apos; is not supported for StructureId. Only Guid, Nullable-Guid, Int, Nullable-Int, Long and Nullable-Long are supported..
+        ///   Looks up a localized string similar to The type &apos;{0}&apos; is not supported for StructureId. Supported types are: Guid, Nullable-Guid, Int32, Nullable-Int32, Int64 and Nullable-Int64..
         /// </summary>
         internal static string StructureId_InvalidType {
             get {

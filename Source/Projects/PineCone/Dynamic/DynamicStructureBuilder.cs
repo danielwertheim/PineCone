@@ -19,25 +19,25 @@ namespace PineCone.Dynamic
 
         public IStructure CreateStructure(DynamicStructure dynamicStructure)
         {
-            var ts = dynamicStructure.Descriptor;
+            var typeDescriptor = dynamicStructure.Descriptor;
             var kvs = dynamicStructure.ToDictionary();
 
             var id = _structureIdGenerator.CreateId(null);
             dynamicStructure.StructureId = id;
 
             var indexes = new List<IStructureIndex>();
-            foreach (var mem in ts)
+            foreach (var mem in typeDescriptor)
             {
-                var kv = kvs[mem.Name];
+                var value = kvs[mem.Name];
 
                 if (!mem.Type.IsEnumerableType())
-                    indexes.Add(new StructureIndex(id, mem.Name, kv));
+                    indexes.Add(new StructureIndex(id, mem.Name, value, mem.Type));
                 else
                 {
                     var subIndexes = new List<IStructureIndex>();
 
-                    foreach (var value in (ICollection)kv)
-                        subIndexes.Add(new StructureIndex(id, mem.Name, value));
+                    foreach (var element in (ICollection)value)
+                        subIndexes.Add(new StructureIndex(id, mem.Name, element, mem.Type));
 
                     indexes.AddRange(subIndexes);
                 }

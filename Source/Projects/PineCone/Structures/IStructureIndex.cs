@@ -12,6 +12,8 @@ namespace PineCone.Structures
         
         object Value { get; }
 
+        Type DataType { get; }
+
         bool IsUnique { get; }
     }
 }

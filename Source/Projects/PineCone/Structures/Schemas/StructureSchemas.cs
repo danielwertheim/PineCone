@@ -38,6 +38,11 @@ namespace PineCone.Structures.Schemas
             return _schemas[type.Name];
         }
 
+        public IEnumerable<IStructureSchema> GetSchemas()
+        {
+            return _schemas.Values;
+        }
+
         public void RemoveSchema(Type type)
         {
             Ensure.That(type, "type").IsNotNull();

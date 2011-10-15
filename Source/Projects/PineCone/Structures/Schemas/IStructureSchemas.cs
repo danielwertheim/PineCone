@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using PineCone.Structures.Schemas.Builders;
 
 namespace PineCone.Structures.Schemas
@@ -12,6 +13,8 @@ namespace PineCone.Structures.Schemas
         IStructureSchema GetSchema<T>() where T : class;
 
         IStructureSchema GetSchema(Type type);
+
+        IEnumerable<IStructureSchema> GetSchemas();
 
         void RemoveSchema(Type type);
         

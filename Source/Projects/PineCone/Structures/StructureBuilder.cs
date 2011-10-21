@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using EnsureThat;
@@ -51,6 +52,12 @@ namespace PineCone.Structures
             
             var batchSize = items.Count() > maxBatchSize ? maxBatchSize : items.Count();
             var batchNo = 0;
+
+            Action<IStructure[], T[], IStructureSchema, StructureBuilderOptions> a;
+            if (options.KeepStructureId)
+                a = FillStructureArrayFromSourceWithPreservedId;
+            else
+                a = FillStructureArrayFromSourceWithNewId;
             
             while (true)
             {
@@ -59,27 +66,29 @@ namespace PineCone.Structures
                     yield break;
 
                 var structures = new IStructure[sourceBatch.Length];
-
-                if (options.KeepStructureId)
-                {
-                    Parallel.For(0, sourceBatch.Length, i =>
-                    {
-                        structures[i] = CreateStructureItemAndKeepId(sourceBatch[i], structureSchema, options.Serializer);
-                    });
-                }
-                else
-                {
-                    var ids = options.IdGenerator.CreateIds(sourceBatch.Length, structureSchema).ToArray();
-
-                    Parallel.For(0, sourceBatch.Length, i =>
-                    {
-                        structures[i] = CreateStructureItemAndSetNewId(sourceBatch[i], structureSchema, ids[i], options.Serializer);
-                    });
-                }
+                a.Invoke(structures, sourceBatch, structureSchema, options);
                 yield return structures;
 
                 batchNo++;
             }
+        }
+
+        private void FillStructureArrayFromSourceWithPreservedId<T>(IStructure[] structures, T[] sourceItems, IStructureSchema structureSchema, StructureBuilderOptions options) where T : class
+        {
+            Parallel.For(0, sourceItems.Length, i =>
+            {
+                structures[i] = CreateStructureItemAndKeepId(sourceItems[i], structureSchema, options.Serializer);
+            });
+        }
+
+        private void FillStructureArrayFromSourceWithNewId<T>(IStructure[] structures, T[] sourceItems, IStructureSchema structureSchema, StructureBuilderOptions options) where T : class
+        {
+            var ids = options.IdGenerator.CreateIds(sourceItems.Length, structureSchema).ToArray();
+
+            Parallel.For(0, sourceItems.Length, i =>
+            {
+                structures[i] = CreateStructureItemAndSetNewId(sourceItems[i], structureSchema, ids[i], options.Serializer);
+            });
         }
 
         private IStructure CreateStructureItemAndKeepId<T>(T item, IStructureSchema structureSchema, ISerializer serializer)

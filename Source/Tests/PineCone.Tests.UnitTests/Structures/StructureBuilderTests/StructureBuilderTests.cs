@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Moq;
 using NUnit.Framework;
@@ -26,10 +27,10 @@ namespace PineCone.Tests.UnitTests.Structures.StructureBuilderTests
         [Test]
         public void CreateStructure_WhenIdIsAssignedAndOptionsSaysKeepId_IdIsNotOverWritten()
         {
+            var schema = StructureSchemaTestFactory.CreateRealFrom<GuidItem>();
             var initialId = StructureId.Create(Guid.Parse("B551349B-53BD-4455-A509-A9B68B58700A"));
             var item = new GuidItem { StructureId = (Guid)initialId.Value };
-            var schema = StructureSchemaTestFactory.CreateRealFrom<GuidItem>();
-
+            
             var structure = Builder.CreateStructure(item, schema, new StructureBuilderOptions { KeepStructureId = true });
 
             Assert.AreEqual(initialId, structure.Id);
@@ -173,6 +174,79 @@ namespace PineCone.Tests.UnitTests.Structures.StructureBuilderTests
             var structures = Builder.CreateStructureBatches(new[] { item }, schema, 1, new StructureBuilderOptions { IdGenerator = idGeneratorMock.Object }).ToArray();
 
             idGeneratorMock.Verify(m => m.CreateIds(1, schema), Times.Once());
+        }
+
+        [Test]
+        public void CreateStructure_WhenHashSetOfInts_ReturnsOneIndexPerElementInCorrectOrder()
+        {
+            var schema = StructureSchemaTestFactory.CreateRealFrom<TestItemWithHashSet>();
+            var item = new TestItemWithHashSet { HashSetOfInts = new HashSet<int> { 5, 6, 7 } };
+
+            var structure = Builder.CreateStructure(item, schema);
+
+            var indices = structure.Indexes.Where(i => i.Path == "HashSetOfInts").ToList();
+            Assert.AreEqual(5, indices[0].Value);
+            Assert.AreEqual(6, indices[1].Value);
+            Assert.AreEqual(7, indices[2].Value);
+        }
+
+        [Test]
+        public void CreateStructure_WhenHashSetOfIntsIsNull_ReturnsNoIndex()
+        {
+            var schema = StructureSchemaTestFactory.CreateRealFrom<TestItemWithHashSet>();
+            var item = new TestItemWithHashSet { HashSetOfInts = null };
+
+            var structure = Builder.CreateStructure(item, schema);
+
+            var actual = structure.Indexes.SingleOrDefault(si => si.Path.StartsWith("HashSetOfInts"));
+            Assert.IsNull(actual);
+            Assert.AreEqual(0, structure.Indexes.Count);
+        }
+
+        [Test]
+        public void CreateStructure_WhenHashSetOfComplex_ReturnsOneIndexPerElementInCorrectOrder()
+        {
+            var schema = StructureSchemaTestFactory.CreateRealFrom<TestItemWithHashSetOfComplex>();
+            var item = new TestItemWithHashSetOfComplex { HashSetOfComplex = new HashSet<Value> { new Value { Is = 5 }, new Value { Is = 6 }, new Value { Is = 7 } } };
+
+            var structure = Builder.CreateStructure(item, schema);
+
+            var indices = structure.Indexes.Where(i => i.Path == "HashSetOfComplex.Is").ToList();
+            Assert.AreEqual(5, indices[0].Value);
+            Assert.AreEqual(6, indices[1].Value);
+            Assert.AreEqual(7, indices[2].Value);
+        }
+
+        [Test]
+        public void CreateStructure_WhenHashSetOfComplex_HasThreeNullItems_ReturnsOneIndexRepresentingNull()
+        {
+            var schema = StructureSchemaTestFactory.CreateRealFrom<TestItemWithHashSetOfComplex>();
+            var item = new TestItemWithHashSetOfComplex { HashSetOfComplex = new HashSet<Value> { null, null, null } };
+
+            var structure = Builder.CreateStructure(item, schema);
+
+            var actual = structure.Indexes.SingleOrDefault(si => si.Path.StartsWith("HashSetOfComplex.Is"));
+            Assert.IsNotNull(actual);
+            Assert.AreEqual(1, structure.Indexes.Count);
+        }
+
+        private class TestItemWithHashSetOfComplex
+        {
+            public Guid StructureId { get; set; }
+
+            public HashSet<Value> HashSetOfComplex { get; set; }
+        }
+
+        private class Value
+        {
+            public int Is { get; set; }
+        }
+
+        private class TestItemWithHashSet
+        {
+            public Guid StructureId { get; set; }
+
+            public HashSet<int> HashSetOfInts { get; set; }
         }
 
         private class TestItemWithIntAsId

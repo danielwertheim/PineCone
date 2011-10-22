@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using NUnit.Framework;
 using PineCone.Structures.Schemas;
 using PineCone.Structures.Schemas.MemberAccessors;

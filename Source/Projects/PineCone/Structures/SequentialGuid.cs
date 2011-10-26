@@ -20,7 +20,7 @@ namespace PineCone.Structures
             RPC_S_UUID_NO_ADDRESS = 1739
         }
 
-        public static Guid NewSqlCompatibleGuid()
+        public static Guid New()
         {
             var sequentialGuid = NewGuid();
 

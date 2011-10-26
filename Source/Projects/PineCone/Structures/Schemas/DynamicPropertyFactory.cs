@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Reflection;
 using System.Reflection.Emit;
+using NCore.Reflections;
 
 namespace PineCone.Structures.Schemas
 {
-    public delegate object DynamicGetter(object target);
-    
-    public delegate void DynamicSetter(object target, object value);
-
     public static class DynamicPropertyFactory
     {
         private static readonly Type ObjectType = typeof(object);
@@ -15,7 +12,15 @@ namespace PineCone.Structures.Schemas
         private static readonly Type DynamicGetterType = typeof(DynamicGetter);
         private static readonly Type DynamicSetterType = typeof(DynamicSetter);
 
-        public static DynamicGetter CreateGetter(PropertyInfo propertyInfo)
+        public static DynamicProperty Create(PropertyInfo propertyInfo)
+        {
+            if (propertyInfo.DeclaringType.IsKeyValuePairType())
+                return new DynamicProperty(propertyInfo, CreateGetter(propertyInfo), CreateSetter(propertyInfo));
+
+            return new DynamicProperty(propertyInfo, (o) => propertyInfo.GetValue(o, null), (o, v) => propertyInfo.SetValue(o, v, null));
+        }
+
+        private static DynamicGetter CreateGetter(PropertyInfo propertyInfo)
         {
             var propGetMethod = propertyInfo.GetGetMethod(true);
             if (propGetMethod == null)
@@ -26,7 +31,7 @@ namespace PineCone.Structures.Schemas
             var generator = getter.GetILGenerator();
             generator.DeclareLocal(ObjectType);
             generator.Emit(OpCodes.Ldarg_0);
-            generator.Emit(OpCodes.Castclass, propertyInfo.DeclaringType);
+            //generator.Emit(OpCodes.Castclass, propertyInfo.DeclaringType);
             generator.EmitCall(OpCodes.Callvirt, propGetMethod, null);
 
             if (!propertyInfo.PropertyType.IsClass)
@@ -37,7 +42,7 @@ namespace PineCone.Structures.Schemas
             return (DynamicGetter)getter.CreateDelegate(DynamicGetterType);
         }
 
-        public static DynamicSetter CreateSetter(PropertyInfo propertyInfo)
+        private static DynamicSetter CreateSetter(PropertyInfo propertyInfo)
         {
             var propSetMethod = propertyInfo.GetSetMethod(true);
             if (propSetMethod == null)
@@ -47,7 +52,7 @@ namespace PineCone.Structures.Schemas
 
             var generator = setter.GetILGenerator();
             generator.Emit(OpCodes.Ldarg_0);
-            generator.Emit(OpCodes.Castclass, propertyInfo.DeclaringType);
+            //generator.Emit(OpCodes.Castclass, propertyInfo.DeclaringType);
             generator.Emit(OpCodes.Ldarg_1);
 
             generator.Emit(propertyInfo.PropertyType.IsClass ? OpCodes.Castclass : OpCodes.Unbox_Any,
@@ -65,15 +70,14 @@ namespace PineCone.Structures.Schemas
             var name = string.Format("_{0}{1}_", isForGetter ? "Get" : "Set", propertyInfo.Name);
             var returnType = isForGetter ? ObjectType : VoidType;
 
-
-            return !propertyInfo.DeclaringType.IsInterface ?
-                new DynamicMethod(
+            return !propertyInfo.DeclaringType.IsInterface
+                ? new DynamicMethod(
                     name,
                     returnType,
                     args,
                     propertyInfo.DeclaringType,
-                    true) :
-                new DynamicMethod(
+                    true)
+                : new DynamicMethod(
                     name,
                     returnType,
                     args,

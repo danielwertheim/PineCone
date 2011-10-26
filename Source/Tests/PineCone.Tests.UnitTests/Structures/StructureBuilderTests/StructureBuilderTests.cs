@@ -204,6 +204,33 @@ namespace PineCone.Tests.UnitTests.Structures.StructureBuilderTests
         }
 
         [Test]
+        public void CreateStructure_WhenISetOfInts_ReturnsOneIndexPerElementInCorrectOrder()
+        {
+            var schema = StructureSchemaTestFactory.CreateRealFrom<TestItemWithISet>();
+            var item = new TestItemWithISet { SetOfInts = new HashSet<int> { 5, 6, 7 } };
+
+            var structure = Builder.CreateStructure(item, schema);
+
+            var indices = structure.Indexes.Where(i => i.Path == "SetOfInts").ToList();
+            Assert.AreEqual(5, indices[0].Value);
+            Assert.AreEqual(6, indices[1].Value);
+            Assert.AreEqual(7, indices[2].Value);
+        }
+
+        [Test]
+        public void CreateStructure_WhenSetOfIntsIsNull_ReturnsNoIndex()
+        {
+            var schema = StructureSchemaTestFactory.CreateRealFrom<TestItemWithISet>();
+            var item = new TestItemWithISet { SetOfInts = null };
+
+            var structure = Builder.CreateStructure(item, schema);
+
+            var actual = structure.Indexes.SingleOrDefault(si => si.Path.StartsWith("SetOfInts"));
+            Assert.IsNull(actual);
+            Assert.AreEqual(0, structure.Indexes.Count);
+        }
+
+        [Test]
         public void CreateStructure_WhenHashSetOfComplex_ReturnsOneIndexPerElementInCorrectOrder()
         {
             var schema = StructureSchemaTestFactory.CreateRealFrom<TestItemWithHashSetOfComplex>();
@@ -230,11 +257,30 @@ namespace PineCone.Tests.UnitTests.Structures.StructureBuilderTests
             Assert.AreEqual(1, structure.Indexes.Count);
         }
 
-        private class TestItemWithHashSetOfComplex
+        [Test]
+        public void CreateStructure_WhenDictionary_ReturnsOneIndexPerElementInCorrectOrder()
         {
-            public Guid StructureId { get; set; }
+            var schema = StructureSchemaTestFactory.CreateRealFrom<TestItemWithDictionary>();
+            var item = new TestItemWithDictionary { DictionaryStringInt = new Dictionary<string, int> { { "Key1", 5 }, { "Key2", 6 }, { "Key3", 7 } } };
 
-            public HashSet<Value> HashSetOfComplex { get; set; }
+            var structure = Builder.CreateStructure(item, schema);
+
+            var indices = structure.Indexes.Where(i => i.Path.StartsWith("DictionaryStringInt")).ToList();
+            Assert.AreEqual(6, indices.Count);
+            
+            Assert.AreEqual("DictionaryStringInt.Key", indices[0].Path);
+            Assert.AreEqual("Key1", indices[0].Value);
+            Assert.AreEqual("DictionaryStringInt.Key", indices[1].Path);
+            Assert.AreEqual("Key2", indices[1].Value);
+            Assert.AreEqual("DictionaryStringInt.Key", indices[2].Path);
+            Assert.AreEqual("Key3", indices[2].Value);
+            
+            Assert.AreEqual("DictionaryStringInt.Value", indices[3].Path);
+            Assert.AreEqual(5, indices[3].Value);
+            Assert.AreEqual("DictionaryStringInt.Value", indices[4].Path);
+            Assert.AreEqual(6, indices[4].Value);
+            Assert.AreEqual("DictionaryStringInt.Value", indices[5].Path);
+            Assert.AreEqual(7, indices[5].Value);
         }
 
         private class Value
@@ -242,11 +288,32 @@ namespace PineCone.Tests.UnitTests.Structures.StructureBuilderTests
             public int Is { get; set; }
         }
 
+        private class TestItemWithHashSetOfComplex
+        {
+            public Guid StructureId { get; set; }
+
+            public HashSet<Value> HashSetOfComplex { get; set; }
+        }
+
         private class TestItemWithHashSet
         {
             public Guid StructureId { get; set; }
 
             public HashSet<int> HashSetOfInts { get; set; }
+        }
+
+        private class TestItemWithISet
+        {
+            public Guid StructureId { get; set; }
+
+            public ISet<int> SetOfInts { get; set; }
+        }
+
+        private class TestItemWithDictionary
+        {
+            public Guid StructureId { get; set; }
+
+            public Dictionary<string, int> DictionaryStringInt { get; set; }
         }
 
         private class TestItemWithIntAsId

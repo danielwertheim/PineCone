@@ -25,6 +25,8 @@ namespace PineCone.Structures.Schemas
         
         Type ElementType { get; }
 
+        bool IsReadOnly { get; }
+
         object GetValue(object item);
 
         void SetValue(object target, object value);

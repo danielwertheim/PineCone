@@ -147,4 +147,7 @@
   <data name="StructureId_InvalidType" xml:space="preserve">
     <value>The type '{0}' is not supported for StructureId. Supported types are: Guid, Nullable-Guid, Int32, Nullable-Int32, Int64 and Nullable-Int64.</value>
   </data>
+  <data name="StructureProperty_Setter_IsReadOnly" xml:space="preserve">
+    <value>Property '{0}' is read-only.</value>
+  </data>
 </root>

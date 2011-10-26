@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Reflection;
 using EnsureThat;
+using NCore;
 using NCore.Reflections;
 using PineCone.Annotations;
 using PineCone.Resources;
@@ -13,14 +14,13 @@ namespace PineCone.Structures.Schemas
     {
         private static readonly Type UniqueAttributeType = typeof(UniqueAttribute);
 
-        private readonly DynamicGetter _getter;
-        private readonly DynamicSetter _setter;
+        private readonly DynamicProperty _property;
 
-        public string Name { get; private set; }
+        public string Name { get { return _property.PropertyInfo.Name; } }
 
         public string Path { get; private set; }
 
-        public Type PropertyType { get; private set; }
+        public Type PropertyType { get { return _property.PropertyInfo.PropertyType; } }
 
         public IStructureProperty Parent { get; private set; }
 
@@ -39,6 +39,8 @@ namespace PineCone.Structures.Schemas
 
         public Type ElementType { get; private set; }
 
+        public bool IsReadOnly { get; private set; }
+
         public static StructureProperty CreateFrom(PropertyInfo propertyInfo)
         {
             return CreateFrom(null, propertyInfo);
@@ -54,26 +56,17 @@ namespace PineCone.Structures.Schemas
 
             return new StructureProperty(
                 parent, 
-                propertyInfo.Name, 
-                propertyInfo.PropertyType,
-                DynamicPropertyFactory.CreateGetter(propertyInfo),
-                DynamicPropertyFactory.CreateSetter(propertyInfo),
+                DynamicPropertyFactory.Create(propertyInfo),
                 uniqueMode);
         }
 
-        private StructureProperty(IStructureProperty parent, string name, Type propertyType, DynamicGetter getter, DynamicSetter setter, UniqueModes? uniqueMode = null)
+        private StructureProperty(IStructureProperty parent, DynamicProperty property, UniqueModes? uniqueMode = null)
         {
-            Ensure.That(name, "name").IsNotNullOrWhiteSpace();
-            Ensure.That(propertyType, "propertyType").IsNotNull();
-            Ensure.That(getter, "getter").IsNotNull();
-            Ensure.That(setter, "setter").IsNotNull();
+            Ensure.That(property, "property").IsNotNull();
 
+            _property = property;
             Parent = parent;
             IsRootMember = parent == null;
-            Name = name;
-            PropertyType = propertyType;
-            _getter = getter;
-            _setter = setter;
             UniqueMode = uniqueMode;
 
             var isSimpleType = PropertyType.IsSimpleType();
@@ -89,12 +82,15 @@ namespace PineCone.Structures.Schemas
 
         public object GetValue(object item)
         {
-            return _getter(item);
+            return _property.Getter.Invoke(item);
         }
 
         public void SetValue(object target, object value)
         {
-            _setter(target, value);
+            if(IsReadOnly)
+                throw new PineConeException(ExceptionMessages.StructureProperty_Setter_IsReadOnly.Inject(Path));
+
+            _property.Setter(target, value);
         }
     }
 }

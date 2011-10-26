@@ -258,6 +258,32 @@ namespace PineCone.Tests.UnitTests.Structures.StructureBuilderTests
         }
 
         [Test]
+        public void CreateStructure_WhenIDictionary_ReturnsOneIndexPerElementInCorrectOrder()
+        {
+            var schema = StructureSchemaTestFactory.CreateRealFrom<TestItemWithIDictionary>();
+            var item = new TestItemWithIDictionary { KeyValues = new Dictionary<string, int> { { "Key1", 5 }, { "Key2", 6 }, { "Key3", 7 } } };
+
+            var structure = Builder.CreateStructure(item, schema);
+
+            var indices = structure.Indexes.Where(i => i.Path.StartsWith("KeyValues")).ToList();
+            Assert.AreEqual(6, indices.Count);
+
+            Assert.AreEqual("KeyValues.Key", indices[0].Path);
+            Assert.AreEqual("Key1", indices[0].Value);
+            Assert.AreEqual("KeyValues.Key", indices[1].Path);
+            Assert.AreEqual("Key2", indices[1].Value);
+            Assert.AreEqual("KeyValues.Key", indices[2].Path);
+            Assert.AreEqual("Key3", indices[2].Value);
+
+            Assert.AreEqual("KeyValues.Value", indices[3].Path);
+            Assert.AreEqual(5, indices[3].Value);
+            Assert.AreEqual("KeyValues.Value", indices[4].Path);
+            Assert.AreEqual(6, indices[4].Value);
+            Assert.AreEqual("KeyValues.Value", indices[5].Path);
+            Assert.AreEqual(7, indices[5].Value);
+        }
+
+        [Test]
         public void CreateStructure_WhenDictionary_ReturnsOneIndexPerElementInCorrectOrder()
         {
             var schema = StructureSchemaTestFactory.CreateRealFrom<TestItemWithDictionary>();
@@ -280,6 +306,32 @@ namespace PineCone.Tests.UnitTests.Structures.StructureBuilderTests
             Assert.AreEqual("KeyValues.Value", indices[4].Path);
             Assert.AreEqual(6, indices[4].Value);
             Assert.AreEqual("KeyValues.Value", indices[5].Path);
+            Assert.AreEqual(7, indices[5].Value);
+        }
+
+        [Test]
+        public void CreateStructure_WhenIDictionaryWithComplex_ReturnsOneIndexPerElementInCorrectOrder()
+        {
+            var schema = StructureSchemaTestFactory.CreateRealFrom<TestItemWithIDictionaryOfComplex>();
+            var item = new TestItemWithIDictionaryOfComplex { KeyValues = new Dictionary<string, Value> { { "Key1", new Value { Is = 5 } }, { "Key2", new Value { Is = 6 } }, { "Key3", new Value { Is = 7 } } } };
+
+            var structure = Builder.CreateStructure(item, schema);
+
+            var indices = structure.Indexes.Where(i => i.Path.StartsWith("KeyValues")).ToList();
+            Assert.AreEqual(6, indices.Count);
+
+            Assert.AreEqual("KeyValues.Key", indices[0].Path);
+            Assert.AreEqual("Key1", indices[0].Value);
+            Assert.AreEqual("KeyValues.Key", indices[1].Path);
+            Assert.AreEqual("Key2", indices[1].Value);
+            Assert.AreEqual("KeyValues.Key", indices[2].Path);
+            Assert.AreEqual("Key3", indices[2].Value);
+
+            Assert.AreEqual("KeyValues.Value.Is", indices[3].Path);
+            Assert.AreEqual(5, indices[3].Value);
+            Assert.AreEqual("KeyValues.Value.Is", indices[4].Path);
+            Assert.AreEqual(6, indices[4].Value);
+            Assert.AreEqual("KeyValues.Value.Is", indices[5].Path);
             Assert.AreEqual(7, indices[5].Value);
         }
 
@@ -333,6 +385,20 @@ namespace PineCone.Tests.UnitTests.Structures.StructureBuilderTests
             public Guid StructureId { get; set; }
 
             public ISet<int> SetOfInts { get; set; }
+        }
+
+        private class TestItemWithIDictionary
+        {
+            public Guid StructureId { get; set; }
+
+            public IDictionary<string, int> KeyValues { get; set; }
+        }
+
+        private class TestItemWithIDictionaryOfComplex
+        {
+            public Guid StructureId { get; set; }
+
+            public IDictionary<string, Value> KeyValues { get; set; }
         }
 
         private class TestItemWithDictionary

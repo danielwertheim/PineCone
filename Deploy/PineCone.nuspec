@@ -17,7 +17,7 @@
 	<requireLicenseAcceptance>false</requireLicenseAcceptance>
 	<tags>indexing,structures,key-value</tags>
 	<dependencies>
-      <dependency id="Ensure.That" version="0.3.0" />
+      <dependency id="Ensure.That" version="0.4.0" />
 	</dependencies>
   </metadata>
   <files>

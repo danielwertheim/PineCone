@@ -39,9 +39,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Ensure.That.0.5.0\lib\EnsureThat.dll</HintPath>
     </Reference>
-    <Reference Include="NCore, Version=0.15.0.59, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="NCore, Version=0.16.0.61, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\NCore.0.15.0.59\lib\NCore.dll</HintPath>
+      <HintPath>..\..\packages\NCore.0.16.0.61\lib\NCore.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -127,13 +127,13 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\..\License.txt">
-      <Link>License.txt</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <Content Include="..\..\License-PineCone.txt">
+      <Link>License-PineCone.txt</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

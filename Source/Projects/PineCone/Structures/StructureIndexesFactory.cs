@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using NCore;
+using NCore.Reflections;
 using PineCone.Resources;
 using PineCone.Structures.Schemas;
 
@@ -36,7 +37,7 @@ namespace PineCone.Structures
                     var subIndexes = new IStructureIndex[values.Count];
                     Parallel.For(0, subIndexes.Length, subC =>
                     {
-                        subIndexes[subC] = new StructureIndex(structureId, indexAccessor.Path, values[subC], indexAccessor.DataType, indexAccessor.UniqueMode.ToStructureIndexType());
+                        subIndexes[subC] = new StructureIndex(structureId, indexAccessor.Path, values[subC], indexAccessor.ElementType ?? indexAccessor.DataType, indexAccessor.UniqueMode.ToStructureIndexType());
                     });
                     indexes[c] = subIndexes;
                 }

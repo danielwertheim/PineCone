@@ -56,6 +56,18 @@ namespace PineCone.Tests.UnitTests.Structures
         }
 
         [Test]
+        public void GetIndexes_WhenItemWithEnumerableWithOneString_ReturnsIndexWithDataTypeOfStringElement()
+        {
+            var item = new WithArray { StringValues = new[] { "A" } };
+            var schemaStub = StructureSchemaTestFactory.CreateRealFrom<WithArray>();
+
+            var factory = new StructureIndexesFactory();
+            var indexes = factory.CreateIndexes(schemaStub, item, _structureIdGenerator.CreateId(_structureSchema)).ToList();
+
+            Assert.AreEqual(typeof(string), indexes[0].DataType);
+        }
+
+        [Test]
         public void GetIndexes_WhenItemWithEnumerableWithOneInt_ReturnsIndexWithInt()
         {
             var item = new WithArray { IntValues = new[] { 42 } };

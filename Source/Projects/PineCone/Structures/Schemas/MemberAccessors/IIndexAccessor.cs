@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using PineCone.Annotations;
 
 namespace PineCone.Structures.Schemas.MemberAccessors
@@ -10,6 +11,8 @@ namespace PineCone.Structures.Schemas.MemberAccessors
         bool IsElement { get; }
 
         bool IsUnique { get; }
+
+        Type ElementType { get; }
 
         UniqueModes? UniqueMode { get; }
 

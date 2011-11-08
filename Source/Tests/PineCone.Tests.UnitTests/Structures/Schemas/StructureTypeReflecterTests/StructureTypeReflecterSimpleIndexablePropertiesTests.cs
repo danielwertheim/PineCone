@@ -3,7 +3,6 @@ using System.Linq;
 using NCore.Reflections;
 using NUnit.Framework;
 using PineCone.Annotations;
-using NCore;
 using PineCone.Structures.Schemas;
 
 namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTests
@@ -11,8 +10,6 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
     [TestFixture]
     public class StructureTypeReflecterSimpleIndexablePropertiesTests : UnitTestBase
     {
-        private readonly StructureTypeReflecter _reflecter = new StructureTypeReflecter();
-
         [Test]
         public void GetSimpleIndexableProperties_WhenMultiplePublicSimplePropertiesExistsAndNoExclusions_ReturnsAllPublicSimpleProperties()
         {
@@ -98,6 +95,34 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
             Assert.AreEqual(2, properties.Count());
             CollectionAssert.Contains(names, "UqInt");
             CollectionAssert.Contains(names, "UqString");
+        }
+
+        [Test]
+        public void GetSimpleIndexableProperties_WhenMultiplePublicNullableSimplePropertiesExistsAndNoExclusions_ReturnsAllPublicSimpleProperties()
+        {
+            var properties = StructureTypeReflecter.GetSimpleIndexablePropertyInfos(
+                typeof(WithNullableValueTypes).GetProperties(StructureTypeReflecter.PropertyBindingFlags));
+
+            var names = properties.Select(p => p.Name).ToArray();
+            Assert.AreEqual(5, properties.Count());
+            CollectionAssert.Contains(names, "StructureId");
+            CollectionAssert.Contains(names, "NullableInt");
+            CollectionAssert.Contains(names, "NullableDecimal");
+            CollectionAssert.Contains(names, "NullableBool");
+            CollectionAssert.Contains(names, "NullableDateTime");
+        }
+
+        private class WithNullableValueTypes
+        {
+            public Guid StructureId { get; set; }
+
+            public int? NullableInt { get; set; }
+
+            public bool? NullableBool { get; set; }
+
+            public decimal? NullableDecimal { get; set; }
+
+            public DateTime? NullableDateTime { get; set; }
         }
 
         private class WithSimpleProperties

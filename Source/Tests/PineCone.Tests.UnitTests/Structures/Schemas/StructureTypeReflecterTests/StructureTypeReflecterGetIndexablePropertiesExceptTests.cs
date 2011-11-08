@@ -63,7 +63,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
         {
             var reflecter = new StructureTypeReflecter();
 
-            var properties = reflecter.GetIndexablePropertiesExcept(typeof(WithStructureId), new[] { "Bool1", "DateTime1", "String1", "Nested", "Nested.Int1OnNested", "Nested.String1OnNested" });
+            var properties = reflecter.GetIndexablePropertiesExcept(typeof(WithStructureId), new[] { "StructureId", "Bool1", "DateTime1", "String1", "Nested", "Nested.Int1OnNested", "Nested.String1OnNested" });
 
             Assert.AreEqual(0, properties.Count());
         }

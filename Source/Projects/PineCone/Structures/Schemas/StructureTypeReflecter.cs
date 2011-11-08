@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using EnsureThat;
+using NCore.Collections;
 using NCore.Reflections;
 
 namespace PineCone.Structures.Schemas
 {
     public class StructureTypeReflecter : IStructureTypeReflecter
     {
-        private static readonly string[] NonIndexableSystemMembers = new[] { StructureSchema.IdMemberName };
+        private static readonly string[] NonIndexableSystemMembers = new string[] { };//StructureSchema.IdMemberName };
 
         public const BindingFlags IdPropertyBindingFlags =
             BindingFlags.Public | BindingFlags.Instance | BindingFlags.GetProperty;
@@ -46,7 +47,7 @@ namespace PineCone.Structures.Schemas
             Ensure.That(type, "type").IsNotNull();
             Ensure.That((ICollection)nonIndexablePaths, "nonIndexablePaths").HasItems();
 
-            return GetIndexableProperties(type, null, NonIndexableSystemMembers.Union(nonIndexablePaths).ToArray(), null);
+            return GetIndexableProperties(type, null, NonIndexableSystemMembers.MergeWith(nonIndexablePaths).ToArray(), null);
         }
 
         public IEnumerable<IStructureProperty> GetSpecificIndexableProperties(IReflect type, ICollection<string> indexablePaths)

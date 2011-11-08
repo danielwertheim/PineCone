@@ -221,8 +221,8 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.Builders
 
             var schema = _schemaBuilder.CreateSchema(structureType);
 
-            Assert.AreEqual(1, schema.IndexAccessors.Count);
-            Assert.IsTrue(schema.IndexAccessors[0].Path.StartsWith("DummyMember"));
+            Assert.AreEqual(1, schema.IndexAccessors.Count(iac => iac.Path != StructureSchema.IdMemberName));
+            Assert.IsTrue(schema.IndexAccessors[1].Path.StartsWith("DummyMember"));
         }
 
         private static bool HasLevel(IIndexAccessor iac, int level)

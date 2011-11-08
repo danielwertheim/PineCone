@@ -20,6 +20,44 @@ namespace PineCone.Tests.UnitTests.Structures
         }
 
         [Test]
+        public void GetIndexes_WhenItemHasGuidId_ReturnsId()
+        {
+            var id = Guid.Parse("1F0E8C1D-7AF5-418F-A6F6-A40B7F31CB00");
+            var item = new WithGuidId { StructureId = id };
+            var schemaStub = StructureSchemaTestFactory.CreateRealFrom<WithGuidId>();
+
+            var factory = new StructureIndexesFactory();
+            var indexes = factory.CreateIndexes(schemaStub, item, _structureIdGenerator.CreateId(_structureSchema)).ToList();
+
+            Assert.AreEqual(id, indexes.Single(i => i.Path == "StructureId").Value);
+        }
+
+        [Test]
+        public void GetIndexes_WhenItemHasNulledGuidId_ReturnsNoIndex()
+        {
+            var item = new WithNullableGuidId { StructureId = null };
+            var schemaStub = StructureSchemaTestFactory.CreateRealFrom<WithNullableGuidId>();
+
+            var factory = new StructureIndexesFactory();
+            var indexes = factory.CreateIndexes(schemaStub, item, _structureIdGenerator.CreateId(_structureSchema)).ToList();
+
+            Assert.AreEqual(0, indexes.Count);
+        }
+
+        [Test]
+        public void GetIndexes_WhenNullableGuidIdHasValue_ReturnsId()
+        {
+            var id = Guid.Parse("1F0E8C1D-7AF5-418F-A6F6-A40B7F31CB00");
+            var item = new WithNullableGuidId { StructureId = id };
+            var schemaStub = StructureSchemaTestFactory.CreateRealFrom<WithNullableGuidId>();
+
+            var factory = new StructureIndexesFactory();
+            var indexes = factory.CreateIndexes(schemaStub, item, _structureIdGenerator.CreateId(_structureSchema)).ToList();
+
+            Assert.AreEqual(id, indexes.Single(i => i.Path == "StructureId").Value);
+        }
+
+        [Test]
         public void GetIndexes_WhenItemWithAssignedString_ReturnsIndexWithStringValue()
         {
             var item = new WithNoArray { StringValue = "A" };
@@ -28,7 +66,7 @@ namespace PineCone.Tests.UnitTests.Structures
             var factory = new StructureIndexesFactory();
             var indexes = factory.CreateIndexes(schemaStub, item, _structureIdGenerator.CreateId(_structureSchema)).ToList();
 
-            Assert.AreEqual("A", indexes[0].Value);
+            Assert.AreEqual("A", indexes.Single(i => i.Path == "StringValue").Value);
         }
 
         [Test]
@@ -40,7 +78,7 @@ namespace PineCone.Tests.UnitTests.Structures
             var factory = new StructureIndexesFactory();
             var indexes = factory.CreateIndexes(schemaStub, item, _structureIdGenerator.CreateId(_structureSchema)).ToList();
 
-            Assert.AreEqual(42, indexes[0].Value);
+            Assert.AreEqual(42, indexes.Single(i => i.Path == "IntValue").Value);
         }
 
         [Test]
@@ -52,7 +90,7 @@ namespace PineCone.Tests.UnitTests.Structures
             var factory = new StructureIndexesFactory();
             var indexes = factory.CreateIndexes(schemaStub, item, _structureIdGenerator.CreateId(_structureSchema)).ToList();
 
-            Assert.AreEqual("A", indexes[0].Value);
+            Assert.AreEqual("A", indexes.Single(i => i.Path == "StringValues").Value);
         }
 
         [Test]
@@ -64,7 +102,7 @@ namespace PineCone.Tests.UnitTests.Structures
             var factory = new StructureIndexesFactory();
             var indexes = factory.CreateIndexes(schemaStub, item, _structureIdGenerator.CreateId(_structureSchema)).ToList();
 
-            Assert.AreEqual(typeof(string), indexes[0].DataType);
+            Assert.AreEqual(typeof(string), indexes.Single(i => i.Path == "StringValues").DataType);
         }
 
         [Test]
@@ -76,7 +114,7 @@ namespace PineCone.Tests.UnitTests.Structures
             var factory = new StructureIndexesFactory();
             var indexes = factory.CreateIndexes(schema, item, _structureIdGenerator.CreateId(_structureSchema)).ToList();
 
-            Assert.AreEqual(42, indexes[0].Value);
+            Assert.AreEqual(42, indexes.Single(i => i.Path == "IntValues").Value);
         }
 
         [Test]
@@ -88,8 +126,8 @@ namespace PineCone.Tests.UnitTests.Structures
             var factory = new StructureIndexesFactory();
             var indexes = factory.CreateIndexes(schemaStub, item, _structureIdGenerator.CreateId(_structureSchema)).ToList();
 
-            Assert.AreEqual("A", indexes[0].Value);
-            Assert.AreEqual("B", indexes[1].Value);
+            Assert.AreEqual("A", indexes[1].Value);
+            Assert.AreEqual("B", indexes[2].Value);
         }
 
         [Test]
@@ -101,8 +139,8 @@ namespace PineCone.Tests.UnitTests.Structures
             var factory = new StructureIndexesFactory();
             var indexes = factory.CreateIndexes(schemaStub, item, _structureIdGenerator.CreateId(_structureSchema)).ToList();
 
-            Assert.AreEqual(42, indexes[0].Value);
-            Assert.AreEqual(43, indexes[1].Value);
+            Assert.AreEqual(42, indexes[1].Value);
+            Assert.AreEqual(43, indexes[2].Value);
         }
 
         [Test]
@@ -114,8 +152,8 @@ namespace PineCone.Tests.UnitTests.Structures
             var factory = new StructureIndexesFactory();
             var indexes = factory.CreateIndexes(schemaStub, item, _structureIdGenerator.CreateId(_structureSchema)).ToList();
 
-            Assert.AreEqual("A", indexes[0].Value);
             Assert.AreEqual("A", indexes[1].Value);
+            Assert.AreEqual("A", indexes[2].Value);
         }
 
         [Test]
@@ -127,8 +165,18 @@ namespace PineCone.Tests.UnitTests.Structures
             var factory = new StructureIndexesFactory();
             var indexes = factory.CreateIndexes(schemaStub, item, _structureIdGenerator.CreateId(_structureSchema)).ToList();
 
-            Assert.AreEqual(42, indexes[0].Value);
             Assert.AreEqual(42, indexes[1].Value);
+            Assert.AreEqual(42, indexes[2].Value);
+        }
+
+        private class WithGuidId
+        {
+            public Guid StructureId { get; set; }
+        }
+
+        private class WithNullableGuidId
+        {
+            public Guid? StructureId { get; set; }
         }
 
         private class WithNoArray

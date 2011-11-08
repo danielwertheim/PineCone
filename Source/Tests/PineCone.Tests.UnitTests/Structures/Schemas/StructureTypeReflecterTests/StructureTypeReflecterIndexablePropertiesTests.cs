@@ -13,39 +13,39 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
         private readonly IStructureTypeReflecter _reflecter = new StructureTypeReflecter();
 
         [Test]
-        public void GetIndexableProperties_WhenGuidIdExists_IdMemberIsNotReturned()
+        public void GetIndexableProperties_WhenGuidIdExists_IdMemberIsReturned()
         {
             var property = _reflecter.GetIndexableProperties(typeof (WithGuidId))
                 .SingleOrDefault(p => p.Path == "StructureId");
 
-            Assert.IsNull(property);
+            Assert.IsNotNull(property);
         }
 
         [Test]
-        public void GetIndexableProperties_WhenIdentityExists_IdMemberIsNotReturned()
+        public void GetIndexableProperties_WhenIdentityExists_IdMemberIsReturned()
         {
             var property = _reflecter.GetIndexableProperties(typeof(WithIdentityId))
                 .SingleOrDefault(p => p.Path == "StructureId");
 
-            Assert.IsNull(property);
+            Assert.IsNotNull(property);
         }
 
         [Test]
-        public void GetIndexableProperties_WhenNullableGuidIdExists_IdMemberIsNotReturned()
+        public void GetIndexableProperties_WhenNulledNullableGuidIdExists_IdMemberIsReturned()
         {
             var property = _reflecter.GetIndexableProperties(typeof(WithNullableGuidId))
                 .SingleOrDefault(p => p.Path == "StructureId");
 
-            Assert.IsNull(property);
+            Assert.IsNotNull(property);
         }
 
         [Test]
-        public void GetIndexableProperties_WhenNullableIdentityExists_IdMemberIsNotReturned()
+        public void GetIndexableProperties_WhenNullableIdentityExists_IdMemberIsReturned()
         {
             var property = _reflecter.GetIndexableProperties(typeof(WithNullableIdentityId))
                 .SingleOrDefault(p => p.Path == "StructureId");
 
-            Assert.IsNull(property);
+            Assert.IsNotNull(property);
         }
 
         [Test]

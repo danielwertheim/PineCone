@@ -39,14 +39,14 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
         }
 
         [Test]
-        public void GetSpecificIndexableProperties_WhenIncludingStructureId_PropertyIsNotReturned()
+        public void GetSpecificIndexableProperties_WhenIncludingStructureId_PropertyIsReturned()
         {
             var reflecter = new StructureTypeReflecter();
 
             var properties = reflecter.GetSpecificIndexableProperties(typeof(WithStructureId), new[] { "StructureId" });
 
-            Assert.AreEqual(0, properties.Count());
-            Assert.IsNull(properties.SingleOrDefault(p => p.Path == "StructureId"));
+            Assert.AreEqual(1, properties.Count());
+            Assert.IsNotNull(properties.SingleOrDefault(p => p.Path == "StructureId"));
         }
 
         [Test]

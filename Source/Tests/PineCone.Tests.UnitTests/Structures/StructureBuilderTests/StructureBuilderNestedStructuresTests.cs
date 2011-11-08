@@ -14,8 +14,9 @@ namespace PineCone.Tests.UnitTests.Structures.StructureBuilderTests
 
             var structure = Builder.CreateStructure(item, schema);
 
-            Assert.AreEqual(1, structure.Indexes.Count);
-            Assert.AreEqual("IntOnStructure1", structure.Indexes[0].Path);
+            Assert.AreEqual(2, structure.Indexes.Count);
+            Assert.AreEqual("StructureId", structure.Indexes[0].Path);
+            Assert.AreEqual("IntOnStructure1", structure.Indexes[1].Path);
         }
 
         private class Structure1

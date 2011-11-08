@@ -90,7 +90,7 @@ namespace PineCone.Tests.UnitTests.Structures.StructureBuilderTests
 
             var actual = structure.Indexes.SingleOrDefault(si => si.Path.StartsWith("IntArray"));
             Assert.IsNull(actual);
-            Assert.AreEqual(1, structure.Indexes.Count);
+            Assert.AreEqual(2, structure.Indexes.Count);
         }
 
         [Test]
@@ -115,7 +115,7 @@ namespace PineCone.Tests.UnitTests.Structures.StructureBuilderTests
 
             var actual = structure.Indexes.SingleOrDefault(si => si.Path.StartsWith("Container.IntArray"));
             Assert.IsNull(actual);
-            Assert.AreEqual(1, structure.Indexes.Count);
+            Assert.AreEqual(2, structure.Indexes.Count);
         }
 
         [Test]
@@ -200,7 +200,7 @@ namespace PineCone.Tests.UnitTests.Structures.StructureBuilderTests
 
             var actual = structure.Indexes.SingleOrDefault(si => si.Path.StartsWith("HashSetOfInts"));
             Assert.IsNull(actual);
-            Assert.AreEqual(0, structure.Indexes.Count);
+            Assert.AreEqual(1, structure.Indexes.Count);
         }
 
         [Test]
@@ -227,7 +227,7 @@ namespace PineCone.Tests.UnitTests.Structures.StructureBuilderTests
 
             var actual = structure.Indexes.SingleOrDefault(si => si.Path.StartsWith("SetOfInts"));
             Assert.IsNull(actual);
-            Assert.AreEqual(0, structure.Indexes.Count);
+            Assert.AreEqual(1, structure.Indexes.Count);
         }
 
         [Test]
@@ -254,7 +254,7 @@ namespace PineCone.Tests.UnitTests.Structures.StructureBuilderTests
 
             var actual = structure.Indexes.SingleOrDefault(si => si.Path.StartsWith("HashSetOfComplex.Is"));
             Assert.IsNotNull(actual);
-            Assert.AreEqual(1, structure.Indexes.Count);
+            Assert.AreEqual(2, structure.Indexes.Count);
         }
 
         [Test]

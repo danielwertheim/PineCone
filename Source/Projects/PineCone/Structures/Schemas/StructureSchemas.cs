@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using EnsureThat;
 using PineCone.Structures.Schemas.Builders;
@@ -7,7 +8,9 @@ namespace PineCone.Structures.Schemas
 {
     public class StructureSchemas : IStructureSchemas
     {
-        private readonly Dictionary<string, IStructureSchema> _schemas;
+        private readonly ConcurrentDictionary<Type, IStructureSchema> _schemas;
+
+        private readonly Func<Type, IStructureSchema> _schemaFactoryFn;
 
         public IStructureTypeFactory StructureTypeFactory { get; set; }
         
@@ -20,7 +23,9 @@ namespace PineCone.Structures.Schemas
 
             StructureTypeFactory = structureTypeFactory;
             SchemaBuilder = schemaBuilder;
-            _schemas = new Dictionary<string, IStructureSchema>();
+            _schemas = new ConcurrentDictionary<Type, IStructureSchema>();
+
+            _schemaFactoryFn = t => SchemaBuilder.CreateSchema(StructureTypeFactory.CreateFor(t));
         }
 
         public IStructureSchema GetSchema<T>() where T : class 
@@ -32,10 +37,7 @@ namespace PineCone.Structures.Schemas
         {
             Ensure.That(type, "type").IsNotNull();
 
-            if (!_schemas.ContainsKey(type.Name))
-                Register(type);
-
-            return _schemas[type.Name];
+            return _schemas.GetOrAdd(type, _schemaFactoryFn);
         }
 
         public IEnumerable<IStructureSchema> GetSchemas()
@@ -47,21 +49,14 @@ namespace PineCone.Structures.Schemas
         {
             Ensure.That(type, "type").IsNotNull();
 
-            _schemas.Remove(type.Name);
+            IStructureSchema tmp;
+
+            _schemas.TryRemove(type, out tmp);
         }
 
         public void Clear()
         {
             _schemas.Clear();
-        }
-
-        private void Register(Type type)
-        {
-            var structureType = StructureTypeFactory.CreateFor(type);
-
-            _schemas.Add(
-                structureType.Name,
-                SchemaBuilder.CreateSchema(structureType));
         }
     }
 }

@@ -28,7 +28,7 @@ namespace PineCone.Structures
             _indexesFactory = new StructureIndexesFactory();
         }
 
-        public IStructure CreateStructure<T>(T item, IStructureSchema structureSchema, StructureBuilderOptions options = null)
+        public virtual IStructure CreateStructure<T>(T item, IStructureSchema structureSchema, StructureBuilderOptions options = null)
             where T : class
         {
             options = options ?? new StructureBuilderOptions();
@@ -36,17 +36,17 @@ namespace PineCone.Structures
             if (options.KeepStructureId)
                 return CreateStructureItemAndKeepId(item, structureSchema, options.Serializer);
 
-            var id = options.IdGenerator.CreateId(structureSchema);
+            var structureId = options.IdGenerator.CreateId(structureSchema);
 
-            return CreateStructureItemAndSetNewId(item, structureSchema, id, options.Serializer);
+            return CreateStructureItemAndSetNewId(item, structureSchema, structureId, options.Serializer);
         }
 
-        public IEnumerable<IStructure> CreateStructures<T>(ICollection<T> items, IStructureSchema structureSchema, StructureBuilderOptions options = null) where T : class
+        public virtual IEnumerable<IStructure> CreateStructures<T>(ICollection<T> items, IStructureSchema structureSchema, StructureBuilderOptions options = null) where T : class
         {
             return CreateStructureBatches(items, structureSchema, items.Count, options).SelectMany(s => s);
         }
 
-        public IEnumerable<IStructure[]> CreateStructureBatches<T>(ICollection<T> items, IStructureSchema structureSchema, int maxBatchSize, StructureBuilderOptions options = null) where T : class
+        public virtual IEnumerable<IStructure[]> CreateStructureBatches<T>(ICollection<T> items, IStructureSchema structureSchema, int maxBatchSize, StructureBuilderOptions options = null) where T : class
         {
             options = options ?? new StructureBuilderOptions();
             

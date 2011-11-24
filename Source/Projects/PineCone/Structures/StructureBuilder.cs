@@ -33,10 +33,10 @@ namespace PineCone.Structures
         {
             options = options ?? new StructureBuilderOptions();
 
-            if (options.KeepStructureId)
+            if (!options.AutoGenerateStructureId)
                 return CreateStructureItemAndKeepId(item, structureSchema, options.Serializer);
 
-            var structureId = options.IdGenerator.CreateId(structureSchema);
+            var structureId = options.StructureIdGenerator.CreateId(structureSchema);
 
             return CreateStructureItemAndSetNewId(item, structureSchema, structureId, options.Serializer);
         }
@@ -54,7 +54,7 @@ namespace PineCone.Structures
             var batchNo = 0;
 
             Action<IStructure[], T[], IStructureSchema, StructureBuilderOptions> a;
-            if (options.KeepStructureId)
+            if (!options.AutoGenerateStructureId)
                 a = FillStructureArrayFromSourceWithPreservedId;
             else
                 a = FillStructureArrayFromSourceWithNewId;
@@ -83,7 +83,7 @@ namespace PineCone.Structures
 
         private void FillStructureArrayFromSourceWithNewId<T>(IStructure[] structures, T[] sourceItems, IStructureSchema structureSchema, StructureBuilderOptions options) where T : class
         {
-            var ids = options.IdGenerator.CreateIds(sourceItems.Length, structureSchema).ToArray();
+            var ids = options.StructureIdGenerator.CreateIds(sourceItems.Length, structureSchema).ToArray();
 
             Parallel.For(0, sourceItems.Length, i =>
             {

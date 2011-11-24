@@ -7,9 +7,9 @@ namespace PineCone.Structures
         /// <summary>
         /// Is used to generate <see cref="IStructureId"/> that
         /// will be assigned to the structure items, depending
-        /// on <see cref="KeepStructureId"/>.
+        /// on <see cref="AutoGenerateStructureId"/>.
         /// </summary>
-        public IStructureIdGenerator IdGenerator { get; set; }
+        public IStructureIdGenerator StructureIdGenerator { get; set; }
 
         /// <summary>
         /// If specified, the <see cref="IStructure.Data"/> member
@@ -18,17 +18,17 @@ namespace PineCone.Structures
         public ISerializer Serializer { get; set; }
 
         /// <summary>
-        /// Determines if the StructureId member
-        /// of the item being passed to the <see cref="IStructureBuilder"/>
-        /// should be overriden or not.
+        /// If true (default) the specified <see cref="StructureIdGenerator"/> generator will be
+        /// consumed. If false, you are responsible for assigning values
+        /// for the <see cref="IStructureId"/> property of your items you self.
         /// </summary>
-        public bool KeepStructureId { get; set; }
+        public bool AutoGenerateStructureId { get; set; }
 
         public StructureBuilderOptions()
         {
-            IdGenerator = new GuidStructureIdGenerator();
+            StructureIdGenerator = new GuidStructureIdGenerator();
             Serializer = new EmptySerializer();
-            KeepStructureId = false;
+            AutoGenerateStructureId = true;
         }
     }
 }

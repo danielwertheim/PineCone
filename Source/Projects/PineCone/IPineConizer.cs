@@ -10,6 +10,5 @@ namespace PineCone
         IStructureBuilder Builder { get; set; }
         IStructure CreateStructureFor<T>(T item) where T : class;
         IEnumerable<IStructure> CreateStructuresFor<T>(ICollection<T> items) where T : class;
-        IEnumerable<IStructure[]> CreateStructureBatches<T>(ICollection<T> items, int maxBatchSize) where T : class;
     }
 }

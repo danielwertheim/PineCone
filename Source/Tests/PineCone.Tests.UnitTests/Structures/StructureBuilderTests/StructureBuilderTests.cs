@@ -12,26 +12,41 @@ namespace PineCone.Tests.UnitTests.Structures.StructureBuilderTests
     public class StructureBuilderTests : StructureBuilderBaseTests
     {
         [Test]
-        public void CreateStructure_WhenIdIsAssignedAndOptionsSaysOverrideId_IdIsOverWritten()
+        public void CreateStructures_WhenProcessing2900Items_ItemsAreGettingGeneratedInCorrectOrder()
+        {
+            var schema = StructureSchemaTestFactory.CreateRealFrom<GuidItem>();
+            var items = CreateGuidItems(2900);
+
+            var structures = Builder.CreateStructures(items, schema).ToArray();
+
+            CollectionAssert.AreEqual(
+                items.Select(i => i.StructureId).ToArray(),
+                structures.Select(s => (Guid)s.Id.Value).ToArray());
+        }
+
+        [Test]
+        public void CreateStructure_WhenIdIsAssignedAndStrategyIs_AlwaysNewGuidStructureId_IdIsOverWritten()
         {
             var initialId = StructureId.Create(Guid.Parse("B551349B-53BD-4455-A509-A9B68B58700A"));
             var item = new GuidItem { StructureId = (Guid)initialId.Value };
             var schema = StructureSchemaTestFactory.CreateRealFrom<GuidItem>();
 
-            var structure = Builder.CreateStructure(item, schema, new StructureBuilderOptions { KeepStructureId = false });
+            Builder.Options.StructureIdStrategy = new AlwaysNewGuidStructureIdStrategy();
+            var structure = Builder.CreateStructure(item, schema);
 
             Assert.AreNotEqual(initialId, structure.Id);
             Assert.AreNotEqual(initialId.Value, item.StructureId);
         }
 
         [Test]
-        public void CreateStructure_WhenIdIsAssignedAndOptionsSaysKeepId_IdIsNotOverWritten()
+        public void CreateStructure_WhenIdIsAssignedAndStrategyIs_KeepStructureId_IdIsNotOverWritten()
         {
             var schema = StructureSchemaTestFactory.CreateRealFrom<GuidItem>();
             var initialId = StructureId.Create(Guid.Parse("B551349B-53BD-4455-A509-A9B68B58700A"));
             var item = new GuidItem { StructureId = (Guid)initialId.Value };
-            
-            var structure = Builder.CreateStructure(item, schema, new StructureBuilderOptions { KeepStructureId = true });
+
+            Builder.Options.StructureIdStrategy = new KeepStructureIdStrategy();
+            var structure = Builder.CreateStructure(item, schema);
 
             Assert.AreEqual(initialId, structure.Id);
             Assert.AreEqual(initialId.Value, item.StructureId);
@@ -41,12 +56,13 @@ namespace PineCone.Tests.UnitTests.Structures.StructureBuilderTests
         public void CreateStructures_WhenSerializerIsSpecified_SerializerIsConsumed()
         {
             var schema = StructureSchemaTestFactory.CreateRealFrom<GuidItem>();
-            var serializer = new Mock<ISerializer>();
+            var serializer = new Mock<IStructureSerializer>();
             Func<GuidItem, object> serializerFunc = s => s.StructureId + ";" + s.Value;
             serializer.Setup<object>(s => s.Serialize(It.IsAny<GuidItem>())).Returns(serializerFunc);
             var items = CreateGuidItems(3).ToArray();
 
-            var structures = Builder.CreateStructures(items, schema, new StructureBuilderOptions { Serializer = serializer.Object }).ToList();
+            Builder.Options.StructureSerializer = serializer.Object;
+            var structures = Builder.CreateStructures(items, schema).ToList();
 
             Assert.AreEqual(3, structures.Count);
             Assert.AreEqual(items[0].StructureId + ";" + items[0].Value, structures[0].Data);
@@ -136,44 +152,42 @@ namespace PineCone.Tests.UnitTests.Structures.StructureBuilderTests
         public void CreateStructure_WhenSpecificIdGeneratorIsPassed_SpecificIdGeneratorIsConsumed()
         {
             var idValue = new Guid("A058FCDE-A3D9-4EAA-AA41-0CE9D4A3FB1E");
-            var schema = StructureSchemaTestFactory.CreateRealFrom<TestItemForFirstLevel>();
-            var idGeneratorMock = new Mock<IStructureIdGenerator>();
-            idGeneratorMock.Setup(m => m.CreateId(schema)).Returns(StructureId.Create(idValue));
             var item = new TestItemForFirstLevel { IntValue = 42 };
+            var schema = StructureSchemaTestFactory.CreateRealFrom<TestItemForFirstLevel>();
+            var idStrategy = new Mock<IStructureIdStrategy>();
+            idStrategy
+                .Setup(m => m.Apply(schema, item))
+                .Callback(() => item.StructureId = idValue)
+                .Returns(StructureId.Create(idValue));
 
-            var structure = Builder.CreateStructure(item, schema, new StructureBuilderOptions { IdGenerator = idGeneratorMock.Object });
+            Builder.Options.StructureIdStrategy = idStrategy.Object;
+            var structure = Builder.CreateStructure(item, schema);
 
-            idGeneratorMock.Verify(m => m.CreateId(schema), Times.Once());
+            idStrategy.Verify(m => m.Apply(schema, item), Times.Once());
         }
 
         [Test]
         public void CreateStructures_WhenSpecificIdGeneratorIsPassed_SpecificIdGeneratorIsConsumed()
         {
-            var idValue = new Guid("A058FCDE-A3D9-4EAA-AA41-0CE9D4A3FB1E");
+            var idValue1 = new Guid("A058FCDE-A3D9-4EAA-AA41-0CE9D4A3FB1E");
+            var idValue2 = new Guid("91D77A9D-C793-4F3D-9DD0-F1F336362C5C");
+            var items = new[] { new TestItemForFirstLevel { IntValue = 42 }, new TestItemForFirstLevel { IntValue = 43 } };
             var schema = StructureSchemaTestFactory.CreateRealFrom<TestItemForFirstLevel>();
-            var idGeneratorMock = new Mock<IStructureIdGenerator>();
-            idGeneratorMock.Setup(m => m.CreateIds(1, schema)).Returns(new[] { StructureId.Create(idValue) });
+            var idStrategy = new Mock<IStructureIdStrategy>();
+            idStrategy
+                .Setup(m => m.Apply(schema, items[0]))
+                .Callback(() => items[0].StructureId = idValue1)
+                .Returns(StructureId.Create(idValue1));
+            idStrategy
+                .Setup(m => m.Apply(schema, items[1]))
+                .Callback(() => items[1].StructureId = idValue1)
+                .Returns(StructureId.Create(idValue2));
 
-            var item = new TestItemForFirstLevel { IntValue = 42 };
+            Builder.Options.StructureIdStrategy = idStrategy.Object;
+            var structures = Builder.CreateStructures(items, schema).ToArray();
 
-            var structures = Builder.CreateStructures(new[] { item }, schema, new StructureBuilderOptions { IdGenerator = idGeneratorMock.Object }).ToArray();
-
-            idGeneratorMock.Verify(m => m.CreateIds(1, schema), Times.Once());
-        }
-
-        [Test]
-        public void CreateStructureBatches_WhenSpecificIdGeneratorIsPassed_SpecificIdGeneratorIsConsumed()
-        {
-            var idValue = new Guid("A058FCDE-A3D9-4EAA-AA41-0CE9D4A3FB1E");
-            var schema = StructureSchemaTestFactory.CreateRealFrom<TestItemForFirstLevel>();
-            var idGeneratorMock = new Mock<IStructureIdGenerator>();
-            idGeneratorMock.Setup(m => m.CreateIds(1, schema)).Returns(new[] { StructureId.Create(idValue) });
-
-            var item = new TestItemForFirstLevel { IntValue = 42 };
-
-            var structures = Builder.CreateStructureBatches(new[] { item }, schema, 1, new StructureBuilderOptions { IdGenerator = idGeneratorMock.Object }).ToArray();
-
-            idGeneratorMock.Verify(m => m.CreateIds(1, schema), Times.Once());
+            idStrategy.Verify(m => m.Apply(schema, items[0]), Times.Once());
+            idStrategy.Verify(m => m.Apply(schema, items[1]), Times.Once());
         }
 
         [Test]

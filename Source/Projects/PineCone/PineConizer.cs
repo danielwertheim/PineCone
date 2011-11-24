@@ -3,7 +3,6 @@ using EnsureThat;
 using PineCone.Structures;
 using PineCone.Structures.Schemas;
 using PineCone.Structures.Schemas.Builders;
-using PineCone.Structures.Schemas.Configuration;
 
 namespace PineCone
 {
@@ -51,11 +50,6 @@ namespace PineCone
         public IEnumerable<IStructure> CreateStructuresFor<T>(ICollection<T> items) where T : class
         {
             return Builder.CreateStructures(items, Schemas.GetSchema<T>());
-        }
-
-        public IEnumerable<IStructure[]> CreateStructureBatches<T>(ICollection<T> items, int maxBatchSize) where T : class
-        {
-            return Builder.CreateStructureBatches(items, Schemas.GetSchema<T>(), maxBatchSize);
         }
     }
 }

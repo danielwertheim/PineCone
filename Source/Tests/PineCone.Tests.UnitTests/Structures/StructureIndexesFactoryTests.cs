@@ -1,22 +1,18 @@
 ﻿using System;
 using System.Linq;
-using Moq;
 using NUnit.Framework;
 using PineCone.Structures;
-using PineCone.Structures.Schemas;
 
 namespace PineCone.Tests.UnitTests.Structures
 {
     [TestFixture]
     public class StructureIndexesFactoryTests : UnitTestBase
     {
-        private IStructureIdGenerator _structureIdGenerator;
-        private IStructureSchema _structureSchema;
+        private Func<IStructureId> _structureIdGenerator;
 
         protected override void OnFixtureInitialize()
         {
-            _structureIdGenerator = new GuidStructureIdGenerator();
-            _structureSchema = new Mock<IStructureSchema>().Object;
+            _structureIdGenerator = () => StructureId.Create(SequentialGuid.New());
         }
 
         [Test]
@@ -27,7 +23,7 @@ namespace PineCone.Tests.UnitTests.Structures
             var schemaStub = StructureSchemaTestFactory.CreateRealFrom<WithGuidId>();
 
             var factory = new StructureIndexesFactory();
-            var indexes = factory.CreateIndexes(schemaStub, item, _structureIdGenerator.CreateId(_structureSchema)).ToList();
+            var indexes = factory.CreateIndexes(schemaStub, item, _structureIdGenerator.Invoke()).ToList();
 
             Assert.AreEqual(id, indexes.Single(i => i.Path == "StructureId").Value);
         }
@@ -39,7 +35,7 @@ namespace PineCone.Tests.UnitTests.Structures
             var schemaStub = StructureSchemaTestFactory.CreateRealFrom<WithNullableGuidId>();
 
             var factory = new StructureIndexesFactory();
-            var indexes = factory.CreateIndexes(schemaStub, item, _structureIdGenerator.CreateId(_structureSchema)).ToList();
+            var indexes = factory.CreateIndexes(schemaStub, item, _structureIdGenerator.Invoke()).ToList();
 
             Assert.AreEqual(0, indexes.Count);
         }
@@ -52,7 +48,7 @@ namespace PineCone.Tests.UnitTests.Structures
             var schemaStub = StructureSchemaTestFactory.CreateRealFrom<WithNullableGuidId>();
 
             var factory = new StructureIndexesFactory();
-            var indexes = factory.CreateIndexes(schemaStub, item, _structureIdGenerator.CreateId(_structureSchema)).ToList();
+            var indexes = factory.CreateIndexes(schemaStub, item, _structureIdGenerator.Invoke()).ToList();
 
             Assert.AreEqual(id, indexes.Single(i => i.Path == "StructureId").Value);
         }
@@ -64,7 +60,7 @@ namespace PineCone.Tests.UnitTests.Structures
             var schemaStub = StructureSchemaTestFactory.CreateRealFrom<WithNoArray>();
 
             var factory = new StructureIndexesFactory();
-            var indexes = factory.CreateIndexes(schemaStub, item, _structureIdGenerator.CreateId(_structureSchema)).ToList();
+            var indexes = factory.CreateIndexes(schemaStub, item, _structureIdGenerator.Invoke()).ToList();
 
             Assert.AreEqual("A", indexes.Single(i => i.Path == "StringValue").Value);
         }
@@ -76,7 +72,7 @@ namespace PineCone.Tests.UnitTests.Structures
             var schemaStub = StructureSchemaTestFactory.CreateRealFrom<WithNoArray>();
 
             var factory = new StructureIndexesFactory();
-            var indexes = factory.CreateIndexes(schemaStub, item, _structureIdGenerator.CreateId(_structureSchema)).ToList();
+            var indexes = factory.CreateIndexes(schemaStub, item, _structureIdGenerator.Invoke()).ToList();
 
             Assert.AreEqual(42, indexes.Single(i => i.Path == "IntValue").Value);
         }
@@ -88,7 +84,7 @@ namespace PineCone.Tests.UnitTests.Structures
             var schemaStub = StructureSchemaTestFactory.CreateRealFrom<WithArray>();
 
             var factory = new StructureIndexesFactory();
-            var indexes = factory.CreateIndexes(schemaStub, item, _structureIdGenerator.CreateId(_structureSchema)).ToList();
+            var indexes = factory.CreateIndexes(schemaStub, item, _structureIdGenerator.Invoke()).ToList();
 
             Assert.AreEqual("A", indexes.Single(i => i.Path == "StringValues").Value);
         }
@@ -100,7 +96,7 @@ namespace PineCone.Tests.UnitTests.Structures
             var schemaStub = StructureSchemaTestFactory.CreateRealFrom<WithArray>();
 
             var factory = new StructureIndexesFactory();
-            var indexes = factory.CreateIndexes(schemaStub, item, _structureIdGenerator.CreateId(_structureSchema)).ToList();
+            var indexes = factory.CreateIndexes(schemaStub, item, _structureIdGenerator.Invoke()).ToList();
 
             Assert.AreEqual(typeof(string), indexes.Single(i => i.Path == "StringValues").DataType);
         }
@@ -112,7 +108,7 @@ namespace PineCone.Tests.UnitTests.Structures
             var schema = StructureSchemaTestFactory.CreateRealFrom<WithArray>();
 
             var factory = new StructureIndexesFactory();
-            var indexes = factory.CreateIndexes(schema, item, _structureIdGenerator.CreateId(_structureSchema)).ToList();
+            var indexes = factory.CreateIndexes(schema, item, _structureIdGenerator.Invoke()).ToList();
 
             Assert.AreEqual(42, indexes.Single(i => i.Path == "IntValues").Value);
         }
@@ -124,7 +120,7 @@ namespace PineCone.Tests.UnitTests.Structures
             var schemaStub = StructureSchemaTestFactory.CreateRealFrom<WithArray>();
 
             var factory = new StructureIndexesFactory();
-            var indexes = factory.CreateIndexes(schemaStub, item, _structureIdGenerator.CreateId(_structureSchema)).ToList();
+            var indexes = factory.CreateIndexes(schemaStub, item, _structureIdGenerator.Invoke()).ToList();
 
             Assert.AreEqual("A", indexes[1].Value);
             Assert.AreEqual("B", indexes[2].Value);
@@ -137,7 +133,7 @@ namespace PineCone.Tests.UnitTests.Structures
             var schemaStub = StructureSchemaTestFactory.CreateRealFrom<WithArray>();
 
             var factory = new StructureIndexesFactory();
-            var indexes = factory.CreateIndexes(schemaStub, item, _structureIdGenerator.CreateId(_structureSchema)).ToList();
+            var indexes = factory.CreateIndexes(schemaStub, item, _structureIdGenerator.Invoke()).ToList();
 
             Assert.AreEqual(42, indexes[1].Value);
             Assert.AreEqual(43, indexes[2].Value);
@@ -150,7 +146,7 @@ namespace PineCone.Tests.UnitTests.Structures
             var schemaStub = StructureSchemaTestFactory.CreateRealFrom<WithArray>();
 
             var factory = new StructureIndexesFactory();
-            var indexes = factory.CreateIndexes(schemaStub, item, _structureIdGenerator.CreateId(_structureSchema)).ToList();
+            var indexes = factory.CreateIndexes(schemaStub, item, _structureIdGenerator.Invoke()).ToList();
 
             Assert.AreEqual("A", indexes[1].Value);
             Assert.AreEqual("A", indexes[2].Value);
@@ -163,7 +159,7 @@ namespace PineCone.Tests.UnitTests.Structures
             var schemaStub = StructureSchemaTestFactory.CreateRealFrom<WithArray>();
 
             var factory = new StructureIndexesFactory();
-            var indexes = factory.CreateIndexes(schemaStub, item, _structureIdGenerator.CreateId(_structureSchema)).ToList();
+            var indexes = factory.CreateIndexes(schemaStub, item, _structureIdGenerator.Invoke()).ToList();
 
             Assert.AreEqual(42, indexes[1].Value);
             Assert.AreEqual(42, indexes[2].Value);

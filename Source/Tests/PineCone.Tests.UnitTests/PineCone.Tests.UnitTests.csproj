@@ -108,7 +108,6 @@
     <Compile Include="Structures\StructureIdTests.cs" />
     <Compile Include="Structures\GuidStructureIdGeneratorTests.cs" />
     <Compile Include="Structures\StructureBuilderTests\StructureBuilderBaseTests.cs" />
-    <Compile Include="Structures\StructureBuilderTests\StructureBuilderBatchTests.cs" />
     <Compile Include="Structures\StructureBuilderTests\DynamicStructureBuilderDynamicTests.cs" />
     <Compile Include="Structures\StructureBuilderTests\StructureBuilderNestedStructuresTests.cs" />
     <Compile Include="Structures\StructureBuilderTests\StructureBuilderTests.cs" />

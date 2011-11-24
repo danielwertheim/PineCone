@@ -8,21 +8,14 @@ namespace PineCone.Dynamic
 {
     public class DynamicStructureBuilder
     {
-        private readonly IStructureIdGenerator _structureIdGenerator;
-
-        public DynamicStructureBuilder(IStructureIdGenerator structureIdGenerator)
-        {
-            Ensure.That(structureIdGenerator).IsNotNull();
-
-            _structureIdGenerator = structureIdGenerator;
-        }
-
         public IStructure CreateStructure(DynamicStructure dynamicStructure)
         {
+            Ensure.That(dynamicStructure, "dynamicStructure").IsNotNull();
+
             var typeDescriptor = dynamicStructure.Descriptor;
             var kvs = dynamicStructure.ToDictionary();
 
-            var id = _structureIdGenerator.CreateId(null);
+            var id = StructureId.Create(SequentialGuid.New());
             dynamicStructure.StructureId = id;
 
             var indexes = new List<IStructureIndex>();

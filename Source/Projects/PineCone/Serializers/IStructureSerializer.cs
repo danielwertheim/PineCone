@@ -1,6 +1,6 @@
 namespace PineCone.Serializers
 {
-    public interface ISerializer
+    public interface IStructureSerializer
     {
         string Serialize<T>(T item) where T : class;
     }

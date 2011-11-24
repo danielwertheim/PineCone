@@ -1,22 +1,25 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using Moq;
 using NUnit.Framework;
 using PineCone.Structures;
-using PineCone.Structures.Schemas;
 
 namespace PineCone.Tests.UnitTests.Structures
 {
     [TestFixture]
     public class GuidStructureIdGeneratorTests : UnitTestBase
     {
-        private IStructureIdGenerator _structureIdGenerator;
-        private IStructureSchema _structureSchema;
+        private Func<int, IEnumerable<IStructureId>> _structureIdGenerator;
 
         protected override void OnFixtureInitialize()
         {
-            _structureIdGenerator = new GuidStructureIdGenerator();
-            _structureSchema = new Mock<IStructureSchema>().Object;
+            _structureIdGenerator = GenerateIds;
+        }
+
+        private IEnumerable<IStructureId> GenerateIds(int numOfIds)
+        {
+            for (var c = 0; c < numOfIds; c++)
+                yield return StructureId.Create(SequentialGuid.New());
         }
 
         [Test]
@@ -24,7 +27,7 @@ namespace PineCone.Tests.UnitTests.Structures
         {
             var numOfIds = 10;
 
-            var ids = _structureIdGenerator.CreateIds(numOfIds, _structureSchema)
+            var ids = _structureIdGenerator.Invoke(numOfIds)
                 .Select(id => id.Value)
                 .Cast<Guid>()
                 .Select(id => id.ToString("D"))
@@ -39,7 +42,7 @@ namespace PineCone.Tests.UnitTests.Structures
         [Test]
         public void CreateIds_WhenZeroIsPassedForNumOfIds_ReturnsZeroLenghtArray()
         {
-            var ids = _structureIdGenerator.CreateIds(0, _structureSchema).ToArray();
+            var ids = _structureIdGenerator.Invoke(0).ToArray();
 
             Assert.AreEqual(0, ids.Length);
         }
@@ -47,7 +50,7 @@ namespace PineCone.Tests.UnitTests.Structures
         [Test]
         public void CreateIds_ReturnsGuids()
         {
-            var ids = _structureIdGenerator.CreateIds(10, _structureSchema).Select(id => id.Value);
+            var ids = _structureIdGenerator.Invoke(10).Select(id => id.Value);
 
             CollectionAssert.AllItemsAreInstancesOfType(ids, typeof(Guid));
         }

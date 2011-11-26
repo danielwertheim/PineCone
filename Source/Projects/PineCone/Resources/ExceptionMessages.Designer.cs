@@ -79,6 +79,15 @@ namespace PineCone.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The type &apos;{0}&apos; is unsupported and a getter for the StructureId accessor can not be created..
+        /// </summary>
+        internal static string Getter_Unsupported_type {
+            get {
+                return ResourceManager.GetString("Getter_Unsupported_type", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Id values must lie on the root object..
         /// </summary>
         internal static string IdAccessor_GetIdValue_InvalidLevel {
@@ -93,6 +102,15 @@ namespace PineCone.Resources {
         internal static string IdAccessor_UnsupportedPropertyType {
             get {
                 return ResourceManager.GetString("IdAccessor_UnsupportedPropertyType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The type &apos;{0}&apos; is unsupported and a setter for the StructureId accessor can not be created..
+        /// </summary>
+        internal static string Setter_Unsupported_type {
+            get {
+                return ResourceManager.GetString("Setter_Unsupported_type", resourceCulture);
             }
         }
         

@@ -7,7 +7,8 @@ namespace PineCone.Structures
     {
         Guid,
         Identity,
-        BigIdentity
+        BigIdentity,
+        String
     }
 
     public static class StructureIdTypesExtensions

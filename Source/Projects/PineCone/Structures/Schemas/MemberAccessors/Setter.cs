@@ -1,4 +1,5 @@
 using System;
+using PineCone.Resources;
 
 namespace PineCone.Structures.Schemas.MemberAccessors
 {
@@ -8,6 +9,8 @@ namespace PineCone.Structures.Schemas.MemberAccessors
         {
             switch (structureIdType)
             {
+                case StructureIdTypes.String:
+                    return new StringSetter();
                 case StructureIdTypes.Guid:
                     return isNullable ? (ISetter)new NullableGuidSetter() : new GuidSetter();
                 case StructureIdTypes.Identity:
@@ -15,13 +18,21 @@ namespace PineCone.Structures.Schemas.MemberAccessors
                 case StructureIdTypes.BigIdentity:
                     return isNullable ? (ISetter)new NullableLongSetter() : new LongSetter();
                 default:
-                    throw new ArgumentOutOfRangeException("structureIdType");
+                    throw new PineConeException(ExceptionMessages.Setter_Unsupported_type);
             }
         }
 
         internal interface ISetter
         {
             void SetValue<T>(T item, IStructureId id, IStructureProperty property) where T : class;
+        }
+
+        private class StringSetter : ISetter
+        {
+            public void SetValue<T>(T item, IStructureId id, IStructureProperty property) where T : class
+            {
+                property.SetValue(item, id.Value);
+            }
         }
 
         private class GuidSetter : ISetter

@@ -150,4 +150,10 @@
   <data name="StructureProperty_Setter_IsReadOnly" xml:space="preserve">
     <value>Property '{0}' is read-only.</value>
   </data>
+  <data name="Getter_Unsupported_type" xml:space="preserve">
+    <value>The type '{0}' is unsupported and a getter for the StructureId accessor can not be created.</value>
+  </data>
+  <data name="Setter_Unsupported_type" xml:space="preserve">
+    <value>The type '{0}' is unsupported and a setter for the StructureId accessor can not be created.</value>
+  </data>
 </root>

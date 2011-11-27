@@ -169,25 +169,27 @@ namespace PineCone.Tests.UnitTests.Structures.StructureBuilderTests
         [Test]
         public void CreateStructures_WhenSpecificIdGeneratorIsPassed_SpecificIdGeneratorIsConsumed()
         {
-            var idValue1 = new Guid("A058FCDE-A3D9-4EAA-AA41-0CE9D4A3FB1E");
-            var idValue2 = new Guid("91D77A9D-C793-4F3D-9DD0-F1F336362C5C");
+            var idValues = new[]
+            {
+                StructureId.Create(Guid.Parse("A058FCDE-A3D9-4EAA-AA41-0CE9D4A3FB1E")), 
+                StructureId.Create(Guid.Parse("91D77A9D-C793-4F3D-9DD0-F1F336362C5C"))
+            };
             var items = new[] { new TestItemForFirstLevel { IntValue = 42 }, new TestItemForFirstLevel { IntValue = 43 } };
             var schema = StructureSchemaTestFactory.CreateRealFrom<TestItemForFirstLevel>();
             var idStrategy = new Mock<IStructureIdStrategy>();
+
             idStrategy
-                .Setup(m => m.Apply(schema, items[0]))
-                .Callback(() => items[0].StructureId = idValue1)
-                .Returns(StructureId.Create(idValue1));
-            idStrategy
-                .Setup(m => m.Apply(schema, items[1]))
-                .Callback(() => items[1].StructureId = idValue1)
-                .Returns(StructureId.Create(idValue2));
+                .Setup(m => m.Apply(schema, (IEnumerable<TestItemForFirstLevel>)items))
+                .Returns(() => new[]
+                {
+                    new StructureIdStrategyResult<TestItemForFirstLevel>(idValues[0], items[0]),
+                    new StructureIdStrategyResult<TestItemForFirstLevel>(idValues[1], items[1])
+                });
 
             Builder.Options.StructureIdStrategy = idStrategy.Object;
             var structures = Builder.CreateStructures(items, schema).ToArray();
 
-            idStrategy.Verify(m => m.Apply(schema, items[0]), Times.Once());
-            idStrategy.Verify(m => m.Apply(schema, items[1]), Times.Once());
+            idStrategy.Verify(m => m.Apply(schema, (IEnumerable<TestItemForFirstLevel>)items), Times.Once());
         }
 
         [Test]

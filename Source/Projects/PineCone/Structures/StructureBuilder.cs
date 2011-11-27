@@ -37,15 +37,13 @@ namespace PineCone.Structures
 
         public virtual IEnumerable<IStructure> CreateStructures<T>(IEnumerable<T> items, IStructureSchema structureSchema) where T : class
         {
-            foreach (var item in items)
+            foreach (var tuple in Options.StructureIdStrategy.Apply(structureSchema, items))
             {
-                var structureId = Options.StructureIdStrategy.Apply(structureSchema, item);
-
                 yield return new Structure(
                     structureSchema.Name,
-                    structureId,
-                    Options.IndexesFactory.CreateIndexes(structureSchema, item, structureId),
-                    Options.StructureSerializer.Serialize(item));    
+                    tuple.StructureId,
+                    Options.IndexesFactory.CreateIndexes(structureSchema, tuple.Item, tuple.StructureId),
+                    Options.StructureSerializer.Serialize(tuple.Item));
             }
         }
     }

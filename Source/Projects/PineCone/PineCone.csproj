@@ -61,6 +61,7 @@
     <Compile Include="IPineConizer.cs" />
     <Compile Include="Structures\IStructureBuilderOptions.cs" />
     <Compile Include="Structures\IStructureIdStrategy.cs" />
+    <Compile Include="Structures\IStructureIdStrategyResult.cs" />
     <Compile Include="Structures\KeepStructureIdStrategy.cs" />
     <Compile Include="Structures\NewIfMissingGuidStructureIdStrategy.cs" />
     <Compile Include="Structures\Schemas\DynamicGetter.cs" />
@@ -115,6 +116,7 @@
     <Compile Include="Structures\AlwaysNewGuidStructureIdStrategy.cs" />
     <Compile Include="Structures\Structure.cs" />
     <Compile Include="Structures\StructureBuilder.cs" />
+    <Compile Include="Structures\StructureIdStrategyResult.cs" />
     <Compile Include="Structures\StructureIdTypes.cs" />
     <Compile Include="Structures\StructureIndex.cs" />
     <Compile Include="Structures\StructureIndexesFactory.cs" />

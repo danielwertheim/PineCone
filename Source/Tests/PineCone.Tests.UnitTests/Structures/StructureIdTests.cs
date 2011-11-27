@@ -1,7 +1,5 @@
 using System;
-using NCore;
 using NUnit.Framework;
-using PineCone.Resources;
 using PineCone.Structures;
 
 namespace PineCone.Tests.UnitTests.Structures
@@ -9,6 +7,19 @@ namespace PineCone.Tests.UnitTests.Structures
     [TestFixture]
     public class StructureIdTests : UnitTestBase
     {
+        [Test]
+        public void Create_WhenString_ValuesAreReflected()
+        {
+            var value = "My string id.";
+
+            var id = StructureId.Create(value);
+
+            Assert.IsTrue(id.HasValue);
+            Assert.AreEqual(value, id.Value);
+            Assert.AreEqual(typeof(string), id.DataType);
+            Assert.AreEqual(StructureIdTypes.String, id.IdType);
+        }
+
         [Test]
         public void Create_WhenGuid_ValuesAreReflected()
         {
@@ -163,6 +174,12 @@ namespace PineCone.Tests.UnitTests.Structures
         }
 
         [Test]
+        public void IsValidType_WhenString_ReturnsTrue()
+        {
+            Assert.IsTrue(StructureId.IsValidDataType(typeof(string)));
+        }
+
+        [Test]
         public void IsValidType_WhenGuid_ReturnsTrue()
         {
             Assert.IsTrue(StructureId.IsValidDataType(typeof(Guid)));
@@ -199,9 +216,9 @@ namespace PineCone.Tests.UnitTests.Structures
         }
 
         [Test]
-        public void IsValidType_WhenRefType_ReturnsFalse()
+        public void IsValidType_WhenObjectType_ReturnsFalse()
         {
-            Assert.IsFalse(StructureId.IsValidDataType(typeof(string)));
+            Assert.IsFalse(StructureId.IsValidDataType(typeof(object)));
         }
     }
 }

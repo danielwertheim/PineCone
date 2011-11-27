@@ -8,6 +8,7 @@ namespace PineCone.Structures
     [Serializable]
     public class StructureId : IStructureId
     {
+        private static readonly Type StringType = typeof(string);
         private static readonly Type GuidType = typeof(Guid);
         private static readonly Type NullableGuidType = typeof(Guid?);
         private static readonly Type IntType = typeof(int);
@@ -16,7 +17,7 @@ namespace PineCone.Structures
         private static readonly Type NullableLongType = typeof(long?);
 
         private readonly StructureIdTypes _idType;
-        private readonly ValueType _value;
+        private readonly object _value;
         private readonly Type _dataType;
         private readonly bool _hasValue;
 
@@ -25,7 +26,7 @@ namespace PineCone.Structures
             get { return _idType; }
         }
 
-        public ValueType Value 
+        public object Value 
         {
             get { return _value; }
         }
@@ -39,35 +40,48 @@ namespace PineCone.Structures
         {
             get { return _hasValue; }
         }
-        
-        public static StructureId Create(Guid value)
+
+        public static IStructureId Create(string value)
+        {
+            return new StructureId(value, StringType);
+        }
+
+        public static IStructureId Create(Guid value)
         {
             return new StructureId(value, GuidType);
         }
 
-        public static StructureId Create(Guid? value)
+        public static IStructureId Create(Guid? value)
         {
             return new StructureId(value, NullableGuidType);
         }
 
-        public static StructureId Create(int value)
+        public static IStructureId Create(int value)
         {
             return new StructureId(value, IntType);
         }
 
-        public static StructureId Create(int? value)
+        public static IStructureId Create(int? value)
         {
             return new StructureId(value, NullableIntType);
         }
 
-        public static StructureId Create(long value)
+        public static IStructureId Create(long value)
         {
             return new StructureId(value, LongType);
         }
 
-        public static StructureId Create(long? value)
+        public static IStructureId Create(long? value)
         {
             return new StructureId(value, NullableLongType);
+        }
+        
+        private StructureId(string value, Type dataType)
+        {
+            _value = value;
+            _hasValue = value != null;
+            _dataType = dataType;
+            _idType = GetIdTypeFrom(dataType);
         }
 
         private StructureId(ValueType value, Type dataType)
@@ -80,6 +94,9 @@ namespace PineCone.Structures
 
         public static StructureIdTypes GetIdTypeFrom(Type type)
         {
+            if (type.IsStringType())
+                return StructureIdTypes.String;
+
             if (type.IsGuidType() || type.IsNullableGuidType())
                 return StructureIdTypes.Guid;
 
@@ -94,11 +111,19 @@ namespace PineCone.Structures
 
         public static bool IsValidDataType(Type type)
         {
-            var isGuidType = type.IsGuidType() || type.IsNullableGuidType();
-            var isIntType = type.IsIntType() || type.IsNullableIntType();
-            var isLongType = type.IsLongType() || type.IsNullableLongType();
+            if (type.IsStringType())
+                return true;
 
-            return isGuidType || isIntType || isLongType;
+            if (type.IsGuidType() || type.IsNullableGuidType())
+                return true;
+
+            if (type.IsIntType() || type.IsNullableIntType())
+                return true;
+
+            if (type.IsLongType() || type.IsNullableLongType())
+                return true;
+
+            return false;
         }
 
         public override bool Equals(object obj)

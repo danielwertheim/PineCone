@@ -5,7 +5,7 @@ namespace PineCone.Structures
     public interface IStructureId : IEquatable<IStructureId>
     {
         StructureIdTypes IdType { get; }
-        ValueType Value { get; }
+        object Value { get; }
         Type DataType { get; }
         bool HasValue { get; }
     }

@@ -1,5 +1,4 @@
 using NCore;
-using NCore.Reflections;
 using PineCone.Resources;
 
 namespace PineCone.Structures.Schemas.MemberAccessors
@@ -22,13 +21,8 @@ namespace PineCone.Structures.Schemas.MemberAccessors
 
             IdType = StructureId.GetIdTypeFrom(property.PropertyType);
 
-            var isNullable = 
-                property.PropertyType.IsNullableGuidType() ||
-                property.PropertyType.IsNullableIntType() ||
-                property.PropertyType.IsNullableLongType();
-
-            _getter = Getter.For(IdType, isNullable);
-            _setter = Setter.For(IdType, isNullable);
+            _getter = Getter.For(IdType, Property.PropertyType);
+            _setter = Setter.For(IdType, Property.PropertyType);
         }
 
         public IStructureId GetValue<T>(T item)

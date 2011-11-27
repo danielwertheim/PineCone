@@ -39,6 +39,33 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.MemberAccessors
         }
 
         [Test]
+        public void Ctor_WhenStringNotOnFirstLevel_ThrowsPineConeException()
+        {
+            var itemPropertyInfo = typeof(Container).GetProperty("NestedWithString");
+            var itemProperty = StructureProperty.CreateFrom(itemPropertyInfo);
+
+            var guidPropertyInfo = typeof(GuidDummy).GetProperty("StructureId");
+            var guidProperty = StructureProperty.CreateFrom(itemProperty, guidPropertyInfo);
+
+            var ex = Assert.Throws<PineConeException>(() => new IdAccessor(guidProperty));
+
+            Assert.AreEqual(ExceptionMessages.IdAccessor_GetIdValue_InvalidLevel, ex.Message);
+        }
+
+        [Test]
+        public void GetValue_FromAssignedStringProperty_ReturnsAssignedString()
+        {
+            var id = "My string id.";
+            var item = new StringDummy { StructureId = id };
+            var property = StructurePropertyTestFactory.GetIdProperty<StringDummy>();
+
+            var idAccessor = new IdAccessor(property);
+            var idViaAccessor = idAccessor.GetValue<StringDummy>(item);
+
+            Assert.AreEqual(id, idViaAccessor.Value);
+        }
+
+        [Test]
         public void GetValue_FromAssignedGuidProperty_ReturnsAssignedGuid()
         {
             var id = Guid.Parse("fc47a673-5a5b-419b-9a40-a756591aa7bf");
@@ -74,6 +101,19 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.MemberAccessors
             var idViaAccessor = idAccessor.GetValue(item);
 
             Assert.IsFalse(idViaAccessor.HasValue);
+        }
+
+        [Test]
+        public void SetValue_ToStringProperty_ValueIsAssigned()
+        {
+            var id = StructureId.Create("Foo string id");
+            var item = new StringDummy();
+
+            var property = StructurePropertyTestFactory.GetIdProperty<StringDummy>();
+            var idAccessor = new IdAccessor(property);
+            idAccessor.SetValue(item, id);
+
+            Assert.AreEqual(id.Value, item.StructureId);
         }
 
         [Test]
@@ -235,6 +275,13 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.MemberAccessors
             public IdentityDummy NestedWithIdentity { get; set; }
 
             public GuidDummy NestedWithGuid { get; set; }
+
+            public StringDummy NestedWithString { get; set; }
+        }
+
+        private class StringDummy
+        {
+            public string StructureId { get; set; }
         }
 
         private class GuidDummy

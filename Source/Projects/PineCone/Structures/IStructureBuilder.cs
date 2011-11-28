@@ -1,4 +1,5 @@
-﻿using PineCone.Serializers;
+﻿using System.Collections.Generic;
+using PineCone.Serializers;
 using PineCone.Structures.Schemas;
 
 namespace PineCone.Structures
@@ -41,6 +42,6 @@ namespace PineCone.Structures
         /// <param name="items"></param>
         /// <param name="structureSchema"></param>
         /// <returns></returns>
-        IStructure[] CreateStructures<T>(T[] items, IStructureSchema structureSchema) where T : class;
+        IStructure[] CreateStructures<T>(IList<T> items, IStructureSchema structureSchema) where T : class;
     }
 }

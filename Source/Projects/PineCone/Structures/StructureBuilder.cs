@@ -1,50 +1,89 @@
-﻿using System.Collections.Generic;
+﻿using System.Threading.Tasks;
 using EnsureThat;
+using PineCone.Serializers;
 using PineCone.Structures.Schemas;
 
 namespace PineCone.Structures
 {
     public class StructureBuilder : IStructureBuilder
     {
-        private IStructureBuilderOptions _options;
+        private IStructureIndexesFactory _indexesFactory;
+        private IStructureSerializer _structureSerializer;
+        private IStructureIdGenerator _structureIdGenerator;
 
-        public IStructureBuilderOptions Options
+        public IStructureIndexesFactory IndexesFactory
         {
-            get { return _options; }
+            get { return _indexesFactory; }
             set
             {
-                Ensure.That(value, "Options").IsNotNull();
+                Ensure.That(value, "IndexesFactory").IsNotNull();
 
-                _options = value;
+                _indexesFactory = value;
+            }
+        }
+
+        public IStructureSerializer StructureSerializer
+        {
+            get { return _structureSerializer; }
+            set
+            {
+                Ensure.That(value, "StructureSerializer").IsNotNull();
+
+                _structureSerializer = value;
+            }
+        }
+
+        public IStructureIdGenerator StructureIdGenerator
+        {
+            get { return _structureIdGenerator; }
+            set
+            {
+                Ensure.That(value, "StructureIdGenerator").IsNotNull();
+
+                _structureIdGenerator = value;
             }
         }
 
         public StructureBuilder()
         {
-            Options = new DefaultStructureBuilderOptions();
+            IndexesFactory = new StructureIndexesFactory();
+            StructureSerializer = new EmptyStructureSerializer();
+            StructureIdGenerator = new GuidStructureIdGenerator();
         }
 
         public virtual IStructure CreateStructure<T>(T item, IStructureSchema structureSchema) where T : class
         {
-            var structureId = Options.StructureIdStrategy.Apply(structureSchema, item);
+            var structureId = StructureIdGenerator.Generate(structureSchema);
+
+            structureSchema.IdAccessor.SetValue(item, structureId);
 
             return new Structure(
                 structureSchema.Name,
                 structureId,
-                Options.IndexesFactory.CreateIndexes(structureSchema, item, structureId),
-                Options.StructureSerializer.Serialize(item));
+                IndexesFactory.CreateIndexes(structureSchema, item, structureId),
+                StructureSerializer.Serialize(item));
         }
 
-        public virtual IEnumerable<IStructure> CreateStructures<T>(IEnumerable<T> items, IStructureSchema structureSchema) where T : class
+        public virtual IStructure[] CreateStructures<T>(T[] items, IStructureSchema structureSchema) where T : class
         {
-            foreach (var tuple in Options.StructureIdStrategy.Apply(structureSchema, items))
+            var structureIds = StructureIdGenerator.Generate(structureSchema, items.Length);
+            var structures = new IStructure[items.Length];
+
+            Parallel.For(0, items.Length, i =>
             {
-                yield return new Structure(
-                    structureSchema.Name,
-                    tuple.StructureId,
-                    Options.IndexesFactory.CreateIndexes(structureSchema, tuple.Item, tuple.StructureId),
-                    Options.StructureSerializer.Serialize(tuple.Item));
-            }
+                var id = structureIds[i];
+                var itm = items[i];
+                
+                structureSchema.IdAccessor.SetValue(itm, id);
+                
+                structures[i] = new Structure(
+                    structureSchema.Name, 
+                    id, 
+                    IndexesFactory.CreateIndexes(structureSchema, itm, id), 
+                    StructureSerializer.Serialize(itm));
+            });
+
+            return structures;
         }
     }
 }

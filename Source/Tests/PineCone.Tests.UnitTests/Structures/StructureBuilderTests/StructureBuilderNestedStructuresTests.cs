@@ -1,11 +1,17 @@
 ﻿using System;
 using NUnit.Framework;
+using PineCone.Structures;
 
 namespace PineCone.Tests.UnitTests.Structures.StructureBuilderTests
 {
     [TestFixture]
     public class StructureBuilderNestedStructuresTests : StructureBuilderBaseTests
     {
+        protected override void OnTestInitialize()
+        {
+            Builder = new StructureBuilder();
+        }
+
         [Test]
         public void CreateStructure_WhenNestedStructureExists_NestedStructureWillNotBePartOfStructure()
         {

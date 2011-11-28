@@ -1,18 +1,27 @@
-﻿using System.Collections.Generic;
+﻿using PineCone.Serializers;
 using PineCone.Structures.Schemas;
 
 namespace PineCone.Structures
 {
     /// <summary>
-    /// Builds <see cref="IStructure"/> instances from sent
-    /// Items.
+    /// Builds <see cref="IStructure"/> instances from sent Items.
     /// </summary>
     public interface IStructureBuilder
     {
         /// <summary>
-        /// Options for the StructureBuilder.
+        /// Creates the indexes for the <see cref="IStructure"/>.
         /// </summary>
-        IStructureBuilderOptions Options { get; set; }
+        IStructureIndexesFactory IndexesFactory { get; set; }
+
+        /// <summary>
+        /// Serilizer used to populate <see cref="IStructure.Data"/>.
+        /// </summary>
+        IStructureSerializer StructureSerializer { get; set; }
+
+        /// <summary>
+        /// Responsible for generating <see cref="IStructureId"/>.
+        /// </summary>
+        IStructureIdGenerator StructureIdGenerator { get; set; }
 
         /// <summary>
         /// Creates a single <see cref="IStructure"/> for sent <typeparamref name="T"/> item.
@@ -32,6 +41,6 @@ namespace PineCone.Structures
         /// <param name="items"></param>
         /// <param name="structureSchema"></param>
         /// <returns></returns>
-        IEnumerable<IStructure> CreateStructures<T>(IEnumerable<T> items, IStructureSchema structureSchema) where T : class;
+        IStructure[] CreateStructures<T>(T[] items, IStructureSchema structureSchema) where T : class;
     }
 }

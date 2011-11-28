@@ -41,6 +41,26 @@ namespace PineCone.Structures
             get { return _hasValue; }
         }
 
+        public static IStructureId ConvertFrom(object idValue)
+        {
+            var type = idValue.GetType();
+            var idType = GetIdTypeFrom(type);
+
+            if (idType == StructureIdTypes.String)
+                return Create(idValue.ToString());
+
+            if (idType == StructureIdTypes.Guid)
+                return Create((Guid)idValue);
+
+            if (idType == StructureIdTypes.Identity)
+                return Create((int)idValue);
+
+            if (idType == StructureIdTypes.BigIdentity)
+                return Create((long)idValue);
+
+            throw new PineConeException(ExceptionMessages.StructureId_ConvertFrom.Inject(type));
+        }
+
         public static IStructureId Create(string value)
         {
             return new StructureId(value, StringType);

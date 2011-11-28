@@ -8,6 +8,58 @@ namespace PineCone.Tests.UnitTests.Structures
     public class StructureIdTests : UnitTestBase
     {
         [Test]
+        public void ConvertFrom_WhenStringAsObject_ValuesAreReflected()
+        {
+            var value = "My string id.";
+
+            var id = StructureId.ConvertFrom(value);
+
+            Assert.IsTrue(id.HasValue);
+            Assert.AreEqual(value, id.Value);
+            Assert.AreEqual(typeof(string), id.DataType);
+            Assert.AreEqual(StructureIdTypes.String, id.IdType);
+        }
+
+        [Test]
+        public void ConvertFrom_WhenGuidAsObject_ValuesAreReflected()
+        {
+            var value = Guid.Parse("925DE70F-03F4-4FC6-B372-FAA344CA8C90");
+
+            var id = StructureId.ConvertFrom(value);
+
+            Assert.IsTrue(id.HasValue);
+            Assert.AreEqual(value, id.Value);
+            Assert.AreEqual(typeof(Guid), id.DataType);
+            Assert.AreEqual(StructureIdTypes.Guid, id.IdType);
+        }
+
+        [Test]
+        public void ConvertFrom_WhenIntAsObject_ValuesAreReflected()
+        {
+            int value = 42;
+
+            var id = StructureId.ConvertFrom(value);
+
+            Assert.IsTrue(id.HasValue);
+            Assert.AreEqual(value, id.Value);
+            Assert.AreEqual(typeof(int), id.DataType);
+            Assert.AreEqual(StructureIdTypes.Identity, id.IdType);
+        }
+
+        [Test]
+        public void ConvertFrom_WhenLongAsObject_ValuesAreReflected()
+        {
+            long value = 42;
+
+            var id = StructureId.ConvertFrom(value);
+
+            Assert.IsTrue(id.HasValue);
+            Assert.AreEqual(value, id.Value);
+            Assert.AreEqual(typeof(long), id.DataType);
+            Assert.AreEqual(StructureIdTypes.BigIdentity, id.IdType);
+        }
+
+        [Test]
         public void Create_WhenString_ValuesAreReflected()
         {
             var value = "My string id.";
@@ -135,6 +187,12 @@ namespace PineCone.Tests.UnitTests.Structures
             Assert.AreEqual(value, id.Value);
             Assert.AreEqual(typeof(long?), id.DataType);
             Assert.AreEqual(StructureIdTypes.BigIdentity, id.IdType);
+        }
+
+        [Test]
+        public void GetIdTypeFrom_WhenString_ReturnsIdTypeOfString()
+        {
+            Assert.AreEqual(StructureIdTypes.String, StructureId.GetIdTypeFrom(typeof(string)));
         }
 
         [Test]

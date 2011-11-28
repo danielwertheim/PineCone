@@ -124,6 +124,15 @@ namespace PineCone.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Can not convert type &apos;{0}&apos; to a StructureId..
+        /// </summary>
+        internal static string StructureId_ConvertFrom {
+            get {
+                return ResourceManager.GetString("StructureId_ConvertFrom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The type &apos;{0}&apos; is not supported for StructureId. Supported types are: Guid, Nullable-Guid, Int32, Nullable-Int32, Int64 and Nullable-Int64..
         /// </summary>
         internal static string StructureId_InvalidType {

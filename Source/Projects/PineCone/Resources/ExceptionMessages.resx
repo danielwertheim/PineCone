@@ -156,4 +156,7 @@
   <data name="Setter_Unsupported_type" xml:space="preserve">
     <value>The type '{0}' is unsupported and a setter for the StructureId accessor can not be created.</value>
   </data>
+  <data name="StructureId_ConvertFrom" xml:space="preserve">
+    <value>Can not convert type '{0}' to a StructureId.</value>
+  </data>
 </root>

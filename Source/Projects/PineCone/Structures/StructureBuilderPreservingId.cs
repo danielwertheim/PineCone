@@ -17,11 +17,11 @@ namespace PineCone.Structures
                 StructureSerializer.Serialize(item));
         }
 
-        public override IStructure[] CreateStructures<T>(T[] items, IStructureSchema structureSchema)
+        public override IStructure[] CreateStructures<T>(IList<T> items, IStructureSchema structureSchema)
         {
-            var structures = new IStructure[items.Length];
+            var structures = new IStructure[items.Count];
 
-            Parallel.For(0, items.Length, i =>
+            Parallel.For(0, items.Count, i =>
             {
                 var itm = items[i];
                 var id = structureSchema.IdAccessor.GetValue(itm);

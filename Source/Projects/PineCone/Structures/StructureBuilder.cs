@@ -48,7 +48,7 @@ namespace PineCone.Structures
         {
             IndexesFactory = new StructureIndexesFactory();
             StructureSerializer = new EmptyStructureSerializer();
-            StructureIdGenerator = new GuidStructureIdGenerator();
+            StructureIdGenerator = new SequentialGuidStructureIdGenerator();
         }
 
         public virtual IStructure CreateStructure<T>(T item, IStructureSchema structureSchema) where T : class

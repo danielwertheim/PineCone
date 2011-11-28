@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Moq;
@@ -9,13 +9,13 @@ using PineCone.Structures.Schemas;
 namespace PineCone.Tests.UnitTests.Structures
 {
     [TestFixture]
-    public class GuidStructureIdGeneratorTests : UnitTestBase
+    public class SequentialGuidStructureIdGeneratorTests : UnitTestBase
     {
         private IStructureIdGenerator _structureIdGenerator;
 
         protected override void OnFixtureInitialize()
         {
-            _structureIdGenerator = new GuidStructureIdGenerator();
+            _structureIdGenerator = new SequentialGuidStructureIdGenerator();
         }
 
         private IEnumerable<IStructureId> GenerateIds(int numOfIds)
@@ -29,13 +29,16 @@ namespace PineCone.Tests.UnitTests.Structures
         {
             var numOfIds = 10;
 
-            var idsCount = _structureIdGenerator.Generate(Mock.Of<IStructureSchema>(), numOfIds)
-                .Where(id => id.HasValue)
+            var ids = _structureIdGenerator.Generate(Mock.Of<IStructureSchema>(), numOfIds)
                 .Select(id => id.Value)
                 .Cast<Guid>()
-                .Count();
+                .Select(id => id.ToString("D"))
+                .ToArray();
             
-            Assert.AreEqual(numOfIds, idsCount);
+            var orderedIds = ids.OrderBy(id => id).ToArray();
+
+            Assert.AreEqual(numOfIds, ids.Length);
+            CollectionAssert.AreEqual(orderedIds, ids);
         }
 
         [Test]

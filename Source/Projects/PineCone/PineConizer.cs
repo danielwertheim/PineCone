@@ -47,7 +47,7 @@ namespace PineCone
             return Builder.CreateStructure(item, Schemas.GetSchema<T>());
         }
 
-        public IEnumerable<IStructure> CreateStructuresFor<T>(IEnumerable<T> items) where T : class
+        public IEnumerable<IStructure> CreateStructuresFor<T>(T[] items) where T : class
         {
             return Builder.CreateStructures(items, Schemas.GetSchema<T>());
         }

@@ -22,11 +22,11 @@ namespace PineCone.Structures
 
         private Structure()
         {
-            Indexes = new List<IStructureIndex>();
-            Uniques = new List<IStructureIndex>();
+            Indexes = Lists.Empty<IStructureIndex>();
+            Uniques = Lists.Empty<IStructureIndex>();
         }
 
-        public Structure(string name, IStructureId id, ICollection<IStructureIndex> indexes, string data = null)
+        public Structure(string name, IStructureId id, IStructureIndex[] indexes, string data = null)
         {
             Ensure.That(name, "name").IsNotNullOrWhiteSpace();
             Ensure.That(id, "id").IsNotNull();
@@ -34,13 +34,13 @@ namespace PineCone.Structures
             Name = name;
             Id = id;
             Data = data;
-            Indexes = new List<IStructureIndex>(indexes);
-            Uniques = new List<IStructureIndex>(indexes.Where(i => i.IsUnique));
+            Indexes = Lists.New(indexes);
+            Uniques = Lists.New(indexes.Where(i => i.IsUnique).ToArray());
 
             if (Uniques.Count > 0)
             {
                 var firstUniqueNotBeingUnique =
-                    Uniques.FirstOrDefault(u => indexes.Count(i => i.Path.Equals(u.Path)) > 1);
+                    Uniques.FirstOrDefault(u => Indexes.Count(i => i.Path.Equals(u.Path)) > 1);
                 if (firstUniqueNotBeingUnique != null)
                 {
                     var idValue = Sys.StringConverter.AsString(firstUniqueNotBeingUnique.StructureId.Value);

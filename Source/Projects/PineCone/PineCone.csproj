@@ -58,8 +58,10 @@
     <Compile Include="Dynamic\DynamicMember.cs" />
     <Compile Include="Dynamic\DynamicStructure.cs" />
     <Compile Include="Dynamic\DynamicStructureBuilder.cs" />
+    <Compile Include="Lists.cs" />
     <Compile Include="IPineConizer.cs" />
-    <Compile Include="Structures\SequentialGuidStructureIdGenerator.cs" />
+    <Compile Include="Structures\IdGenerators\EmptyStructureIdGenerator.cs" />
+    <Compile Include="Structures\IdGenerators\SequentialGuidStructureIdGenerator.cs" />
     <Compile Include="Structures\IStructureIdGenerator.cs" />
     <Compile Include="Structures\Schemas\DynamicGetter.cs" />
     <Compile Include="Structures\Schemas\DynamicProperty.cs" />
@@ -108,7 +110,7 @@
     <Compile Include="Structures\Schemas\StructureType.cs" />
     <Compile Include="Structures\Schemas\StructureTypeFactory.cs" />
     <Compile Include="Structures\Schemas\StructureTypeReflecter.cs" />
-    <Compile Include="Structures\GuidStructureIdGenerator.cs" />
+    <Compile Include="Structures\IdGenerators\GuidStructureIdGenerator.cs" />
     <Compile Include="Structures\StructureBuilderPreservingId.cs" />
     <Compile Include="Structures\StructureId.cs" />
     <Compile Include="Structures\Structure.cs" />

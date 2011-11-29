@@ -6,6 +6,7 @@
 	<version>0.0.0.0</version>
 	<authors>Daniel Wertheim - @@danielwertheim - http://daniel.wertheim.se</authors>
 	<owners>Daniel Wertheim - @@danielwertheim - http://daniel.wertheim.se</owners>
+	<copyright>Daniel Wertheim</copyright>
 	<summary>PineCone takes an object graph and gives you indexes for it.</summary>
     <description>
 		PineCone has been extracted from the open source document-oriented provider for SQL-server, SisoDb (http://sisodb.com). PineCone takes an instance of an C# class and builds a class-schema for it. This schema is then used to extract all primitive .Net types in the object-graph using some IL-Emits and then turns this to a key-value structure with paths and values.

@@ -9,8 +9,7 @@ namespace PineCone.Structures
 {
     public class StructureIndexesFactory : IStructureIndexesFactory
     {
-        public ICollection<IStructureIndex> CreateIndexes<T>(IStructureSchema structureSchema, T item, IStructureId structureId)
-            where T : class
+        public IStructureIndex[] CreateIndexes<T>(IStructureSchema structureSchema, T item, IStructureId structureId) where T : class
         {
             var indexes = new IEnumerable<IStructureIndex>[structureSchema.IndexAccessors.Count];
 

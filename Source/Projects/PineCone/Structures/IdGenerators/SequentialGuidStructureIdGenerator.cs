@@ -1,6 +1,6 @@
 using PineCone.Structures.Schemas;
 
-namespace PineCone.Structures
+namespace PineCone.Structures.IdGenerators
 {
     public class SequentialGuidStructureIdGenerator : IStructureIdGenerator
     {

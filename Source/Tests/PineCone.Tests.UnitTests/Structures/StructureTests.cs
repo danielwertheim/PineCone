@@ -17,7 +17,7 @@ namespace PineCone.Tests.UnitTests.Structures
                 new StructureIndex(structureId, "UniqueIndex1", "Value1", typeof(string), StructureIndexType.UniquePerInstance)
             };
             
-            Assert.Throws<PineConeException>(() => new Structure("Name", structureId, indexes));
+            Assert.Throws<PineConeException>(() => new Structure("Name", structureId, indexes.ToArray()));
         }
     }
 }

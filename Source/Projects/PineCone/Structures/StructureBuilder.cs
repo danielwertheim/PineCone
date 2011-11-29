@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using EnsureThat;
 using PineCone.Serializers;
+using PineCone.Structures.IdGenerators;
 using PineCone.Structures.Schemas;
 
 namespace PineCone.Structures

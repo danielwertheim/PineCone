@@ -2,7 +2,7 @@ using System;
 using System.Threading.Tasks;
 using PineCone.Structures.Schemas;
 
-namespace PineCone.Structures
+namespace PineCone.Structures.IdGenerators
 {
     public class GuidStructureIdGenerator : IStructureIdGenerator 
     {

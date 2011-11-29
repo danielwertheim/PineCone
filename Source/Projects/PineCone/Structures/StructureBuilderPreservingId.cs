@@ -26,8 +26,6 @@ namespace PineCone.Structures
                 var itm = items[i];
                 var id = structureSchema.IdAccessor.GetValue(itm);
                 
-                structureSchema.IdAccessor.SetValue(itm, id);
-
                 structures[i] = new Structure(
                     structureSchema.Name,
                     id,

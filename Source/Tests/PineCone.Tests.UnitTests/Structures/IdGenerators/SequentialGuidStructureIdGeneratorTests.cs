@@ -4,9 +4,10 @@ using System.Linq;
 using Moq;
 using NUnit.Framework;
 using PineCone.Structures;
+using PineCone.Structures.IdGenerators;
 using PineCone.Structures.Schemas;
 
-namespace PineCone.Tests.UnitTests.Structures
+namespace PineCone.Tests.UnitTests.Structures.IdGenerators
 {
     [TestFixture]
     public class SequentialGuidStructureIdGeneratorTests : UnitTestBase

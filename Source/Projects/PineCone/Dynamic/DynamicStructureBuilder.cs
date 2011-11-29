@@ -36,7 +36,7 @@ namespace PineCone.Dynamic
                 }
             }
 
-            return new Structure(dynamicStructure.Name, id, indexes);
+            return new Structure(dynamicStructure.Name, id, indexes.ToArray());
         }
     }
 }

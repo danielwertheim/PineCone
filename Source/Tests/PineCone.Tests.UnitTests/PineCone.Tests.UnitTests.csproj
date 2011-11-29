@@ -105,10 +105,10 @@
     <Compile Include="Structures\Schemas\StructureTypeReflecterTests\StructureTypeReflecterComplexIndexablePropertiesTests.cs" />
     <Compile Include="Structures\Schemas\StructureTypeReflecterTests\StructureTypeReflecterGetIndexablePropertiesExceptTests.cs" />
     <Compile Include="Structures\Schemas\StructureTypeReflecterTests\StructureTypeReflecterGetSpecificIndexablePropertiesTests.cs" />
-    <Compile Include="Structures\SequentialGuidStructureIdGeneratorTests.cs" />
+    <Compile Include="Structures\IdGenerators\SequentialGuidStructureIdGeneratorTests.cs" />
     <Compile Include="Structures\StructureBuilderTests\StructureBuilderPreservingIdsTests.cs" />
     <Compile Include="Structures\StructureIdTests.cs" />
-    <Compile Include="Structures\GuidStructureIdGeneratorTests.cs" />
+    <Compile Include="Structures\IdGenerators\GuidStructureIdGeneratorTests.cs" />
     <Compile Include="Structures\StructureBuilderTests\StructureBuilderBaseTests.cs" />
     <Compile Include="Structures\StructureBuilderTests\DynamicStructureBuilderDynamicTests.cs" />
     <Compile Include="Structures\StructureBuilderTests\StructureBuilderNestedStructuresTests.cs" />

@@ -10,6 +10,10 @@ namespace PineCone.Structures.Schemas
         
         ISchemaBuilder SchemaBuilder { get; set; }
 
+        void Clear();
+
+        IEnumerable<KeyValuePair<Type, IStructureSchema>> GetRegistrations();
+
         IStructureSchema GetSchema<T>() where T : class;
 
         IStructureSchema GetSchema(Type type);
@@ -17,7 +21,5 @@ namespace PineCone.Structures.Schemas
         IEnumerable<IStructureSchema> GetSchemas();
 
         void RemoveSchema(Type type);
-        
-        void Clear();
     }
 }

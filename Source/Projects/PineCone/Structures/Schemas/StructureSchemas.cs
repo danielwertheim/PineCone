@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using EnsureThat;
 using PineCone.Structures.Schemas.Builders;
 
@@ -52,6 +53,11 @@ namespace PineCone.Structures.Schemas
             IStructureSchema tmp;
 
             _schemas.TryRemove(type, out tmp);
+        }
+
+        public IEnumerable<KeyValuePair<Type, IStructureSchema>> GetRegistrations()
+        {
+            return _schemas.ToList();
         }
 
         public void Clear()

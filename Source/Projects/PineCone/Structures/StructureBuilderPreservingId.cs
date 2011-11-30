@@ -1,11 +1,20 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using PineCone.Serializers;
+using PineCone.Structures.IdGenerators;
 using PineCone.Structures.Schemas;
 
 namespace PineCone.Structures
 {
     public class StructureBuilderPreservingId : StructureBuilder
     {
+        public StructureBuilderPreservingId()
+        {
+            IndexesFactory = new StructureIndexesFactory();
+            StructureSerializer = new EmptyStructureSerializer();
+            StructureIdGenerator = new EmptyStructureIdGenerator();
+        }
+
         public override IStructure CreateStructure<T>(T item, IStructureSchema structureSchema)
         {
             var structureId = structureSchema.IdAccessor.GetValue(item);

@@ -15,9 +15,9 @@ namespace PineCone.Structures.Schemas
         public static DynamicProperty Create(PropertyInfo propertyInfo)
         {
             if (propertyInfo.DeclaringType.IsKeyValuePairType())
-                return new DynamicProperty(propertyInfo, CreateGetter(propertyInfo), CreateSetter(propertyInfo));
+                return new DynamicProperty(propertyInfo, (o) => propertyInfo.GetValue(o, null), (o, v) => propertyInfo.SetValue(o, v, null));
 
-            return new DynamicProperty(propertyInfo, (o) => propertyInfo.GetValue(o, null), (o, v) => propertyInfo.SetValue(o, v, null));
+            return new DynamicProperty(propertyInfo, CreateGetter(propertyInfo), CreateSetter(propertyInfo));
         }
 
         private static DynamicGetter CreateGetter(PropertyInfo propertyInfo)

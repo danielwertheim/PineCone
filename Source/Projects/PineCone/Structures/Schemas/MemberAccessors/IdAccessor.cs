@@ -5,8 +5,8 @@ namespace PineCone.Structures.Schemas.MemberAccessors
 {
     public class IdAccessor : MemberAccessorBase, IIdAccessor
     {
-        private readonly Getter.IGetter _getter;
-        private readonly Setter.ISetter _setter;
+        private readonly StructureIdGetters.IGetter _getter;
+        private readonly StructureIdSetters.ISetter _setter;
 
         public StructureIdTypes IdType { get; private set; }
 
@@ -21,20 +21,20 @@ namespace PineCone.Structures.Schemas.MemberAccessors
 
             IdType = StructureId.GetIdTypeFrom(property.PropertyType);
 
-            _getter = Getter.For(IdType, Property.PropertyType);
-            _setter = Setter.For(IdType, Property.PropertyType);
+            _getter = StructureIdGetters.For(IdType, Property.PropertyType);
+            _setter = StructureIdSetters.For(IdType, Property.PropertyType);
         }
 
         public IStructureId GetValue<T>(T item)
             where T : class
         {
-            return _getter.GetValue(item, Property);
+            return _getter.GetIdValue(item, Property);
         }
         
         public void SetValue<T>(T item, IStructureId value)
             where T : class
         {
-            _setter.SetValue(item, value, Property);
+            _setter.SetIdValue(item, value, Property);
         }
     }
 }

@@ -1,4 +1,21 @@
+using System;
+using System.Collections.Concurrent;
+using System.Reflection;
+
 namespace PineCone.Structures.Schemas
 {
-    public delegate object DynamicGetter(object target);
+    public class DynamicGetter
+    {
+        private readonly Func<object, object> _accessor;
+
+        public DynamicGetter(Func<object, object> accessor)
+        {
+            _accessor = accessor;
+        }
+
+        public object GetValue<T>(T item)
+        {
+            return _accessor(item);
+        }
+    }
 }

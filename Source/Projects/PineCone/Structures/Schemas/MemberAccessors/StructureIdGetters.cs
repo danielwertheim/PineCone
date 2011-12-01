@@ -5,7 +5,7 @@ using PineCone.Resources;
 
 namespace PineCone.Structures.Schemas.MemberAccessors
 {
-    internal static class Getter
+    internal static class StructureIdGetters
     {
         internal static IGetter For(StructureIdTypes structureIdType, Type type)
         {
@@ -26,12 +26,12 @@ namespace PineCone.Structures.Schemas.MemberAccessors
 
         internal interface IGetter
         {
-            IStructureId GetValue<T>(T item, IStructureProperty property) where T : class;
+            IStructureId GetIdValue<T>(T item, IStructureProperty property) where T : class;
         }
 
         private class StringGetter : IGetter
         {
-            public IStructureId GetValue<T>(T item, IStructureProperty property) where T : class
+            public IStructureId GetIdValue<T>(T item, IStructureProperty property) where T : class
             {
                 return StructureId.Create((string)property.GetValue(item));
             }
@@ -39,7 +39,7 @@ namespace PineCone.Structures.Schemas.MemberAccessors
 
         private class GuidGetter : IGetter
         {
-            public IStructureId GetValue<T>(T item, IStructureProperty property) where T : class
+            public IStructureId GetIdValue<T>(T item, IStructureProperty property) where T : class
             {
                 return StructureId.Create((Guid)property.GetValue(item));
             }
@@ -47,7 +47,7 @@ namespace PineCone.Structures.Schemas.MemberAccessors
 
         private class NullableGuidGetter : IGetter
         {
-            public IStructureId GetValue<T>(T item, IStructureProperty property) where T : class
+            public IStructureId GetIdValue<T>(T item, IStructureProperty property) where T : class
             {
                 return StructureId.Create((Guid?)property.GetValue(item));
             }
@@ -55,7 +55,7 @@ namespace PineCone.Structures.Schemas.MemberAccessors
 
         private class IntGetter : IGetter
         {
-            public IStructureId GetValue<T>(T item, IStructureProperty property) where T : class
+            public IStructureId GetIdValue<T>(T item, IStructureProperty property) where T : class
             {
                 return StructureId.Create((int)property.GetValue(item));
             }
@@ -63,7 +63,7 @@ namespace PineCone.Structures.Schemas.MemberAccessors
 
         private class NullableIntGetter : IGetter
         {
-            public IStructureId GetValue<T>(T item, IStructureProperty property) where T : class
+            public IStructureId GetIdValue<T>(T item, IStructureProperty property) where T : class
             {
                 return StructureId.Create((int?)property.GetValue(item));
             }
@@ -71,7 +71,7 @@ namespace PineCone.Structures.Schemas.MemberAccessors
 
         private class LongGetter : IGetter
         {
-            public IStructureId GetValue<T>(T item, IStructureProperty property) where T : class
+            public IStructureId GetIdValue<T>(T item, IStructureProperty property) where T : class
             {
                 return StructureId.Create((long)property.GetValue(item));
             }
@@ -79,7 +79,7 @@ namespace PineCone.Structures.Schemas.MemberAccessors
 
         private class NullableLongGetter : IGetter
         {
-            public IStructureId GetValue<T>(T item, IStructureProperty property) where T : class
+            public IStructureId GetIdValue<T>(T item, IStructureProperty property) where T : class
             {
                 return StructureId.Create((long?)property.GetValue(item));
             }

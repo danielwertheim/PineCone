@@ -64,10 +64,10 @@
     <Compile Include="Structures\IdGenerators\SequentialGuidStructureIdGenerator.cs" />
     <Compile Include="Structures\IStructureIdGenerator.cs" />
     <Compile Include="Structures\Schemas\DynamicGetter.cs" />
-    <Compile Include="Structures\Schemas\DynamicProperty.cs" />
+    <Compile Include="Structures\Schemas\DynamicPropertyFactory.cs" />
     <Compile Include="Structures\Schemas\DynamicSetter.cs" />
-    <Compile Include="Structures\Schemas\MemberAccessors\Getter.cs" />
-    <Compile Include="Structures\Schemas\MemberAccessors\Setter.cs" />
+    <Compile Include="Structures\Schemas\MemberAccessors\StructureIdGetters.cs" />
+    <Compile Include="Structures\Schemas\MemberAccessors\StructureIdSetters.cs" />
     <Compile Include="Structures\IStructureId.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PineConizer.cs" />
@@ -90,7 +90,6 @@
     <Compile Include="Structures\Schemas\Configuration\IStructureTypeConfigurations.cs" />
     <Compile Include="Structures\Schemas\Configuration\StructureTypeConfig.cs" />
     <Compile Include="Structures\Schemas\Configuration\StructureTypeConfigurations.cs" />
-    <Compile Include="Structures\Schemas\DynamicPropertyFactory.cs" />
     <Compile Include="Structures\Schemas\IStructureProperty.cs" />
     <Compile Include="Structures\Schemas\IStructureSchema.cs" />
     <Compile Include="Structures\Schemas\IStructureSchemas.cs" />

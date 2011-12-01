@@ -5,7 +5,7 @@ using PineCone.Resources;
 
 namespace PineCone.Structures.Schemas.MemberAccessors
 {
-    internal static class Setter
+    internal static class StructureIdSetters
     {
         internal static ISetter For(StructureIdTypes structureIdType, Type type)
         {
@@ -26,12 +26,12 @@ namespace PineCone.Structures.Schemas.MemberAccessors
 
         internal interface ISetter
         {
-            void SetValue<T>(T item, IStructureId id, IStructureProperty property) where T : class;
+            void SetIdValue<T>(T item, IStructureId id, IStructureProperty property) where T : class;
         }
 
         private class StringSetter : ISetter
         {
-            public void SetValue<T>(T item, IStructureId id, IStructureProperty property) where T : class
+            public void SetIdValue<T>(T item, IStructureId id, IStructureProperty property) where T : class
             {
                 property.SetValue(item, id.Value);
             }
@@ -39,7 +39,7 @@ namespace PineCone.Structures.Schemas.MemberAccessors
 
         private class GuidSetter : ISetter
         {
-            public void SetValue<T>(T item, IStructureId id, IStructureProperty property) where T : class
+            public void SetIdValue<T>(T item, IStructureId id, IStructureProperty property) where T : class
             {
                 property.SetValue(item, (Guid)id.Value);
             }
@@ -47,7 +47,7 @@ namespace PineCone.Structures.Schemas.MemberAccessors
 
         private class NullableGuidSetter : ISetter
         {
-            public void SetValue<T>(T item, IStructureId id, IStructureProperty property) where T : class
+            public void SetIdValue<T>(T item, IStructureId id, IStructureProperty property) where T : class
             {
                 property.SetValue(item, (Guid?)id.Value);
             }
@@ -55,7 +55,7 @@ namespace PineCone.Structures.Schemas.MemberAccessors
 
         private class IntSetter : ISetter
         {
-            public void SetValue<T>(T item, IStructureId id, IStructureProperty property) where T : class
+            public void SetIdValue<T>(T item, IStructureId id, IStructureProperty property) where T : class
             {
                 property.SetValue(item, (int)id.Value);
             }
@@ -63,7 +63,7 @@ namespace PineCone.Structures.Schemas.MemberAccessors
 
         private class NullableIntSetter : ISetter
         {
-            public void SetValue<T>(T item, IStructureId id, IStructureProperty property) where T : class
+            public void SetIdValue<T>(T item, IStructureId id, IStructureProperty property) where T : class
             {
                 property.SetValue(item, (int?)id.Value);
             }
@@ -71,7 +71,7 @@ namespace PineCone.Structures.Schemas.MemberAccessors
 
         private class LongSetter : ISetter
         {
-            public void SetValue<T>(T item, IStructureId id, IStructureProperty property) where T : class
+            public void SetIdValue<T>(T item, IStructureId id, IStructureProperty property) where T : class
             {
                 property.SetValue(item, (long)id.Value);
             }
@@ -79,7 +79,7 @@ namespace PineCone.Structures.Schemas.MemberAccessors
 
         private class NullableLongSetter : ISetter
         {
-            public void SetValue<T>(T item, IStructureId id, IStructureProperty property) where T : class
+            public void SetIdValue<T>(T item, IStructureId id, IStructureProperty property) where T : class
             {
                 property.SetValue(item, (long?)id.Value);
             }

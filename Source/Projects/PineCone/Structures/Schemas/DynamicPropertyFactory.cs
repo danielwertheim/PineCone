@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Reflection.Emit;
 using NCore.Reflections;
@@ -9,46 +10,89 @@ namespace PineCone.Structures.Schemas
     {
         private static readonly Type ObjectType = typeof(object);
         private static readonly Type VoidType = typeof(void);
-        private static readonly Type DynamicGetterType = typeof(DynamicGetter);
-        private static readonly Type DynamicSetterType = typeof(DynamicSetter);
+        private static readonly Type IlGetterType = typeof(Func<object, object>);
+        private static readonly Type IlSetterType = typeof(Action<object, object>);
 
-        public static DynamicProperty Create(PropertyInfo propertyInfo)
+        public static DynamicGetter GetterFor(PropertyInfo p)
         {
-            if (propertyInfo.DeclaringType.IsKeyValuePairType())
-                return new DynamicProperty(propertyInfo, (o) => propertyInfo.GetValue(o, null), (o, v) => propertyInfo.SetValue(o, v, null));
+            if(p.DeclaringType.IsKeyValuePairType())
+                return new DynamicGetter(CreateLambdaGetter(p.DeclaringType, p));
 
-            return new DynamicProperty(propertyInfo, CreateGetter(propertyInfo), CreateSetter(propertyInfo));
+            return new DynamicGetter(CreateIlGetter(p));
         }
 
-        private static DynamicGetter CreateGetter(PropertyInfo propertyInfo)
+        public static DynamicSetter SetterFor(PropertyInfo p)
+        {
+            var ilSetter = CreateIlSetter(p);
+            if (ilSetter == null)
+                return null;
+
+            return new DynamicSetter(ilSetter);
+        }
+
+        private static Func<object, object> CreateLambdaGetter(Type type, PropertyInfo property)
+        {
+            var objExpr = Expression.Parameter(ObjectType, "theItem");
+            var castedObjExpr = Expression.Convert(objExpr, type);
+
+            var p = Expression.Property(castedObjExpr, property);
+            var castedProp = Expression.Convert(p, ObjectType);
+
+            var lambda = Expression.Lambda<Func<object, object>>(castedProp, objExpr);
+
+            return lambda.Compile();
+        }
+
+        private static Func<object, object> CreateIlGetter(PropertyInfo propertyInfo)
         {
             var propGetMethod = propertyInfo.GetGetMethod(true);
             if (propGetMethod == null)
                 return null;
 
-            var getter = CreateDynamicMethod(propertyInfo, isForGetter: true);
+            var getter = CreateDynamicGetMethod(propertyInfo);
 
             var generator = getter.GetILGenerator();
             generator.DeclareLocal(ObjectType);
             generator.Emit(OpCodes.Ldarg_0);
-            //generator.Emit(OpCodes.Castclass, propertyInfo.DeclaringType);
+            generator.Emit(OpCodes.Castclass, propertyInfo.DeclaringType);
             generator.EmitCall(OpCodes.Callvirt, propGetMethod, null);
 
-            if (!propertyInfo.PropertyType.IsClass)
+            if (propertyInfo.PropertyType.IsPrimitive || propertyInfo.PropertyType.IsValueType)
                 generator.Emit(OpCodes.Box, propertyInfo.PropertyType);
 
             generator.Emit(OpCodes.Ret);
 
-            return (DynamicGetter)getter.CreateDelegate(DynamicGetterType);
+            return (Func<object, object>)getter.CreateDelegate(IlGetterType);
         }
 
-        private static DynamicSetter CreateSetter(PropertyInfo propertyInfo)
+        private static DynamicMethod CreateDynamicGetMethod(PropertyInfo propertyInfo)
+        {
+            var args = new[] { ObjectType };
+            var name = string.Format("_{0}{1}_", "Get", propertyInfo.Name);
+            var returnType = ObjectType;
+
+            return !propertyInfo.DeclaringType.IsInterface
+                       ? new DynamicMethod(
+                             name,
+                             returnType,
+                             args,
+                             propertyInfo.DeclaringType,
+                             true)
+                       : new DynamicMethod(
+                             name,
+                             returnType,
+                             args,
+                             propertyInfo.Module,
+                             true);
+        }
+
+        private static Action<object, object> CreateIlSetter(PropertyInfo propertyInfo)
         {
             var propSetMethod = propertyInfo.GetSetMethod(true);
             if (propSetMethod == null)
                 return null;
 
-            var setter = CreateDynamicMethod(propertyInfo, isForGetter: false);
+            var setter = CreateDynamicSetMethod(propertyInfo);
 
             var generator = setter.GetILGenerator();
             generator.Emit(OpCodes.Ldarg_0);
@@ -61,28 +105,28 @@ namespace PineCone.Structures.Schemas
             generator.EmitCall(OpCodes.Callvirt, propSetMethod, null);
             generator.Emit(OpCodes.Ret);
 
-            return (DynamicSetter)setter.CreateDelegate(DynamicSetterType);
+            return (Action<object, object>)setter.CreateDelegate(IlSetterType);
         }
 
-        private static DynamicMethod CreateDynamicMethod(PropertyInfo propertyInfo, bool isForGetter)
+        private static DynamicMethod CreateDynamicSetMethod(PropertyInfo propertyInfo)
         {
-            var args = isForGetter ? new[] { ObjectType } : new[] { ObjectType, ObjectType };
-            var name = string.Format("_{0}{1}_", isForGetter ? "Get" : "Set", propertyInfo.Name);
-            var returnType = isForGetter ? ObjectType : VoidType;
+            var args = new[] { ObjectType, ObjectType };
+            var name = string.Format("_{0}{1}_", "Set", propertyInfo.Name);
+            var returnType = VoidType;
 
             return !propertyInfo.DeclaringType.IsInterface
-                ? new DynamicMethod(
-                    name,
-                    returnType,
-                    args,
-                    propertyInfo.DeclaringType,
-                    true)
-                : new DynamicMethod(
-                    name,
-                    returnType,
-                    args,
-                    propertyInfo.Module,
-                    true);
+                       ? new DynamicMethod(
+                             name,
+                             returnType,
+                             args,
+                             propertyInfo.DeclaringType,
+                             true)
+                       : new DynamicMethod(
+                             name,
+                             returnType,
+                             args,
+                             propertyInfo.Module,
+                             true);
         }
     }
 }

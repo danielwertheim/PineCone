@@ -14,13 +14,15 @@ namespace PineCone.Structures.Schemas
     {
         private static readonly Type UniqueAttributeType = typeof(UniqueAttribute);
 
-        private readonly DynamicProperty _property;
+        private readonly PropertyInfo _property;
+        private readonly DynamicGetter _getter;
+        private readonly DynamicSetter _setter;
 
-        public string Name { get { return _property.PropertyInfo.Name; } }
+        public string Name { get { return _property.Name; } }
 
         public string Path { get; private set; }
 
-        public Type PropertyType { get { return _property.PropertyInfo.PropertyType; } }
+        public Type PropertyType { get { return _property.PropertyType; } }
 
         public IStructureProperty Parent { get; private set; }
 
@@ -56,17 +58,24 @@ namespace PineCone.Structures.Schemas
 
             return new StructureProperty(
                 parent, 
-                DynamicPropertyFactory.Create(propertyInfo),
+                propertyInfo,
+                DynamicPropertyFactory.GetterFor(propertyInfo),
+                DynamicPropertyFactory.SetterFor(propertyInfo),
                 uniqueMode);
         }
 
-        private StructureProperty(IStructureProperty parent, DynamicProperty property, UniqueModes? uniqueMode = null)
+        private StructureProperty(IStructureProperty parent, PropertyInfo property, DynamicGetter getter, DynamicSetter setter = null, UniqueModes? uniqueMode = null)
         {
             Ensure.That(property, "property").IsNotNull();
-
+            Ensure.That(getter, "getter").IsNotNull();
+            
             _property = property;
+            _getter = getter;
+            _setter = setter;
+
             Parent = parent;
             IsRootMember = parent == null;
+            IsReadOnly = _setter == null;
             UniqueMode = uniqueMode;
 
             var isSimpleType = PropertyType.IsSimpleType();
@@ -82,7 +91,7 @@ namespace PineCone.Structures.Schemas
 
         public object GetValue(object item)
         {
-            return _property.Getter.Invoke(item);
+            return _getter.GetValue(item);
         }
 
         public void SetValue(object target, object value)
@@ -90,7 +99,7 @@ namespace PineCone.Structures.Schemas
             if(IsReadOnly)
                 throw new PineConeException(ExceptionMessages.StructureProperty_Setter_IsReadOnly.Inject(Path));
 
-            _property.Setter(target, value);
+            _setter.SetValue(target, value);
         }
     }
 }

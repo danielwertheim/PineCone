@@ -21,7 +21,7 @@ namespace PineCone.Tests.UnitTests.Structures.StructureBuilderTests
         public void CreateStructures_WhenProcessing2900Items_ItemsAreGettingGeneratedInCorrectOrder()
         {
             var schema = StructureSchemaTestFactory.CreateRealFrom<GuidItem>();
-            var items = CreateGuidItems(2900);
+            var items = CreateGuidItems(1000);
 
             var structures = Builder.CreateStructures(items, schema).ToArray();
 

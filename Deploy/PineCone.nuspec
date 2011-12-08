@@ -4,8 +4,8 @@
     <id>PineCone</id>    
     <title>PineCone</title>
 	<version>0.0.0.0</version>
-	<authors>Daniel Wertheim - @@danielwertheim - http://daniel.wertheim.se</authors>
-	<owners>Daniel Wertheim - @@danielwertheim - http://daniel.wertheim.se</owners>
+	<authors>Daniel Wertheim</authors>
+	<owners>Daniel Wertheim</owners>
 	<copyright>Daniel Wertheim</copyright>
 	<summary>PineCone takes an object graph and gives you indexes for it.</summary>
     <description>
@@ -20,9 +20,8 @@
 	</dependencies>
   </metadata>
   <files>
-    <file src="PineCone.dll" target="lib" />
-	<file src="PineCone.xml" target="lib" />
-	<file src="NCore.dll" target="lib" />
-	<file src="License*.txt" />
-  </files>  
+    <file src="**\*.dll" target="lib\net40\"/>
+	<file src="**\*.xml" target="lib\net40\"/>
+	<file src="**\*.txt" target="content\"/>
+  </files>
 </package>

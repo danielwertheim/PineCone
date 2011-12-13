@@ -22,6 +22,5 @@
   <files>
     <file src="**\*.dll" target="lib\net40\"/>
 	<file src="**\*.xml" target="lib\net40\"/>
-	<file src="**\*.txt" target="content\"/>
   </files>
 </package>

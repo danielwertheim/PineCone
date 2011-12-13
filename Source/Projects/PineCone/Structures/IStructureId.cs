@@ -2,7 +2,7 @@ using System;
 
 namespace PineCone.Structures
 {
-    public interface IStructureId : IEquatable<IStructureId>
+    public interface IStructureId : IEquatable<IStructureId>, IComparable<IStructureId>
     {
         StructureIdTypes IdType { get; }
         object Value { get; }

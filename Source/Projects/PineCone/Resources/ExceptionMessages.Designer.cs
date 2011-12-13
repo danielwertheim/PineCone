@@ -124,6 +124,15 @@ namespace PineCone.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Can not compare StructureId&apos;s of different IdTypes..
+        /// </summary>
+        internal static string StructureId_CompareTo_DifferentIdTypes {
+            get {
+                return ResourceManager.GetString("StructureId_CompareTo_DifferentIdTypes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Can not convert type &apos;{0}&apos; to a StructureId..
         /// </summary>
         internal static string StructureId_ConvertFrom {

@@ -1,5 +1,6 @@
 using System;
 using NUnit.Framework;
+using PineCone.Resources;
 using PineCone.Structures;
 
 namespace PineCone.Tests.UnitTests.Structures
@@ -278,5 +279,217 @@ namespace PineCone.Tests.UnitTests.Structures
         {
             Assert.IsFalse(StructureId.IsValidDataType(typeof(object)));
         }
+
+		[Test]
+		public void CompareTo_WhenDifferentIdTypes_ThrowsException()
+		{
+			var x = StructureId.Create((int?)42);
+			var y = StructureId.Create((long?)42);
+
+			var ex = Assert.Throws<PineConeException>(() => x.CompareTo(y));
+
+			Assert.AreEqual(ExceptionMessages.StructureId_CompareTo_DifferentIdTypes, ex.Message);
+		}
+
+    	[Test]
+    	public void CompareTo_WhenEqualInts_Returns0()
+    	{
+    		var x = StructureId.Create(42);
+			var y = StructureId.Create(42);
+
+			Assert.AreEqual(0, x.CompareTo(y));
+    	}
+
+		[Test]
+		public void CompareTo_WhenEqualNullableInts_Returns0()
+		{
+			var x = StructureId.Create((int?)42);
+			var y = StructureId.Create((int?)42);
+
+			Assert.AreEqual(0, x.CompareTo(y));
+		}
+
+		[Test]
+		public void CompareTo_WhenEqualNonNullableAndNullableInts_Returns0()
+		{
+			var x = StructureId.Create((int?)42);
+			var y = StructureId.Create(42);
+
+			Assert.AreEqual(0, x.CompareTo(y));
+		}
+
+		[Test]
+		public void CompareTo_WhenEqualNullableIntsAreNull_Returns0()
+		{
+			var x = StructureId.Create((int?)null);
+			var y = StructureId.Create((int?)null);
+
+			Assert.AreEqual(0, x.CompareTo(y));
+		}
+
+		[Test]
+		public void CompareTo_WhenEqualLongs_Returns0()
+		{
+			var x = StructureId.Create((long)42);
+			var y = StructureId.Create((long)42);
+
+			Assert.AreEqual(0, x.CompareTo(y));
+		}
+
+		[Test]
+		public void CompareTo_WhenEqualNullableLongs_Returns0()
+		{
+			var x = StructureId.Create((long?)42);
+			var y = StructureId.Create((long?)42);
+
+			Assert.AreEqual(0, x.CompareTo(y));
+		}
+
+		[Test]
+		public void CompareTo_WhenEqualNonNullableAndNullableLongs_Returns0()
+		{
+			var x = StructureId.Create((long?)42);
+			var y = StructureId.Create((long)42);
+
+			Assert.AreEqual(0, x.CompareTo(y));
+		}
+
+		[Test]
+		public void CompareTo_WhenEqualNullableLongsAreNull_Returns0()
+		{
+			var x = StructureId.Create((long?)null);
+			var y = StructureId.Create((long?)null);
+
+			Assert.AreEqual(0, x.CompareTo(y));
+		}
+
+		[Test]
+		public void CompareTo_WhenEqualGuids_Returns0()
+		{
+			var v = Guid.Parse("E72A0240-4B05-4678-B1DD-8CCBA10F8CA2");
+			var x = StructureId.Create(v);
+			var y = StructureId.Create(v);
+
+			Assert.AreEqual(0, x.CompareTo(y));
+		}
+
+		[Test]
+		public void CompareTo_WhenEqualNullableGuids_Returns0()
+		{
+			var v = Guid.Parse("E72A0240-4B05-4678-B1DD-8CCBA10F8CA2");
+			var x = StructureId.Create((Guid?)v);
+			var y = StructureId.Create((Guid?)v);
+
+			Assert.AreEqual(0, x.CompareTo(y));
+		}
+
+		[Test]
+		public void CompareTo_WhenEqualNonNullableAndNullableGuids_Returns0()
+		{
+			var v = Guid.Parse("E72A0240-4B05-4678-B1DD-8CCBA10F8CA2");
+			var x = StructureId.Create((Guid?)v);
+			var y = StructureId.Create(v);
+
+			Assert.AreEqual(0, x.CompareTo(y));
+		}
+
+		[Test]
+		public void CompareTo_WhenStringsAreNull_Returns0()
+		{
+			var x = StructureId.Create((string)null);
+			var y = StructureId.Create((string)null);
+
+			Assert.AreEqual(0, x.CompareTo(y));
+		}
+
+		[Test]
+		public void CompareTo_WhenEqualStrings_Returns0()
+		{
+			var x = StructureId.Create("foo");
+			var y = StructureId.Create("foo");
+
+			Assert.AreEqual(0, x.CompareTo(y));
+		}
+
+		[Test]
+		public void CompareTo_WhenStringsDifferOnCasing_Returns0()
+		{
+			var x = StructureId.Create("foo");
+			var y = StructureId.Create("FOO");
+
+			Assert.AreEqual(0, x.CompareTo(y));
+		}
+
+		[Test]
+		public void CompareTo_WhenIntXisLessThanY_ReturnsMinus1()
+		{
+			var x = StructureId.Create(10);
+			var y = StructureId.Create(20);
+
+			Assert.AreEqual(-1, x.CompareTo(y));
+		}
+
+		[Test]
+		public void CompareTo_WhenIntXisGreaterThanY_Returns1()
+		{
+			var x = StructureId.Create(20);
+			var y = StructureId.Create(10);
+
+			Assert.AreEqual(1, x.CompareTo(y));
+		}
+
+		[Test]
+		public void CompareTo_WhenLongXisLessThanY_ReturnsMinus1()
+		{
+			var x = StructureId.Create((long)10);
+			var y = StructureId.Create((long)20);
+
+			Assert.AreEqual(-1, x.CompareTo(y));
+		}
+
+		[Test]
+		public void CompareTo_WhenLongXisGreaterThanY_Returns1()
+		{
+			var x = StructureId.Create((long)20);
+			var y = StructureId.Create((long)10);
+
+			Assert.AreEqual(1, x.CompareTo(y));
+		}
+
+		[Test]
+		public void CompareTo_WhenStringXisLessThanY_ReturnsMinus1()
+		{
+			var x = StructureId.Create("a");
+			var y = StructureId.Create("b");
+
+			Assert.AreEqual(-1, x.CompareTo(y));
+		}
+
+		[Test]
+		public void CompareTo_WhenStringXisGreaterThanY_Returns1()
+		{
+			var x = StructureId.Create("b");
+			var y = StructureId.Create("a");
+
+			Assert.AreEqual(1, x.CompareTo(y));
+		}
+
+    	[Test]
+    	public void GetSmallest_WhenXisLessThanY_ReturnsX()
+    	{
+			var x = StructureId.Create(10);
+			var y = StructureId.Create(20);
+
+			Assert.AreEqual(x, StructureId.GetSmallest(x, y));
+    	}
+
+		[Test]
+		public void GetSmallest_WhenXisGreaterThanY_ReturnsX()
+		{
+			var x = StructureId.Create(20);
+			var y = StructureId.Create(10);
+
+			Assert.AreEqual(y, StructureId.GetSmallest(x, y));
+		}
     }
 }

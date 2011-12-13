@@ -159,4 +159,7 @@
   <data name="StructureId_ConvertFrom" xml:space="preserve">
     <value>Can not convert type '{0}' to a StructureId.</value>
   </data>
+  <data name="StructureId_CompareTo_DifferentIdTypes" xml:space="preserve">
+    <value>Can not compare StructureId's of different IdTypes.</value>
+  </data>
 </root>

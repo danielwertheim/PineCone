@@ -146,7 +146,51 @@ namespace PineCone.Structures
             return false;
         }
 
-        public override bool Equals(object obj)
+    	public int CompareTo(IStructureId other)
+    	{
+    		if (other.IdType != IdType)
+    			throw new PineConeException(ExceptionMessages.StructureId_CompareTo_DifferentIdTypes);
+
+			if (Equals(other))
+				return 0;
+
+			if (IdType == StructureIdTypes.Identity)
+			{
+				var x = (int?) Value;
+				var y = (int?) other.Value;
+
+				if (x.HasValue && y.HasValue)
+					return x.Value.CompareTo(y.Value);
+
+				return x.HasValue ? -1 : 1;
+			}
+
+			if (IdType == StructureIdTypes.BigIdentity)
+			{
+				var x = (long?)Value;
+				var y = (long?)other.Value;
+
+				if (x.HasValue && y.HasValue)
+					return x.Value.CompareTo(y.Value);
+
+				return x.HasValue ? -1 : 1;
+			}
+
+			if (IdType.IsGuid())
+			{
+				var x = (Guid?)Value;
+				var y = (Guid?)other.Value;
+
+				if (x.HasValue && y.HasValue)
+					return x.Value.CompareTo(y.Value);
+
+				return x.HasValue ? -1 : 1;
+			}
+
+    		return Value.ToString().CompareTo(other.Value.ToString());
+    	}
+
+    	public override bool Equals(object obj)
         {
             return Equals(obj as IStructureId);
         }
@@ -155,7 +199,11 @@ namespace PineCone.Structures
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return Equals(other.Value, Value);
+
+			if (IdType == StructureIdTypes.String)
+				return string.Equals(Value as string, other.Value as string, StringComparison.InvariantCultureIgnoreCase);
+			
+        	return Equals(other.Value, Value);
         }
 
         public override int GetHashCode()

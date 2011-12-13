@@ -95,6 +95,13 @@ namespace PineCone.Structures
         {
             return new StructureId(value, NullableLongType);
         }
+
+    	public static IStructureId GetSmallest(IStructureId x, IStructureId y)
+		{
+			return x.CompareTo(y) == -1
+				? x
+				: y;
+		}
         
         private StructureId(string value, Type dataType)
         {

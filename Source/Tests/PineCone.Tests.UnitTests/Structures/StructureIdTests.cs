@@ -473,5 +473,23 @@ namespace PineCone.Tests.UnitTests.Structures
 
 			Assert.AreEqual(1, x.CompareTo(y));
 		}
+
+    	[Test]
+    	public void GetSmallest_WhenXisLessThanY_ReturnsX()
+    	{
+			var x = StructureId.Create(10);
+			var y = StructureId.Create(20);
+
+			Assert.AreEqual(x, StructureId.GetSmallest(x, y));
+    	}
+
+		[Test]
+		public void GetSmallest_WhenXisGreaterThanY_ReturnsX()
+		{
+			var x = StructureId.Create(20);
+			var y = StructureId.Create(10);
+
+			Assert.AreEqual(y, StructureId.GetSmallest(x, y));
+		}
     }
 }

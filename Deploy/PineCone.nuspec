@@ -14,7 +14,7 @@
 	<projectUrl>http://github.com/danielwertheim/pinecone</projectUrl>
 	<licenseUrl>http://github.com/danielwertheim/pinecone/blob/master/Source/License-PineCone.txt</licenseUrl>
 	<requireLicenseAcceptance>false</requireLicenseAcceptance>
-	<tags>indexing,structures,key-value</tags>
+	<tags>indexing,structures,key-value,hierarcial-data</tags>
 	<dependencies>
       <dependency id="Ensure.That" version="0.5.0" />
 	</dependencies>

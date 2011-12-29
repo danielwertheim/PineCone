@@ -20,7 +20,9 @@
 	</dependencies>
   </metadata>
   <files>
-    <file src="**\*.dll" target="lib\net40\"/>
-	<file src="**\*.xml" target="lib\net40\"/>
+    <file src="**\NCore.dll" target="lib\net40\"/>
+	<file src="**\PineCone.dll" target="lib\net40\"/>
+	<file src="**\NCore.xml" target="lib\net40\"/>
+	<file src="**\PineCone.xml" target="lib\net40\"/>
   </files>
 </package>

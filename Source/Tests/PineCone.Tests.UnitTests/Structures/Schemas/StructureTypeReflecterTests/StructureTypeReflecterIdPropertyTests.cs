@@ -13,46 +13,58 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
         public void HasIdProperty_WhenGuidIdPropertyExists_ReturnsTrue()
         {
             var type = typeof(WithGuidId);
-            var reflecter = new StructureTypeReflecter();
 
-            Assert.IsTrue(reflecter.HasIdProperty(type));
+            Assert.IsTrue(_reflecter.HasIdProperty(type));
         }
 
         [Test]
         public void HasIdProperty_WhenIdentityPropertyExists_ReturnsTrue()
         {
             var type = typeof(WithIntId);
-            var reflecter = new StructureTypeReflecter();
 
-            Assert.IsTrue(reflecter.HasIdProperty(type));
+            Assert.IsTrue(_reflecter.HasIdProperty(type));
         }
 
         [Test]
         public void HasIdProperty_WhenNullableGuidIdPropertyExists_ReturnsTrue()
         {
             var type = typeof(WithNullableGuidId);
-            var reflecter = new StructureTypeReflecter();
 
-            Assert.IsTrue(reflecter.HasIdProperty(type));
+            Assert.IsTrue(_reflecter.HasIdProperty(type));
         }
 
         [Test]
         public void HasIdProperty_WhenNullableIdentityPropertyExists_ReturnsTrue()
         {
             var type = typeof(WithNullableIntId);
-            var reflecter = new StructureTypeReflecter();
 
-            Assert.IsTrue(reflecter.HasIdProperty(type));
+            Assert.IsTrue(_reflecter.HasIdProperty(type));
         }
 
         [Test]
-        public void HasIdProperty_WhenIdPropertyDoesNotExist_ReturnsTrue()
+        public void HasIdProperty_WhenIdPropertyDoesNotExist_ReturnsFalse()
         {
             var type = typeof(WithNoId);
-            var reflecter = new StructureTypeReflecter();
 
-            Assert.IsFalse(reflecter.HasIdProperty(type));
+			Assert.IsFalse(_reflecter.HasIdProperty(type));
         }
+
+		[Test]
+		public void HasIdProperty_WhenIdPropertyNameIsTypeNameId_ReturnsTrue()
+		{
+			var type = typeof(WithCustomIdOfTypeName);
+
+			Assert.IsTrue(_reflecter.HasIdProperty(type));
+		}
+
+		[Test]
+		public void HasIdProperty_WhenIdPropertyNameIsId_ReturnsTrue()
+		{
+			var type = typeof(WithId);
+			var reflecter = new StructureTypeReflecter();
+
+			Assert.IsTrue(reflecter.HasIdProperty(type));
+		}
 
         [Test]
         public void GetIdProperty_WhenPublicGuidIdProperty_ReturnsProperty()
@@ -126,6 +138,22 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
             Assert.IsNull(property);
         }
 
+		[Test]
+		public void GetIdProperty_WhenIdPropertyNameIsTypeNameId_ReturnsProperty()
+		{
+			var property = _reflecter.GetIdProperty(typeof(WithCustomIdOfTypeName));
+
+			Assert.IsNotNull(property);
+		}
+
+		[Test]
+		public void GetIdProperty_WhenIdPropertyNameIsId_ReturnsProperty()
+		{
+			var property = _reflecter.GetIdProperty(typeof(WithId));
+
+			Assert.IsNotNull(property);
+		}
+
         private class WithNoId
         {}
 
@@ -173,5 +201,15 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
         {
             private long StructureId { get; set; }
         }
+
+		private class WithCustomIdOfTypeName
+		{
+			public Guid WithCustomIdOfTypeNameId { get; set; }
+		}
+
+		private class WithId
+		{
+			public Guid Id { get; set; }
+		}
     }
 }

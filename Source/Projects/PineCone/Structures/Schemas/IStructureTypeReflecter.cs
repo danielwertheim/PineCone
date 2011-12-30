@@ -1,13 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 
 namespace PineCone.Structures.Schemas
 {
     public interface IStructureTypeReflecter
     {
-        bool HasIdProperty(IReflect type);
+		bool HasIdProperty(Type type);
 
-        IStructureProperty GetIdProperty(IReflect type);
+        IStructureProperty GetIdProperty(Type type);
 
         IEnumerable<IStructureProperty> GetIndexableProperties(IReflect type);
 

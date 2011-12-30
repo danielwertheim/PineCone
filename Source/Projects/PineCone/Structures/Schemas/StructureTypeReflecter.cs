@@ -54,7 +54,7 @@ namespace PineCone.Structures.Schemas
 		public IEnumerable<IStructureProperty> GetIndexablePropertiesExcept(IReflect type, ICollection<string> nonIndexablePaths)
 		{
 			Ensure.That(type, "type").IsNotNull();
-			Ensure.That((ICollection)nonIndexablePaths, "nonIndexablePaths").HasItems();
+			Ensure.That(nonIndexablePaths, "nonIndexablePaths").HasItems();
 
 			return GetIndexableProperties(type, null, NonIndexableSystemMembers.MergeWith(nonIndexablePaths).ToArray(), null);
 		}
@@ -62,7 +62,7 @@ namespace PineCone.Structures.Schemas
 		public IEnumerable<IStructureProperty> GetSpecificIndexableProperties(IReflect type, ICollection<string> indexablePaths)
 		{
 			Ensure.That(type, "type").IsNotNull();
-			Ensure.That((ICollection)indexablePaths, "indexablePaths").HasItems();
+			Ensure.That(indexablePaths, "indexablePaths").HasItems();
 
 			return GetIndexableProperties(type, null, NonIndexableSystemMembers, indexablePaths);
 		}

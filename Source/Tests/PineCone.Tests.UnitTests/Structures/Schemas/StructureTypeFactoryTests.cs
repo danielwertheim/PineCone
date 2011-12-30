@@ -1,6 +1,8 @@
+using System;
 using Moq;
 using NUnit.Framework;
 using PineCone.Structures.Schemas;
+using PineCone.Structures.Schemas.Builders;
 
 namespace PineCone.Tests.UnitTests.Structures.Schemas
 {

@@ -50,6 +50,52 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas
             Assert.AreEqual(schema, fetchedSchema);
         }
 
+		[Test]
+		public void GetSchema_WhenCustomConfigurationExists_ReturnsSchemaWithCorrectIndexAccessor()
+		{
+			var pineConizer = new PineConizer();
+			pineConizer.Schemas.StructureTypeFactory.Configurations.NewForType<FooCustomer>().OnlyIndexThis("CustomerNo");
+
+			var schema = pineConizer.Schemas.GetSchema<FooCustomer>();
+
+			Assert.AreEqual("CustomerNo", schema.IndexAccessors.Single().Path);
+		}
+
+		[Test]
+		public void GetSchema_WhenCustomConfigurationExists_ViaLambdas_ReturnsSchemaWithCorrectIndexAccessor()
+		{
+			var pineConizer = new PineConizer();
+			pineConizer.Schemas.StructureTypeFactory.Configurations.NewForType<FooCustomer>().OnlyIndexThis(c => c.CustomerNo);
+
+			var schema = pineConizer.Schemas.GetSchema<FooCustomer>();
+
+			Assert.AreEqual("CustomerNo", schema.IndexAccessors.Single().Path);
+		}
+
+		[Test]
+		public void GetSchema_WhenCustomConfigurationExists_ViaNonGenericConfig_ReturnsSchemaWithCorrectIndexAccessor()
+		{
+			var pineConizer = new PineConizer();
+			pineConizer.Schemas.StructureTypeFactory.Configurations.NewForType(typeof(FooCustomer)).OnlyIndexThis("CustomerNo");
+
+			var schema = pineConizer.Schemas.GetSchema<FooCustomer>();
+
+			Assert.AreEqual("CustomerNo", schema.IndexAccessors.Single().Path);
+		}
+
+		private class FooCustomer
+		{
+			public Guid StructureId { get; set; }
+			public int CustomerNo { get; set; }
+			public string Firstname { get; set; }
+			public string Lastname { get; set; }
+
+			public override string ToString()
+			{
+				return string.Format("StructureId: {0}, CustomerNo: {1}, Firstname: {2}, Lastname: {3}", StructureId, CustomerNo, Firstname, Lastname);
+			}
+		}
+
         private class X
         {
             public Guid StructureId { get; set; }

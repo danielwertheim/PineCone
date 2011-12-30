@@ -104,7 +104,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.Builders
         }
 
         [Test]
-        public void CreateSchema_WhenItemHasNoIdMember_ThrowsMissingKeyMemberException()
+        public void CreateSchema_WhenItemHasNoIdMember_ThrowsMissingIdMemberException()
         {
             var structureTypeStub = new Mock<IStructureType>();
             structureTypeStub.Setup(s => s.Name).Returns("TempType");
@@ -116,14 +116,34 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.Builders
         }
 
         [Test]
-        public void CreateSchema_WhenItemHasIdMember_CreatesSchemaWithKeyMemberAccessor()
+        public void CreateSchema_WhenItemHasIdMember_CreatesSchemaWithIdMemberAccessor()
         {
-            var structureType = GetStructureTypeFor<WithIdAndIndexableFirstLevelMembers>();
+            var structureType = GetStructureTypeFor<WithGuidId>();
 
             var schema = _schemaBuilder.CreateSchema(structureType);
 
             Assert.IsNotNull(schema.IdAccessor);
         }
+
+		[Test]
+		public void CreateSchema_WhenItemHasIdMemberOfTypeName_CreatesSchemaWithIdMemberAccessor()
+		{
+			var structureType = GetStructureTypeFor<WithCustomIdOfTypeName>();
+
+			var schema = _schemaBuilder.CreateSchema(structureType);
+
+			Assert.IsNotNull(schema.IdAccessor);
+		}
+
+		[Test]
+		public void CreateSchema_WhenItemHasIdMemberWithNameId_CreatesSchemaWithIdMemberAccessor()
+		{
+			var structureType = GetStructureTypeFor<WithId>();
+
+			var schema = _schemaBuilder.CreateSchema(structureType);
+
+			Assert.IsNotNull(schema.IdAccessor);
+		}
 
         [Test]
         public void CreateSchema_WhenItemHasIndexableFirstLevelProperties_IndexAccessorsAreExtracted()
@@ -182,7 +202,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.Builders
         [Test]
         public void CreateSchema_WhenFirstLevelGuid_ReturnsSchemaWithIdentityAccessor()
         {
-            var structureType = GetStructureTypeFor<WithGuid>();
+            var structureType = GetStructureTypeFor<WithGuidId>();
 
             var schema = _schemaBuilder.CreateSchema(structureType);
 
@@ -221,7 +241,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.Builders
 
             var schema = _schemaBuilder.CreateSchema(structureType);
 
-            Assert.AreEqual(1, schema.IndexAccessors.Count(iac => iac.Path != StructureSchema.IdMemberName));
+            Assert.AreEqual(1, schema.IndexAccessors.Count(iac => iac.Path != StructureIdPropertyNames.Default));
             Assert.IsTrue(schema.IndexAccessors[1].Path.StartsWith("DummyMember"));
         }
 
@@ -232,12 +252,26 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.Builders
             return count == level;
         }
 
-        private class WithGuid
+        private class WithGuidId
         {
             public Guid StructureId { get; set; }
 
             public int Int1 { get; set; }
         }
+
+		private class WithCustomIdOfTypeName
+		{
+			public Guid WithCustomIdOfTypeNameId { get; set; }
+
+			public int Int1 { get; set; }
+		}
+
+		private class WithId
+		{
+			public Guid Id { get; set; }
+
+			public int Int1 { get; set; }
+		}
 
         private class WithByte
         {

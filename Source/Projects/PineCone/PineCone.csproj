@@ -76,6 +76,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ExceptionMessages.resx</DependentUpon>
     </Compile>
+    <Compile Include="Structures\Schemas\StructureIdPropertyNames.cs" />
     <Compile Include="Structures\SequentialGuid.cs" />
     <Compile Include="PineConeException.cs" />
     <Compile Include="Serializers\IStructureSerializer.cs" />

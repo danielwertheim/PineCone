@@ -5,10 +5,8 @@ using PineCone.Structures.Schemas.MemberAccessors;
 
 namespace PineCone.Structures.Schemas
 {
-    public class StructureSchema : IStructureSchema
+	public class StructureSchema : IStructureSchema
     {
-        public const string IdMemberName = "StructureId";
-
         public string Name { get; private set; }
 
         public string Hash { get; private set; }

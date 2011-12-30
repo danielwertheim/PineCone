@@ -55,9 +55,9 @@ namespace PineCone.Structures.Schemas
             generator.DeclareLocal(ObjectType);
             generator.Emit(OpCodes.Ldarg_0);
             generator.Emit(OpCodes.Castclass, propertyInfo.DeclaringType);
-            generator.EmitCall(OpCodes.Callvirt, propGetMethod, null);
+            generator.EmitCall(OpCodes.Callvirt, propGetMethod, (Type[])null);
 
-            if (propertyInfo.PropertyType.IsPrimitive || propertyInfo.PropertyType.IsValueType)
+            if (!propertyInfo.PropertyType.IsClass)
                 generator.Emit(OpCodes.Box, propertyInfo.PropertyType);
 
             generator.Emit(OpCodes.Ret);
@@ -96,13 +96,15 @@ namespace PineCone.Structures.Schemas
 
             var generator = setter.GetILGenerator();
             generator.Emit(OpCodes.Ldarg_0);
-            //generator.Emit(OpCodes.Castclass, propertyInfo.DeclaringType);
+			generator.Emit(OpCodes.Castclass, propertyInfo.DeclaringType);
             generator.Emit(OpCodes.Ldarg_1);
 
-            generator.Emit(propertyInfo.PropertyType.IsClass ? OpCodes.Castclass : OpCodes.Unbox_Any,
-                           propertyInfo.PropertyType);
+            generator.Emit(propertyInfo.PropertyType.IsClass 
+				? OpCodes.Castclass 
+				: OpCodes.Unbox_Any,
+				propertyInfo.PropertyType);
 
-            generator.EmitCall(OpCodes.Callvirt, propSetMethod, null);
+            generator.EmitCall(OpCodes.Callvirt, propSetMethod, (Type[])null);
             generator.Emit(OpCodes.Ret);
 
             return (Action<object, object>)setter.CreateDelegate(IlSetterType);

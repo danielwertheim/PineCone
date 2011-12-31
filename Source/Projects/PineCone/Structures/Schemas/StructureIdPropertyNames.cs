@@ -35,5 +35,12 @@ namespace PineCone.Structures.Schemas
 		{
 			return type.Name + "Id";
 		}
+
+		public static string GetInterfaceTypeNamePropertyNameFor(Type type)
+		{
+			return type.Name.StartsWith("I") 
+				? type.Name.Substring(1) + "Id" 
+				: type.Name + "Id";
+		}
 	}
 }

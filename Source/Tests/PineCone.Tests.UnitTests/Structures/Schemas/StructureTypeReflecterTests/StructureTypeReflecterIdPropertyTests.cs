@@ -50,9 +50,17 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
         }
 
 		[Test]
-		public void HasIdProperty_WhenIdPropertyNameIsTypeNameId_ReturnsTrue()
+		public void HasIdProperty_WhenIdPropertyNameIsTypeNamedId_ReturnsTrue()
 		{
 			var type = typeof(WithCustomIdOfTypeName);
+
+			Assert.IsTrue(_reflecter.HasIdProperty(type));
+		}
+
+		[Test]
+		public void HasIdProperty_WhenIdPropertyNameIsInterfaceNamedId_ReturnsTrue()
+		{
+			var type = typeof(IMyType);
 
 			Assert.IsTrue(_reflecter.HasIdProperty(type));
 		}
@@ -139,11 +147,21 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
         }
 
 		[Test]
-		public void GetIdProperty_WhenIdPropertyNameIsTypeNameId_ReturnsProperty()
+		public void GetIdProperty_WhenIdPropertyNameIsTypeNamedId_ReturnsProperty()
 		{
 			var property = _reflecter.GetIdProperty(typeof(WithCustomIdOfTypeName));
 
 			Assert.IsNotNull(property);
+			Assert.AreEqual("WithCustomIdOfTypeNameId", property.Name);
+		}
+
+		[Test]
+		public void GetIdProperty_WhenIdPropertyNameIsInterfaceNamedId_ReturnsProperty()
+		{
+			var property = _reflecter.GetIdProperty(typeof(IMyType));
+
+			Assert.IsNotNull(property);
+			Assert.AreEqual("MyTypeId", property.Name);
 		}
 
 		[Test]
@@ -152,6 +170,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
 			var property = _reflecter.GetIdProperty(typeof(WithId));
 
 			Assert.IsNotNull(property);
+			Assert.AreEqual("Id", property.Name);
 		}
 
         private class WithNoId
@@ -205,6 +224,16 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
 		private class WithCustomIdOfTypeName
 		{
 			public Guid WithCustomIdOfTypeNameId { get; set; }
+		}
+
+		private interface IMyType
+		{
+			Guid MyTypeId { get; set; } 
+		}
+
+		private class WithInterfaceNamedId : IMyType
+		{
+			public Guid MyTypeId { get; set; }
 		}
 
 		private class WithId

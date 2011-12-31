@@ -28,20 +28,43 @@ namespace PineCone.Structures.Schemas
 		{
 			var properties = type.GetProperties(IdPropertyBindingFlags).Where(p => p.Name.EndsWith("Id")).ToArray();
 
-			var defaultProp = properties.SingleOrDefault(p => p.Name.Equals(StructureIdPropertyNames.Default));
+			var defaultProp = GetDefaultStructureIdProperty(properties);
 			if (defaultProp != null)
 				return StructureProperty.CreateFrom(defaultProp);
 
-			var typeNameIdPropName = StructureIdPropertyNames.GetTypeNamePropertyNameFor(type);
-			var typeNameIdProp = properties.SingleOrDefault(p => p.Name.Equals(typeNameIdPropName));
-			if (typeNameIdProp != null)
-				return StructureProperty.CreateFrom(typeNameIdProp);
+			var typeNamedIdProp = GetTypeNamedStructureIdProperty(type, properties);
+			if (typeNamedIdProp != null)
+				return StructureProperty.CreateFrom(typeNamedIdProp);
+
+			var interfaceNamedIdProp = GetInterfaceNamedStructureIdProperty(type, properties);
+			if (interfaceNamedIdProp != null)
+				return StructureProperty.CreateFrom(interfaceNamedIdProp);
 
 			var idProp = properties.SingleOrDefault(p => p.Name.Equals("Id"));
 			if (idProp != null)
 				return StructureProperty.CreateFrom(idProp);
 
 			return null;
+		}
+
+		private static PropertyInfo GetDefaultStructureIdProperty(IEnumerable<PropertyInfo> properties)
+		{
+			return properties.SingleOrDefault(p => p.Name.Equals(StructureIdPropertyNames.Default));
+		}
+
+		private static PropertyInfo GetTypeNamedStructureIdProperty(Type type, IEnumerable<PropertyInfo> properties)
+		{
+			var propertyName = StructureIdPropertyNames.GetTypeNamePropertyNameFor(type);
+			return properties.SingleOrDefault(p => p.Name.Equals(propertyName));
+		}
+
+		private static PropertyInfo GetInterfaceNamedStructureIdProperty(Type type, IEnumerable<PropertyInfo> properties)
+		{
+			if (!type.IsInterface)
+				return null;
+
+			var propertyName = StructureIdPropertyNames.GetInterfaceTypeNamePropertyNameFor(type);
+			return properties.SingleOrDefault(p => p.Name.Equals(propertyName));
 		}
 
 		public IEnumerable<IStructureProperty> GetIndexableProperties(IReflect type)

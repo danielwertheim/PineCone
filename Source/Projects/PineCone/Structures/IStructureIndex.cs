@@ -12,7 +12,7 @@ namespace PineCone.Structures
         
         object Value { get; }
 
-        Type DataType { get; }
+    	DataType DataType { get; }
 
         bool IsUnique { get; }
     }

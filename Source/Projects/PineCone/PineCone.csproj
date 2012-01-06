@@ -60,6 +60,7 @@
     <Compile Include="Dynamic\DynamicStructureBuilder.cs" />
     <Compile Include="Lists.cs" />
     <Compile Include="IPineConizer.cs" />
+    <Compile Include="Structures\DataType.cs" />
     <Compile Include="Structures\IdGenerators\EmptyStructureIdGenerator.cs" />
     <Compile Include="Structures\IdGenerators\SequentialGuidStructureIdGenerator.cs" />
     <Compile Include="Structures\IStructureIdGenerator.cs" />

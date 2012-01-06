@@ -91,6 +91,7 @@
     </Compile>
     <Compile Include="PineConizerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Structures\DataTypeTests.cs" />
     <Compile Include="Structures\Schemas\Configuration\StructureTypeConfigurationsTests.cs" />
     <Compile Include="Structures\Schemas\Configuration\StuctureTypeConfigTests.cs" />
     <Compile Include="Structures\Schemas\MemberAccessors\IndexAccessorGetValuesOnDeepGraphTests.cs" />

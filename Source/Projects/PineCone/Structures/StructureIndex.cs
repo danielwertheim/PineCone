@@ -36,9 +36,15 @@ namespace PineCone.Structures
             Path = path;
             Value = value;
         	DataType = dataType;
-			DataTypeCode = dataType.ToDataType();
+			DataTypeCode = dataType.ToDataTypeCode();
             IndexType = indexType;
             IsUnique = indexType.IsUnique();
+
+			if(Value is Text)
+			{
+				Path = Path.Substring(0, Path.LastIndexOf("."));
+				Value = Value == null ? null : ((Text)Value).Value;
+			}
         }
 
         public override bool Equals(object obj)

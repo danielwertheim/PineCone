@@ -122,6 +122,7 @@
     <Compile Include="Structures\StructureIndexType.cs" />
     <Compile Include="Structures\UniqueModesExtensions.cs" />
     <Compile Include="Sys.cs" />
+    <Compile Include="Text.cs" />
     <Compile Include="TypeFor.cs" />
   </ItemGroup>
   <ItemGroup>

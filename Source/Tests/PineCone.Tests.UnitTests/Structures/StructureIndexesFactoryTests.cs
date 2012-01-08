@@ -98,7 +98,7 @@ namespace PineCone.Tests.UnitTests.Structures
             var factory = new StructureIndexesFactory();
             var indexes = factory.CreateIndexes(schemaStub, item, _structureIdGenerator.Invoke()).ToList();
 
-            Assert.AreEqual(DataType.String, indexes.Single(i => i.Path == "StringValues").DataType);
+            Assert.AreEqual(DataTypeCode.String, indexes.Single(i => i.Path == "StringValues").DataTypeCode);
         }
 
         [Test]

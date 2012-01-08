@@ -4,7 +4,7 @@ using NCore.Reflections;
 namespace PineCone.Structures
 {
 	[Serializable]
-	public enum DataType
+	public enum DataTypeCode
 	{
 		Unknown,
 		IntegerNumber,
@@ -18,30 +18,30 @@ namespace PineCone.Structures
 
 	public static class DataTypeExtensions
 	{
-		public static DataType ToDataType(this Type type)
+		public static DataTypeCode ToDataType(this Type type)
 		{
 			if (type.IsAnyIntegerNumberType())
-				return DataType.IntegerNumber;
+				return DataTypeCode.IntegerNumber;
 
 			if (type.IsAnyFractalNumberType())
-				return DataType.FractalNumber;
+				return DataTypeCode.FractalNumber;
 
 			if (type.IsAnyBoolType())
-				return DataType.Bool;
+				return DataTypeCode.Bool;
 
 			if (type.IsAnyDateTimeType())
-				return DataType.DateTime;
+				return DataTypeCode.DateTime;
 
 			if (type.IsAnyGuidType())
-				return DataType.Guid;
+				return DataTypeCode.Guid;
 
 			if (type.IsStringType())
-				return DataType.String;
+				return DataTypeCode.String;
 
 			if (type.IsAnyEnumType())
-				return DataType.Enum;
+				return DataTypeCode.Enum;
 
-			return DataType.Unknown;
+			return DataTypeCode.Unknown;
 		}
 	}
 }

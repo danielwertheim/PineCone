@@ -1,6 +1,5 @@
 ﻿using System;
 using EnsureThat;
-using NCore.Reflections;
 using PineCone.Resources;
 
 namespace PineCone.Structures
@@ -16,11 +15,13 @@ namespace PineCone.Structures
 
         public object Value { get; private set; }
 
-        public DataType DataType { get; private set; }
+		public Type DataType { get; private set; }
+
+		public DataTypeCode DataTypeCode { get; private set; }
 
         public bool IsUnique { get; private set; }
 
-        public StructureIndex(IStructureId structureId, string path, object value, Type memberType, StructureIndexType indexType = StructureIndexType.Normal)
+        public StructureIndex(IStructureId structureId, string path, object value, Type dataType, StructureIndexType indexType = StructureIndexType.Normal)
         {
             var valueIsOkType = value is string || value is ValueType;
 
@@ -29,12 +30,13 @@ namespace PineCone.Structures
 
             Ensure.That(structureId, "structureId").IsNotNull();
             Ensure.That(path, "path").IsNotNullOrWhiteSpace();
-			Ensure.That(memberType, "memberType").IsNotNull();
+			Ensure.That(dataType, "dataType").IsNotNull();
 
             StructureId = structureId;
             Path = path;
             Value = value;
-			DataType = memberType.ToDataType();
+        	DataType = dataType;
+			DataTypeCode = dataType.ToDataType();
             IndexType = indexType;
             IsUnique = indexType.IsUnique();
         }

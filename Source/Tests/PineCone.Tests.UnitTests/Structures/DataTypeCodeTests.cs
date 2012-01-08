@@ -14,7 +14,7 @@ namespace PineCone.Tests.UnitTests.Structures
 		[TestCase(typeof(short?))]
 		public void ToDataType_TypeIsIntegerFamily_ReturnsIntegerNumber(Type type)
 		{
-			Assert.AreEqual(DataTypeCode.IntegerNumber, type.ToDataType());
+			Assert.AreEqual(DataTypeCode.IntegerNumber, type.ToDataTypeCode());
 		}
 
 		[Test]
@@ -28,7 +28,7 @@ namespace PineCone.Tests.UnitTests.Structures
 		[TestCase(typeof(float?))]
 		public void ToDataType_TypeIsFractalFamily_ReturnsFractalNumber(Type type)
 		{
-			Assert.AreEqual(DataTypeCode.FractalNumber, type.ToDataType());
+			Assert.AreEqual(DataTypeCode.FractalNumber, type.ToDataTypeCode());
 		}
 
 		[Test]
@@ -36,7 +36,7 @@ namespace PineCone.Tests.UnitTests.Structures
 		[TestCase(typeof(bool?))]
 		public void ToDataType_TypeIsBool_ReturnsBool(Type type)
 		{
-			Assert.AreEqual(DataTypeCode.Bool, type.ToDataType());
+			Assert.AreEqual(DataTypeCode.Bool, type.ToDataTypeCode());
 		}
 
 		[Test]
@@ -44,7 +44,7 @@ namespace PineCone.Tests.UnitTests.Structures
 		[TestCase(typeof(DateTime?))]
 		public void ToDataType_TypeIsDateTime_ReturnsDateTime(Type type)
 		{
-			Assert.AreEqual(DataTypeCode.DateTime, type.ToDataType());
+			Assert.AreEqual(DataTypeCode.DateTime, type.ToDataTypeCode());
 		}
 
 		[Test]
@@ -52,14 +52,14 @@ namespace PineCone.Tests.UnitTests.Structures
 		[TestCase(typeof(Guid?))]
 		public void ToDataType_TypeIsGuid_ReturnsGuid(Type type)
 		{
-			Assert.AreEqual(DataTypeCode.Guid, type.ToDataType());
+			Assert.AreEqual(DataTypeCode.Guid, type.ToDataTypeCode());
 		}
 
 		[Test]
 		[TestCase(typeof(string))]
 		public void ToDataType_TypeIsString_ReturnsString(Type type)
 		{
-			Assert.AreEqual(DataTypeCode.String, type.ToDataType());
+			Assert.AreEqual(DataTypeCode.String, type.ToDataTypeCode());
 		}
 
 		[Test]
@@ -67,7 +67,7 @@ namespace PineCone.Tests.UnitTests.Structures
 		[TestCase(typeof(DataTypeCode?))]
 		public void ToDataType_TypeIsEnum_ReturnsEnum(Type type)
 		{
-			Assert.AreEqual(DataTypeCode.Enum, type.ToDataType());
+			Assert.AreEqual(DataTypeCode.Enum, type.ToDataTypeCode());
 		}
 	}
 }

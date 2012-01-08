@@ -13,13 +13,24 @@ namespace PineCone.Structures
 		DateTime,
 		Guid,
 		String,
-		Enum
+		Enum,
+		Text
 	}
 
 	public static class DataTypeExtensions
 	{
-		public static DataTypeCode ToDataType(this Type type)
+		private static readonly Type TextType;
+
+		static DataTypeExtensions()
 		{
+			TextType = typeof (Text);
+		}
+
+		public static DataTypeCode ToDataTypeCode(this Type type)
+		{
+			if(type == TextType)
+				return DataTypeCode.Text;
+			
 			if (type.IsAnyIntegerNumberType())
 				return DataTypeCode.IntegerNumber;
 

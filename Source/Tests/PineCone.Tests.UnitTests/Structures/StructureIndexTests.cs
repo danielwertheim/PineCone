@@ -7,18 +7,6 @@ namespace PineCone.Tests.UnitTests.Structures
     [TestFixture]
     public class StructureIndexTests : UnitTestBase
     {
-		[Test]
-		public void Ctor_WhenPassingInstanceOfTextWithValue_StructureReflectsTheTextInstance()
-		{
-			var structureId = StructureId.Create(Guid.Parse("06E2FC67-AB9F-4E65-A2C8-5FC897597887"));
-
-			var structure = new StructureIndex(structureId, "SomeLongText.Value", "The long content text.", typeof(Text));
-
-			Assert.AreEqual("The long content text.", structure.Value);
-			Assert.AreEqual(typeof(Text), structure.DataType);
-			Assert.AreEqual(DataTypeCode.Text, structure.DataTypeCode);
-		}
-
         [Test]
         public void Equals_WhenSameStructureIdNameAndValue_ReturnsTrue()
         {

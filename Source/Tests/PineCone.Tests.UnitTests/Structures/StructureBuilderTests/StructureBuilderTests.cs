@@ -18,10 +18,23 @@ namespace PineCone.Tests.UnitTests.Structures.StructureBuilderTests
 		}
 
 		[Test]
-		public void CreateStructures_WhenProcessing2900Items_ItemsAreGettingGeneratedInCorrectOrder()
+		public void CreateStructures_WhenProcessing50Items_ItemsAreGettingGeneratedInCorrectOrder()
 		{
 			var schema = StructureSchemaTestFactory.CreateRealFrom<GuidItem>();
-			var items = CreateGuidItems(1000);
+			var items = CreateGuidItems(50);
+
+			var structures = Builder.CreateStructures(items, schema).ToArray();
+
+			CollectionAssert.AreEqual(
+				items.Select(i => i.StructureId).ToArray(),
+				structures.Select(s => (Guid)s.Id.Value).ToArray());
+		}
+
+		[Test]
+		public void CreateStructures_WhenProcessing1500Items_ItemsAreGettingGeneratedInCorrectOrder()
+		{
+			var schema = StructureSchemaTestFactory.CreateRealFrom<GuidItem>();
+			var items = CreateGuidItems(1500);
 
 			var structures = Builder.CreateStructures(items, schema).ToArray();
 
@@ -121,26 +134,21 @@ namespace PineCone.Tests.UnitTests.Structures.StructureBuilderTests
 		[Test]
 		public void CreateStructures_WhenSpecificIdGeneratorIsPassed_SpecificIdGeneratorIsConsumed()
 		{
-			var idValues = new[]
-            {
-                StructureId.Create(Guid.Parse("A058FCDE-A3D9-4EAA-AA41-0CE9D4A3FB1E")), 
-                StructureId.Create(Guid.Parse("91D77A9D-C793-4F3D-9DD0-F1F336362C5C"))
-            };
+			var idValues = new Queue<IStructureId>();
+			idValues.Enqueue(StructureId.Create(Guid.Parse("A058FCDE-A3D9-4EAA-AA41-0CE9D4A3FB1E")));
+			idValues.Enqueue(StructureId.Create(Guid.Parse("91D77A9D-C793-4F3D-9DD0-F1F336362C5C")));
+		
 			var items = new[] { new TestItemForFirstLevel { IntValue = 42 }, new TestItemForFirstLevel { IntValue = 43 } };
 			var schema = StructureSchemaTestFactory.CreateRealFrom<TestItemForFirstLevel>();
 			var idGeneratorMock = new Mock<IStructureIdGenerator>();
 			idGeneratorMock
-				.Setup(m => m.Generate(schema, 2))
-				.Returns(() => new[]
-                {
-                    idValues[0],
-                    idValues[1],
-                });
+				.Setup(m => m.Generate(schema))
+				.Returns(idValues.Dequeue);
 
 			Builder.StructureIdGenerator = idGeneratorMock.Object;
 			var structures = Builder.CreateStructures(items, schema).ToArray();
 
-			idGeneratorMock.Verify(m => m.Generate(schema, 2), Times.Once());
+			idGeneratorMock.Verify(m => m.Generate(schema), Times.Exactly(2));
 		}
 
 		[Test]
@@ -310,22 +318,36 @@ namespace PineCone.Tests.UnitTests.Structures.StructureBuilderTests
 
 			var structure = Builder.CreateStructure(item, schema);
 
-			var indices = structure.Indexes.Where(i => i.Path.StartsWith("KeyValues")).ToList();
-			Assert.AreEqual(6, indices.Count);
+			var indexes = structure.Indexes.Where(i => i.Path.StartsWith("KeyValues")).ToList();
+			Assert.AreEqual(6, indexes.Count);
 
-			Assert.AreEqual("KeyValues.Key", indices[0].Path);
-			Assert.AreEqual("Key1", indices[0].Value);
-			Assert.AreEqual("KeyValues.Key", indices[1].Path);
-			Assert.AreEqual("Key2", indices[1].Value);
-			Assert.AreEqual("KeyValues.Key", indices[2].Path);
-			Assert.AreEqual("Key3", indices[2].Value);
+			Assert.AreEqual("KeyValues.Key", indexes[0].Path);
+			Assert.AreEqual("Key1", indexes[0].Value);
+			Assert.AreEqual("KeyValues.Key", indexes[1].Path);
+			Assert.AreEqual("Key2", indexes[1].Value);
+			Assert.AreEqual("KeyValues.Key", indexes[2].Path);
+			Assert.AreEqual("Key3", indexes[2].Value);
 
-			Assert.AreEqual("KeyValues.Value.Is", indices[3].Path);
-			Assert.AreEqual(5, indices[3].Value);
-			Assert.AreEqual("KeyValues.Value.Is", indices[4].Path);
-			Assert.AreEqual(6, indices[4].Value);
-			Assert.AreEqual("KeyValues.Value.Is", indices[5].Path);
-			Assert.AreEqual(7, indices[5].Value);
+			Assert.AreEqual("KeyValues.Value.Is", indexes[3].Path);
+			Assert.AreEqual(5, indexes[3].Value);
+			Assert.AreEqual("KeyValues.Value.Is", indexes[4].Path);
+			Assert.AreEqual(6, indexes[4].Value);
+			Assert.AreEqual("KeyValues.Value.Is", indexes[5].Path);
+			Assert.AreEqual(7, indexes[5].Value);
+		}
+
+		[Test]
+		public void CreateStructure_WhenStructureContainsStructWithValue_ValueOfStructIsRepresentedInIndex()
+		{
+			var schema = StructureSchemaTestFactory.CreateRealFrom<StructContainer>();
+			var item = new StructContainer { Content = "My content" };
+
+			var structure = Builder.CreateStructure(item, schema);
+
+			Assert.AreEqual(2, structure.Indexes.Count);
+			Assert.AreEqual("Content", structure.Indexes[1].Path);
+			Assert.AreEqual(typeof(Text), structure.Indexes[1].DataType);
+			Assert.AreEqual(new Text("My content"), structure.Indexes[1].Value);
 		}
 
 		private class Value
@@ -413,6 +435,44 @@ namespace PineCone.Tests.UnitTests.Structures.StructureBuilderTests
 		private class Container
 		{
 			public int IntValue { get; set; }
+		}
+
+		private class StructContainer
+		{
+			public Guid StructureId { get; set; }
+
+			public Text Content { get; set; }
+		}
+
+		[Serializable]
+		private struct Text
+		{
+			private readonly string _value;
+
+			public Text(string value)
+			{
+				_value = value;
+			}
+
+			public static Text Parse(string value)
+			{
+				return value == null ? null : new Text(value);
+			}
+
+			public static implicit operator Text(string value)
+			{
+				return new Text(value);
+			}
+
+			public static implicit operator string(Text item)
+			{
+				return item._value;
+			}
+
+			public override string ToString()
+			{
+				return _value;
+			}
 		}
 	}
 }

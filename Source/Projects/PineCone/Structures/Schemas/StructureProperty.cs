@@ -78,12 +78,12 @@ namespace PineCone.Structures.Schemas
             IsReadOnly = _setter == null;
             UniqueMode = uniqueMode;
 
-            var isSimpleType = PropertyType.IsSimpleType();
-            IsEnumerable = !isSimpleType && PropertyType.IsEnumerableType();
+            var isSimpleOrValueType = PropertyType.IsSimpleType() || PropertyType.IsValueType;
+			IsEnumerable = !isSimpleOrValueType && PropertyType.IsEnumerableType();
             ElementType = IsEnumerable ? PropertyType.GetEnumerableElementType() : null;
             IsElement = Parent != null && (Parent.IsElement || Parent.IsEnumerable);
 
-            if (IsUnique && !isSimpleType)
+			if (IsUnique && !isSimpleOrValueType)
                 throw new PineConeException(ExceptionMessages.StructureProperty_Ctor_UniqueOnNonSimpleType);
 
             Path = PropertyPathBuilder.BuildPath(this);

@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using EnsureThat;
 
 namespace PineCone.Structures.Schemas
@@ -11,7 +10,7 @@ namespace PineCone.Structures.Schemas
 
         public IStructureProperty IdProperty { get; private set; }
 
-        public IEnumerable<IStructureProperty> IndexableProperties { get; private set; }
+		public IStructureProperty[] IndexableProperties { get; private set; }
 
         public StructureType(string name, IStructureProperty idProperty, IStructureProperty[] indexableProperties)
         {

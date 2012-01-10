@@ -245,6 +245,18 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.Builders
             Assert.IsTrue(schema.IndexAccessors[1].Path.StartsWith("DummyMember"));
         }
 
+		[Test]
+		public void CreateSchema_WhenClassContainsStructMember_StructMemberIsRepresentedInSchema()
+		{
+			var structureType = GetStructureTypeFor<StructContainer>();
+
+			var schema = _schemaBuilder.CreateSchema(structureType);
+
+			Assert.AreEqual(2, schema.IndexAccessors.Count);
+			Assert.AreEqual("Content", schema.IndexAccessors[1].Path);
+			Assert.AreEqual(typeof(Text), schema.IndexAccessors[1].DataType);
+		}
+
         private static bool HasLevel(IIndexAccessor iac, int level)
         {
             var count = iac.Path.Count(ch => ch == '.');
@@ -337,5 +349,43 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.Builders
 
             public Collection<byte> Bytes6 { get; set; }
         }
+
+		private class StructContainer
+		{
+			public Guid StructureId { get; set; }
+
+			public Text Content { get; set; }
+		}
+
+		[Serializable]
+		private struct Text
+		{
+			private readonly string _value;
+
+			public Text(string value)
+			{
+				_value = value;
+			}
+
+			public static Text Parse(string value)
+			{
+				return value == null ? null : new Text(value);
+			}
+
+			public static implicit operator Text(string value)
+			{
+				return new Text(value);
+			}
+
+			public static implicit operator string(Text item)
+			{
+				return item._value;
+			}
+
+			public override string ToString()
+			{
+				return _value;
+			}
+		}
     }
 }

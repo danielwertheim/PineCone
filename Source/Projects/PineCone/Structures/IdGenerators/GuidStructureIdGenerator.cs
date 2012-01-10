@@ -1,5 +1,4 @@
 using System;
-using System.Threading.Tasks;
 using PineCone.Structures.Schemas;
 
 namespace PineCone.Structures.IdGenerators
@@ -8,16 +7,17 @@ namespace PineCone.Structures.IdGenerators
     {
         public IStructureId Generate(IStructureSchema structureSchema)
         {
-            return StructureId.Create(SequentialGuid.New());
+			return StructureId.Create(Guid.NewGuid());
         }
 
         public IStructureId[] Generate(IStructureSchema structureSchema, int numOfIds)
         {
-            var ids = new IStructureId[numOfIds];
+			var structureIds = new IStructureId[numOfIds];
 
-            Parallel.For(0, numOfIds, i => ids[i] = StructureId.Create(Guid.NewGuid()));
+			for (var c = 0; c < structureIds.Length; c++)
+				structureIds[c] = StructureId.Create(Guid.NewGuid());
 
-            return ids;
+			return structureIds;
         }
     }
 }

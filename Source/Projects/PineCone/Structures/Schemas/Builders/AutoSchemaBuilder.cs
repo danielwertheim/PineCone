@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using EnsureThat;
+﻿using EnsureThat;
 using NCore;
 using NCore.Cryptography;
 using PineCone.Resources;
@@ -41,9 +40,12 @@ namespace PineCone.Structures.Schemas.Builders
 
         private static IIndexAccessor[] GetIndexAccessors(IStructureType structureType)
         {
-            return structureType.IndexableProperties
-                .Select(p => new IndexAccessor(p))
-                .ToArray();
+        	var accessors = new IIndexAccessor[structureType.IndexableProperties.Length];
+
+			for (var i = 0; i < accessors.Length; i++)
+				accessors[i] = new IndexAccessor(structureType.IndexableProperties[i]);
+
+        	return accessors;
         }
     }
 }

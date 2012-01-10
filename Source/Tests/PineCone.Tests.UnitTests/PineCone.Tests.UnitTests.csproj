@@ -61,9 +61,9 @@
     <Reference Include="Moq">
       <HintPath>..\..\packages\Moq.4.0.10827\lib\NET40\Moq.dll</HintPath>
     </Reference>
-    <Reference Include="NCore, Version=0.26.0.73, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="NCore, Version=0.26.1.74, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\NCore.0.26.0.73\lib\net40\NCore.dll</HintPath>
+      <HintPath>..\..\packages\NCore.0.26.1.74\lib\net40\NCore.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\..\packages\NUnit.2.5.10.11092\lib\nunit.framework.dll</HintPath>
@@ -107,6 +107,7 @@
     <Compile Include="Structures\Schemas\StructureTypeReflecterTests\StructureTypeReflecterGetIndexablePropertiesExceptTests.cs" />
     <Compile Include="Structures\Schemas\StructureTypeReflecterTests\StructureTypeReflecterGetSpecificIndexablePropertiesTests.cs" />
     <Compile Include="Structures\IdGenerators\SequentialGuidStructureIdGeneratorTests.cs" />
+    <Compile Include="Structures\StructureBuilderTests\StructureBuilderEnumerableTests.cs" />
     <Compile Include="Structures\StructureBuilderTests\StructureBuilderPreservingIdsTests.cs" />
     <Compile Include="Structures\StructureIdTests.cs" />
     <Compile Include="Structures\IdGenerators\GuidStructureIdGeneratorTests.cs" />

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using EnsureThat;
 using PineCone.Serializers;
@@ -66,26 +67,54 @@ namespace PineCone.Structures
                 StructureSerializer.Serialize(item));
         }
 
-        public virtual IStructure[] CreateStructures<T>(IList<T> items, IStructureSchema structureSchema) where T : class
-        {
-            var structureIds = StructureIdGenerator.Generate(structureSchema, items.Count);
-            var structures = new IStructure[items.Count];
+		public virtual IStructure[] CreateStructures<T>(IList<T> items, IStructureSchema structureSchema) where T : class
+		{
+			return items.Count < 100
+			       	? CreateStructuresInSerial(items, structureSchema)
+			       	: CreateStructuresInParallel(items, structureSchema);
+		}
 
-            Parallel.For(0, items.Count, i =>
-            {
-                var id = structureIds[i];
-                var itm = items[i];
-                
-                structureSchema.IdAccessor.SetValue(itm, id);
-                
-                structures[i] = new Structure(
-                    structureSchema.Name, 
-                    id, 
-                    IndexesFactory.CreateIndexes(structureSchema, itm, id), 
-                    StructureSerializer.Serialize(itm));
-            });
+		private IStructure[] CreateStructuresInParallel<T>(IList<T> items, IStructureSchema structureSchema) where T : class
+		{
+			var structureIds = StructureIdGenerator.Generate(structureSchema, items.Count);
+			var structures = new IStructure[items.Count];
 
-            return structures;
-        }
+			Parallel.For(0, items.Count, i =>
+			{
+				var id = structureIds[i];
+				var itm = items[i];
+
+				structureSchema.IdAccessor.SetValue(itm, id);
+
+				structures[i] = new Structure(
+					structureSchema.Name,
+					id,
+					IndexesFactory.CreateIndexes(structureSchema, itm, id),
+					StructureSerializer.Serialize(itm));
+			});
+
+			return structures;
+		}
+
+		private IStructure[] CreateStructuresInSerial<T>(IList<T> items, IStructureSchema structureSchema) where T : class
+		{
+			var structures = new IStructure[items.Count];
+
+			for(var i = 0; i < structures.Length; i++)
+			{
+				var id = StructureIdGenerator.Generate(structureSchema);
+				var itm = items[i];
+
+				structureSchema.IdAccessor.SetValue(itm, id);
+
+				structures[i] = new Structure(
+					structureSchema.Name,
+					id,
+					IndexesFactory.CreateIndexes(structureSchema, itm, id),
+					StructureSerializer.Serialize(itm));
+			}
+
+			return structures;
+		}
     }
 }

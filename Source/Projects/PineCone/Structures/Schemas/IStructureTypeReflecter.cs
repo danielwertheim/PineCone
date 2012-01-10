@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
 
 namespace PineCone.Structures.Schemas
 {
@@ -10,10 +9,10 @@ namespace PineCone.Structures.Schemas
 
         IStructureProperty GetIdProperty(Type type);
 
-        IEnumerable<IStructureProperty> GetIndexableProperties(IReflect type);
-
-        IEnumerable<IStructureProperty> GetIndexablePropertiesExcept(IReflect type, ICollection<string> nonIndexablePaths);
-
-        IEnumerable<IStructureProperty> GetSpecificIndexableProperties(IReflect type, ICollection<string> indexablePaths);
+		IStructureProperty[] GetIndexableProperties(Type type);
+						  
+		IStructureProperty[] GetIndexablePropertiesExcept(Type type, ICollection<string> nonIndexablePaths);
+						  
+		IStructureProperty[] GetSpecificIndexableProperties(Type type, ICollection<string> indexablePaths);
     }
 }

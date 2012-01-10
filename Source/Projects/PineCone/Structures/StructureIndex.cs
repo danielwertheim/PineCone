@@ -4,7 +4,7 @@ using PineCone.Resources;
 
 namespace PineCone.Structures
 {
-    [Serializable]
+	[Serializable]
     public class StructureIndex : IStructureIndex
     {
         public IStructureId StructureId { get; private set; }
@@ -15,7 +15,9 @@ namespace PineCone.Structures
 
         public object Value { get; private set; }
 
-        public Type DataType { get; private set; }
+		public Type DataType { get; private set; }
+
+		public DataTypeCode DataTypeCode { get; private set; }
 
         public bool IsUnique { get; private set; }
 
@@ -28,12 +30,13 @@ namespace PineCone.Structures
 
             Ensure.That(structureId, "structureId").IsNotNull();
             Ensure.That(path, "path").IsNotNullOrWhiteSpace();
-            Ensure.That(dataType, "dataType").IsNotNull();
+			Ensure.That(dataType, "dataType").IsNotNull();
 
             StructureId = structureId;
             Path = path;
             Value = value;
-            DataType = dataType;
+        	DataType = dataType;
+			DataTypeCode = dataType.ToDataTypeCode();
             IndexType = indexType;
             IsUnique = indexType.IsUnique();
         }

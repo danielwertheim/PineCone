@@ -9,7 +9,9 @@ namespace PineCone.Structures.Schemas
 
         string Hash { get; }
 
-        IIdAccessor IdAccessor { get; }
+    	bool HasId { get; }
+
+    	IIdAccessor IdAccessor { get; }
 
         IList<IIndexAccessor> IndexAccessors { get; }
 

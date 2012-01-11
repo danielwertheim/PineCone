@@ -11,17 +11,21 @@ namespace PineCone.Structures.Schemas
 
         public string Hash { get; private set; }
 
-        public IIdAccessor IdAccessor { get; private set; }
+		public bool HasId
+		{
+			get { return IdAccessor != null; }
+		}
+
+		public IIdAccessor IdAccessor { get; private set; }
 
         public IList<IIndexAccessor> IndexAccessors { get; private set; }
 
         public IList<IIndexAccessor> UniqueIndexAccessors { get; private set; }
         
-        public StructureSchema(string name, string hash, IIdAccessor idAccessor, ICollection<IIndexAccessor> indexAccessors = null)
+        public StructureSchema(string name, string hash, IIdAccessor idAccessor = null, ICollection<IIndexAccessor> indexAccessors = null)
         {
             Ensure.That(name, "name").IsNotNullOrWhiteSpace();
             Ensure.That(hash, "hash").IsNotNullOrWhiteSpace();
-            Ensure.That(idAccessor, "idAccessor").IsNotNull();
 
             Name = name;
             Hash = hash;

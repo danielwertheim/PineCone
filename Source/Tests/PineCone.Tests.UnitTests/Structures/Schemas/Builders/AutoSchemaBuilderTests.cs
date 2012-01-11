@@ -7,6 +7,7 @@ using NCore;
 using NCore.Reflections;
 using NUnit.Framework;
 using PineCone.Resources;
+using PineCone.Structures;
 using PineCone.Structures.Schemas;
 using PineCone.Structures.Schemas.Builders;
 using PineCone.Structures.Schemas.MemberAccessors;
@@ -104,16 +105,24 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.Builders
         }
 
         [Test]
-        public void CreateSchema_WhenItemHasNoIdMember_ThrowsMissingIdMemberException()
+        public void CreateSchema_WhenItemHasNoIdMember_AndAllowMissingIdMemberIsFalse_ThrowsMissingIdMemberException()
         {
-            var structureTypeStub = new Mock<IStructureType>();
-            structureTypeStub.Setup(s => s.Name).Returns("TempType");
+			var structureType = GetStructureTypeFor<WithNoId>();
 
-            var ex = Assert.Throws<PineConeException>(() => _schemaBuilder.CreateSchema(structureTypeStub.Object));
+            var ex = Assert.Throws<PineConeException>(() => _schemaBuilder.CreateSchema(structureType));
 
-            var expectedMessage = string.Format(ExceptionMessages.AutoSchemaBuilder_MissingIdMember, "TempType");
+            var expectedMessage = string.Format(ExceptionMessages.AutoSchemaBuilder_MissingIdMember, "WithNoId");
             Assert.AreEqual(expectedMessage, ex.Message);
         }
+
+		[Test]
+		public void CreateSchema_WhenItemHasNoIdMember_AndAllowMissingIdMemberIsTrue_DoesNotThrowMissingIdMemberException()
+		{
+			var structureType = GetStructureTypeFor<WithNoId>();
+			_schemaBuilder.AllowMissingIdMember = true;
+
+			Assert.DoesNotThrow(() => _schemaBuilder.CreateSchema(structureType));
+		}
 
         [Test]
         public void CreateSchema_WhenItemHasIdMember_CreatesSchemaWithIdMemberAccessor()
@@ -263,6 +272,11 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.Builders
 
             return count == level;
         }
+
+		private class WithNoId
+		{
+			public int Int1 { get; set; } 
+		}
 
         private class WithGuidId
         {

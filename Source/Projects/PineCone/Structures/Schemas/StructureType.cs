@@ -12,15 +12,13 @@ namespace PineCone.Structures.Schemas
 
 		public IStructureProperty[] IndexableProperties { get; private set; }
 
-        public StructureType(string name, IStructureProperty idProperty, IStructureProperty[] indexableProperties)
+        public StructureType(string name, IStructureProperty idProperty = null, IStructureProperty[] indexableProperties = null)
         {
             Ensure.That(name, "name").IsNotNullOrWhiteSpace();
-            Ensure.That(idProperty, "idProperty").IsNotNull();
-            Ensure.That(indexableProperties, "indexableProperties").IsNotNull();
             
             Name = name;
             IdProperty = idProperty;
-            IndexableProperties = indexableProperties;
+            IndexableProperties = indexableProperties ?? new IStructureProperty[]{};
         }
     }
 }

@@ -26,23 +26,53 @@ namespace PineCone.Structures
                 StructureSerializer.Serialize(item));
         }
 
-        public override IStructure[] CreateStructures<T>(IList<T> items, IStructureSchema structureSchema)
-        {
-            var structures = new IStructure[items.Count];
+		public override IStructure[] CreateStructures<T>(IList<T> items, IStructureSchema structureSchema)
+		{
+			return items.Count < 100
+					? CreateStructuresInSerial(items, structureSchema)
+					: CreateStructuresInParallel(items, structureSchema);
+		}
 
-            Parallel.For(0, items.Count, i =>
-            {
-                var itm = items[i];
-                var id = structureSchema.IdAccessor.GetValue(itm);
-                
-                structures[i] = new Structure(
-                    structureSchema.Name,
-                    id,
-                    IndexesFactory.CreateIndexes(structureSchema, itm, id),
-                    StructureSerializer.Serialize(itm));
-            });
+		protected override IStructure[] CreateStructuresInParallel<T>(IList<T> items, IStructureSchema structureSchema)
+		{
+			var structures = new IStructure[items.Count];
 
-            return structures;
-        }
+			Parallel.For(0, items.Count, i =>
+			{
+				var itm = items[i];
+				var id = structureSchema.IdAccessor.GetValue(itm);
+
+				structureSchema.IdAccessor.SetValue(itm, id);
+
+				structures[i] = new Structure(
+					structureSchema.Name,
+					id,
+					IndexesFactory.CreateIndexes(structureSchema, itm, id),
+					StructureSerializer.Serialize(itm));
+			});
+
+			return structures;
+		}
+
+		protected override IStructure[] CreateStructuresInSerial<T>(IList<T> items, IStructureSchema structureSchema)
+		{
+			var structures = new IStructure[items.Count];
+
+			for (var i = 0; i < structures.Length; i++)
+			{
+				var itm = items[i];
+				var id = structureSchema.IdAccessor.GetValue(itm);
+
+				structureSchema.IdAccessor.SetValue(itm, id);
+
+				structures[i] = new Structure(
+					structureSchema.Name,
+					id,
+					IndexesFactory.CreateIndexes(structureSchema, itm, id),
+					StructureSerializer.Serialize(itm));
+			}
+
+			return structures;
+		}
     }
 }

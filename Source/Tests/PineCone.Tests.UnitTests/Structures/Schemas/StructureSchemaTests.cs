@@ -31,11 +31,9 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas
         }
 
         [Test]
-        public void Ctor_WhenIdAccessorIsNull_ThrowsArgumentNullException()
+        public void Ctor_WhenIdAccessorIsNull_DoesNotThrowArgumentNullException()
         {
-            var ex = Assert.Throws<ArgumentNullException>(() => new StructureSchema("FakeName", "FakeHash", null));
-
-            Assert.AreEqual("idAccessor", ex.ParamName);
+            Assert.DoesNotThrow(() => new StructureSchema("FakeName", "FakeHash", null));
         }
 
         [Test]

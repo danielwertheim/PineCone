@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using EnsureThat;
 using PineCone.Serializers;
@@ -74,7 +73,7 @@ namespace PineCone.Structures
 			       	: CreateStructuresInParallel(items, structureSchema);
 		}
 
-		private IStructure[] CreateStructuresInParallel<T>(IList<T> items, IStructureSchema structureSchema) where T : class
+    	protected virtual IStructure[] CreateStructuresInParallel<T>(IList<T> items, IStructureSchema structureSchema) where T : class
 		{
 			var structureIds = StructureIdGenerator.Generate(structureSchema, items.Count);
 			var structures = new IStructure[items.Count];
@@ -96,7 +95,7 @@ namespace PineCone.Structures
 			return structures;
 		}
 
-		private IStructure[] CreateStructuresInSerial<T>(IList<T> items, IStructureSchema structureSchema) where T : class
+		protected virtual IStructure[] CreateStructuresInSerial<T>(IList<T> items, IStructureSchema structureSchema) where T : class
 		{
 			var structures = new IStructure[items.Count];
 

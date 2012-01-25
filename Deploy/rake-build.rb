@@ -28,9 +28,9 @@ pineConeOutputPath = "#{@env_buildfolderpath}/#{@env_projectnamePineCone}"
 #--------------------------------------
 # Albacore flow controlling tasks
 #--------------------------------------
-task :ci => [:buildIt, :copyIt, :testIt, :zipIt, :packIt, :publishIt]
+task :ci => [:buildIt, :copyPineCone, :testIt, :zipIt, :packIt, :publishIt]
 
-task :local => [:buildIt, :copyIt, :testIt, :zipIt, :packIt]
+task :local => [:buildIt, :copyPineCone, :testIt, :zipIt, :packIt]
 #--------------------------------------
 task :testIt => [:unittests]
 
@@ -62,15 +62,15 @@ msbuild :buildIt => [:ensureCleanBuildFolder, :versionIt] do |msb|
 	msb.solution = "#{@env_solutionfolderpath}/#{@env_solutionname}.sln"
 end
 
-task :copyIt do
+task :copyPineCone do
 	FileUtils.mkdir_p(pineConeOutputPath)
 	FileUtils.cp_r(FileList["#{@env_solutionfolderpath}/Projects/#{@env_projectnamePineCone}/bin/#{@env_buildconfigname}/**"], pineConeOutputPath)
 end
 
 nunit :unittests do |nunit|
 	nunit.command = "#{@env_solutionfolderpath}/packages/NUnit.2.5.10.11092/tools/nunit-console.exe"
-	nunit.options "/framework=v4.0.30319","/xml=#{@env_buildfolderpath}/NUnit-Report-#{@env_projectnamePineCone}-UnitTests.xml"
-	nunit.assemblies FileList["#{@env_solutionfolderpath}/Tests/#{@env_projectnamePineCone}.**UnitTests/bin/#{@env_buildconfigname}/#{@env_projectnamePineCone}.**UnitTests.dll"]
+	nunit.options "/framework=v4.0.30319","/xml=#{@env_buildfolderpath}/NUnit-Report-#{@env_solutionname}-UnitTests.xml"
+	nunit.assemblies FileList["#{@env_solutionfolderpath}/Tests/#{@env_solutionname}.**UnitTests/bin/#{@env_buildconfigname}/#{@env_solutionname}.**UnitTests.dll"]
 end
 
 zip :zipPineCone do |zip|

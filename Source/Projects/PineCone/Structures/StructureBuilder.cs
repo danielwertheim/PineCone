@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using EnsureThat;
 using PineCone.Serializers;
 using PineCone.Structures.IdGenerators;
@@ -66,19 +65,19 @@ namespace PineCone.Structures
                 StructureSerializer.Serialize(item));
         }
 
-		public virtual IStructure[] CreateStructures<T>(IList<T> items, IStructureSchema structureSchema) where T : class
+		public virtual IStructure[] CreateStructures<T>(T[] items, IStructureSchema structureSchema) where T : class
 		{
-			return items.Count < 100
+			return items.Length < 100
 			       	? CreateStructuresInSerial(items, structureSchema)
 			       	: CreateStructuresInParallel(items, structureSchema);
 		}
 
-    	protected virtual IStructure[] CreateStructuresInParallel<T>(IList<T> items, IStructureSchema structureSchema) where T : class
+    	protected virtual IStructure[] CreateStructuresInParallel<T>(T[] items, IStructureSchema structureSchema) where T : class
 		{
-			var structureIds = StructureIdGenerator.Generate(structureSchema, items.Count);
-			var structures = new IStructure[items.Count];
+			var structureIds = StructureIdGenerator.Generate(structureSchema, items.Length);
+			var structures = new IStructure[items.Length];
 
-			Parallel.For(0, items.Count, i =>
+			Parallel.For(0, items.Length, i =>
 			{
 				var id = structureIds[i];
 				var itm = items[i];
@@ -95,9 +94,9 @@ namespace PineCone.Structures
 			return structures;
 		}
 
-		protected virtual IStructure[] CreateStructuresInSerial<T>(IList<T> items, IStructureSchema structureSchema) where T : class
+		protected virtual IStructure[] CreateStructuresInSerial<T>(T[] items, IStructureSchema structureSchema) where T : class
 		{
-			var structures = new IStructure[items.Count];
+			var structures = new IStructure[items.Length];
 
 			for(var i = 0; i < structures.Length; i++)
 			{

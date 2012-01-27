@@ -208,7 +208,7 @@ namespace PineCone.Structures
             if (ReferenceEquals(this, other)) return true;
 
 			if (IdType == StructureIdTypes.String)
-				return string.Equals(Value as string, other.Value as string, StringComparison.InvariantCultureIgnoreCase);
+				return string.Equals(Value as string, other.Value as string, Sys.StringComparision);
 			
         	return Equals(other.Value, Value);
         }

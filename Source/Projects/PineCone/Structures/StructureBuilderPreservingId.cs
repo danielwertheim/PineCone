@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using PineCone.Serializers;
 using PineCone.Structures.IdGenerators;
@@ -26,18 +25,18 @@ namespace PineCone.Structures
                 StructureSerializer.Serialize(item));
         }
 
-		public override IStructure[] CreateStructures<T>(IList<T> items, IStructureSchema structureSchema)
+		public override IStructure[] CreateStructures<T>(T[] items, IStructureSchema structureSchema)
 		{
-			return items.Count < 100
+			return items.Length < 100
 					? CreateStructuresInSerial(items, structureSchema)
 					: CreateStructuresInParallel(items, structureSchema);
 		}
 
-		protected override IStructure[] CreateStructuresInParallel<T>(IList<T> items, IStructureSchema structureSchema)
+		protected override IStructure[] CreateStructuresInParallel<T>(T[] items, IStructureSchema structureSchema)
 		{
-			var structures = new IStructure[items.Count];
+			var structures = new IStructure[items.Length];
 
-			Parallel.For(0, items.Count, i =>
+			Parallel.For(0, items.Length, i =>
 			{
 				var itm = items[i];
 				var id = structureSchema.IdAccessor.GetValue(itm);
@@ -54,9 +53,9 @@ namespace PineCone.Structures
 			return structures;
 		}
 
-		protected override IStructure[] CreateStructuresInSerial<T>(IList<T> items, IStructureSchema structureSchema)
+		protected override IStructure[] CreateStructuresInSerial<T>(T[] items, IStructureSchema structureSchema)
 		{
-			var structures = new IStructure[items.Count];
+			var structures = new IStructure[items.Length];
 
 			for (var i = 0; i < structures.Length; i++)
 			{

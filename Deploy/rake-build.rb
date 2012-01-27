@@ -12,10 +12,10 @@ require 'albacore'
 @env_solutionname = 'PineCone'
 @env_projectnamePineCone = 'PineCone'
 @env_solutionfolderpath = "../Source"
-@env_buildversion = "0.56.0" + (ENV['env_buildnumber'].to_s.empty? ? "" : ".#{ENV['env_buildnumber'].to_s}")
+@env_buildversion = "0.57.0" + (ENV['env_buildnumber'].to_s.empty? ? "" : ".#{ENV['env_buildnumber'].to_s}")
 @env_buildconfigname = ENV['env_buildconfigname'].to_s.empty? ? "Release" : ENV['env_buildconfigname'].to_s
 @env_buildname = "#{@env_solutionname}-v#{@env_buildversion}-#{@env_buildconfigname}"
-@env_buildfolderpath = @env_buildname
+@env_buildfolderpath = 'build'
 #--------------------------------------
 #optional if no remote nuget actions should be performed
 @env_nugetPublishApiKey = ENV['env_nugetPublishApiKey']
@@ -28,9 +28,9 @@ pineConeOutputPath = "#{@env_buildfolderpath}/#{@env_projectnamePineCone}"
 #--------------------------------------
 # Albacore flow controlling tasks
 #--------------------------------------
-task :ci => [:buildIt, :copyIt, :testIt, :zipIt, :packIt, :publishIt]
+task :ci => [:buildIt, :copyPineCone, :testIt, :zipIt, :packIt, :publishIt]
 
-task :local => [:buildIt, :copyIt, :testIt, :zipIt, :packIt]
+task :local => [:buildIt, :copyPineCone, :testIt, :zipIt, :packIt]
 #--------------------------------------
 task :testIt => [:unittests]
 
@@ -62,7 +62,7 @@ msbuild :buildIt => [:ensureCleanBuildFolder, :versionIt] do |msb|
 	msb.solution = "#{@env_solutionfolderpath}/#{@env_solutionname}.sln"
 end
 
-task :copyIt do
+task :copyPineCone do
 	FileUtils.mkdir_p(pineConeOutputPath)
 	FileUtils.cp_r(FileList["#{@env_solutionfolderpath}/Projects/#{@env_projectnamePineCone}/bin/#{@env_buildconfigname}/**"], pineConeOutputPath)
 end
@@ -75,7 +75,7 @@ end
 
 zip :zipPineCone do |zip|
 	zip.directories_to_zip pineConeOutputPath
-	zip.output_file = "#{@env_buildname}-#{@env_projectnamePineConeAdmin}.zip"
+	zip.output_file = "#{@env_buildname}.zip"
 	zip.output_path = @env_buildfolderpath
 end
 

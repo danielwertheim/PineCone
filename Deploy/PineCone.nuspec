@@ -4,8 +4,7 @@
     <id>PineCone</id>    
     <title>PineCone</title>
 	<version>0.0.0.0</version>
-	<authors>Daniel Wertheim</authors>
-	<owners>Daniel Wertheim</owners>
+	<authors>danielwertheim</authors>
 	<copyright>Daniel Wertheim</copyright>
 	<summary>PineCone takes an object graph and gives you indexes for it.</summary>
     <description>

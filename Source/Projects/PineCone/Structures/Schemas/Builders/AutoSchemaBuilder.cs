@@ -6,7 +6,7 @@ using PineCone.Structures.Schemas.MemberAccessors;
 
 namespace PineCone.Structures.Schemas.Builders
 {
-    public class AutoSchemaBuilder : ISchemaBuilder
+	public class AutoSchemaBuilder : ISchemaBuilder
     {
         private readonly IHashService _hashService;
 
@@ -28,10 +28,9 @@ namespace PineCone.Structures.Schemas.Builders
             if (indexAccessors == null || indexAccessors.Length < 1)
                 throw new PineConeException(ExceptionMessages.AutoSchemaBuilder_MissingIndexableMembers.Inject(structureType.Name));
 
-            var schemaName = structureType.Name;
-            var schemaHash = _hashService.GenerateHash(schemaName);
+            var schemaHash = _hashService.GenerateHash(structureType.Name);
 
-            return new StructureSchema(schemaName, schemaHash, idAccessor, indexAccessors);
+			return new StructureSchema(structureType, schemaHash, idAccessor, indexAccessors);
         }
 
         private IIdAccessor GetIdAccessor(IStructureType structureType)

@@ -11,21 +11,22 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas
     public class StructureSchemaTests : UnitTestBase
     {
         [Test]
-        public void Ctor_WhenNameIsWhiteSpaceEmpty_ThrowsArgumentNullException()
+        public void Ctor_WhenTypeIsNull_ThrowsArgumentNullException()
         {
             var idAccessorFake = new Mock<IIdAccessor>();
 
-            var ex = Assert.Throws<ArgumentException>(() => new StructureSchema(" ", "FakeHash", idAccessorFake.Object));
+            var ex = Assert.Throws<ArgumentNullException>(() => new StructureSchema(null, "FakeHash", idAccessorFake.Object));
 
-            Assert.AreEqual("name", ex.ParamName);
+            Assert.AreEqual("type", ex.ParamName);
         }
 
         [Test]
         public void Ctor_WhenHashIsWhiteSpaceEmpty_ThrowsArgumentNullException()
         {
+        	var typeFake = new Mock<IStructureType>();
             var idAccessorFake = new Mock<IIdAccessor>();
 
-            var ex = Assert.Throws<ArgumentException>(() => new StructureSchema("FakeName", " ", idAccessorFake.Object));
+            var ex = Assert.Throws<ArgumentException>(() => new StructureSchema(typeFake.Object, " ", idAccessorFake.Object));
 
             Assert.AreEqual("hash", ex.ParamName);
         }
@@ -33,12 +34,16 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas
         [Test]
         public void Ctor_WhenIdAccessorIsNull_DoesNotThrowArgumentNullException()
         {
-            Assert.DoesNotThrow(() => new StructureSchema("FakeName", "FakeHash", null));
+			var typeFake = new Mock<IStructureType>();
+
+			Assert.DoesNotThrow(() => new StructureSchema(typeFake.Object, "FakeHash", null));
         }
 
         [Test]
         public void Ctor_WhenUniqueIndexAccessorsInjected_ExistsInBothListOfIndexAccessors()
         {
+			var typeFake = new Mock<IStructureType>();
+
             var idAccessorFake = new Mock<IIdAccessor>();
             var indexAccessorFake = new Mock<IIndexAccessor>();
 
@@ -50,7 +55,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas
             uniqueIndexAccessorFake.Setup(x => x.IsUnique).Returns(true);
 
             var schema = new StructureSchema(
-                "FakeName",
+                typeFake.Object,
                 "FakeHash",
                 idAccessorFake.Object,
                 new[] {indexAccessorFake.Object, uniqueIndexAccessorFake.Object});

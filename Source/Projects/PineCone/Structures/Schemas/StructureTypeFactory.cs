@@ -28,12 +28,12 @@ namespace PineCone.Structures.Schemas
             //Scenario: Index ALL which is the default behavior
             if (config == null || config.IsEmpty)
                 return new StructureType(
-                    type.Name,
+                    type,
                     Reflecter.GetIdProperty(type),
                     Reflecter.GetIndexableProperties(type).ToArray());
 
             return new StructureType(
-                type.Name,
+                type,
                 Reflecter.GetIdProperty(type),
                 ((config.MemberPathsNotBeingIndexed.Count > 0)
                 ? Reflecter.GetIndexablePropertiesExcept(type, config.MemberPathsNotBeingIndexed) //Scenario: Index ALL EXCEPT

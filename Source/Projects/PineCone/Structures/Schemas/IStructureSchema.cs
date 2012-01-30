@@ -5,7 +5,9 @@ namespace PineCone.Structures.Schemas
 {
     public interface IStructureSchema
     {
-        string Name { get; }
+		IStructureType Type { get; }
+
+    	string Name { get; }
 
         string Hash { get; }
 

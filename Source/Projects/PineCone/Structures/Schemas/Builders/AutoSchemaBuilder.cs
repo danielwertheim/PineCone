@@ -24,13 +24,14 @@ namespace PineCone.Structures.Schemas.Builders
             Ensure.That(structureType, "structureType").IsNotNull();
 
             var idAccessor = GetIdAccessor(structureType);
+    	    var concurrencyTokenAccessor = GetConcurrencyTokenAccessor(structureType);
             var indexAccessors = GetIndexAccessors(structureType);
             if (indexAccessors == null || indexAccessors.Length < 1)
                 throw new PineConeException(ExceptionMessages.AutoSchemaBuilder_MissingIndexableMembers.Inject(structureType.Name));
 
             var schemaHash = _hashService.GenerateHash(structureType.Name);
 
-			return new StructureSchema(structureType, schemaHash, idAccessor, indexAccessors);
+			return new StructureSchema(structureType, schemaHash, idAccessor, concurrencyTokenAccessor, indexAccessors);
         }
 
         private IIdAccessor GetIdAccessor(IStructureType structureType)
@@ -46,7 +47,14 @@ namespace PineCone.Structures.Schemas.Builders
             return new IdAccessor(structureType.IdProperty);
         }
 
-        private static IIndexAccessor[] GetIndexAccessors(IStructureType structureType)
+        private IConcurrencyTokenAccessor GetConcurrencyTokenAccessor(IStructureType structureType)
+        {
+            return structureType.ConcurrencyTokenProperty == null 
+                ? null 
+                : new ConcurrencyTokenAccessor(structureType.ConcurrencyTokenProperty);
+        }
+
+	    private static IIndexAccessor[] GetIndexAccessors(IStructureType structureType)
         {
         	var accessors = new IIndexAccessor[structureType.IndexableProperties.Length];
 

@@ -7,6 +7,7 @@ namespace PineCone.Structures.Schemas
     	Type Type { get; } 
         string Name { get; }
         IStructureProperty IdProperty { get; }
+        IStructureProperty ConcurrencyTokenProperty { get; }
 		IStructureProperty[] IndexableProperties { get; }
     }
 }

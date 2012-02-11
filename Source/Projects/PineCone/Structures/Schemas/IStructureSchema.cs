@@ -13,7 +13,11 @@ namespace PineCone.Structures.Schemas
 
     	bool HasId { get; }
 
-    	IIdAccessor IdAccessor { get; }
+        bool HasConcurrencyToken { get; }
+
+        IIdAccessor IdAccessor { get; }
+
+        IConcurrencyTokenAccessor ConcurrencyTokenAccessor { get; }
 
         IList<IIndexAccessor> IndexAccessors { get; }
 

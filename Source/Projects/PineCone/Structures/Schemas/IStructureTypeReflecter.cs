@@ -7,7 +7,11 @@ namespace PineCone.Structures.Schemas
     {
 		bool HasIdProperty(Type type);
 
+        bool HasConcurrencyTokenProperty(Type type);
+
         IStructureProperty GetIdProperty(Type type);
+
+        IStructureProperty GetConcurrencyTokenProperty(Type type);
 
 		IStructureProperty[] GetIndexableProperties(Type type);
 						  

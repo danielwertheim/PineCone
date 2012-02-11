@@ -8,194 +8,208 @@ using NCore.Reflections;
 
 namespace PineCone.Structures.Schemas
 {
-	public class StructureTypeReflecter : IStructureTypeReflecter
-	{
-		private static readonly string[] NonIndexableSystemMembers = new string[] { };
+    public class StructureTypeReflecter : IStructureTypeReflecter
+    {
+        private static readonly string[] NonIndexableSystemMembers = new string[] { };
 
-		public const BindingFlags IdPropertyBindingFlags =
-			BindingFlags.Public | BindingFlags.Instance | BindingFlags.GetProperty;
+        public const BindingFlags IdPropertyBindingFlags =
+            BindingFlags.Public | BindingFlags.Instance | BindingFlags.GetProperty;
 
-		public const BindingFlags PropertyBindingFlags =
-			BindingFlags.Public | BindingFlags.Instance | BindingFlags.GetProperty;
+        public const BindingFlags PropertyBindingFlags =
+            BindingFlags.Public | BindingFlags.Instance | BindingFlags.GetProperty;
 
-		public bool HasIdProperty(Type type)
-		{
-			return GetIdProperty(type) != null;
-		}
+        public bool HasIdProperty(Type type)
+        {
+            return GetIdProperty(type) != null;
+        }
 
-		public IStructureProperty GetIdProperty(Type type)
-		{
-			var properties = type.GetProperties(IdPropertyBindingFlags).Where(p => p.Name.EndsWith("Id")).ToArray();
+        public bool HasConcurrencyTokenProperty(Type type)
+        {
+            return GetConcurrencyTokenProperty(type) != null;
+        }
 
-			var defaultProp = GetDefaultStructureIdProperty(properties);
-			if (defaultProp != null)
-				return StructureProperty.CreateFrom(defaultProp);
+        public IStructureProperty GetIdProperty(Type type)
+        {
+            var properties = type.GetProperties(IdPropertyBindingFlags).Where(p => p.Name.EndsWith("Id")).ToArray();
 
-			var typeNamedIdProp = GetTypeNamedStructureIdProperty(type, properties);
-			if (typeNamedIdProp != null)
-				return StructureProperty.CreateFrom(typeNamedIdProp);
+            var defaultProp = GetDefaultStructureIdProperty(properties);
+            if (defaultProp != null)
+                return StructureProperty.CreateFrom(defaultProp);
 
-			var interfaceNamedIdProp = GetInterfaceNamedStructureIdProperty(type, properties);
-			if (interfaceNamedIdProp != null)
-				return StructureProperty.CreateFrom(interfaceNamedIdProp);
+            var typeNamedIdProp = GetTypeNamedStructureIdProperty(type, properties);
+            if (typeNamedIdProp != null)
+                return StructureProperty.CreateFrom(typeNamedIdProp);
 
-			var idProp = properties.SingleOrDefault(p => p.Name.Equals("Id"));
-			if (idProp != null)
-				return StructureProperty.CreateFrom(idProp);
+            var interfaceNamedIdProp = GetInterfaceNamedStructureIdProperty(type, properties);
+            if (interfaceNamedIdProp != null)
+                return StructureProperty.CreateFrom(interfaceNamedIdProp);
 
-			return null;
-		}
+            var idProp = properties.SingleOrDefault(p => p.Name.Equals("Id"));
+            if (idProp != null)
+                return StructureProperty.CreateFrom(idProp);
 
-		private static PropertyInfo GetDefaultStructureIdProperty(IEnumerable<PropertyInfo> properties)
-		{
-			return properties.SingleOrDefault(p => p.Name.Equals(StructureIdPropertyNames.Default));
-		}
+            return null;
+        }
 
-		private static PropertyInfo GetTypeNamedStructureIdProperty(Type type, IEnumerable<PropertyInfo> properties)
-		{
-			var propertyName = StructureIdPropertyNames.GetTypeNamePropertyNameFor(type);
+        private static PropertyInfo GetDefaultStructureIdProperty(IEnumerable<PropertyInfo> properties)
+        {
+            return properties.SingleOrDefault(p => p.Name.Equals(StructureIdPropertyNames.Default));
+        }
 
-			return properties.SingleOrDefault(p => p.Name.Equals(propertyName));
-		}
+        private static PropertyInfo GetTypeNamedStructureIdProperty(Type type, IEnumerable<PropertyInfo> properties)
+        {
+            var propertyName = StructureIdPropertyNames.GetTypeNamePropertyNameFor(type);
 
-		private static PropertyInfo GetInterfaceNamedStructureIdProperty(Type type, IEnumerable<PropertyInfo> properties)
-		{
-			if (!type.IsInterface)
-				return null;
+            return properties.SingleOrDefault(p => p.Name.Equals(propertyName));
+        }
 
-			var propertyName = StructureIdPropertyNames.GetInterfaceTypeNamePropertyNameFor(type);
+        private static PropertyInfo GetInterfaceNamedStructureIdProperty(Type type, IEnumerable<PropertyInfo> properties)
+        {
+            if (!type.IsInterface)
+                return null;
 
-			return properties.SingleOrDefault(p => p.Name.Equals(propertyName));
-		}
+            var propertyName = StructureIdPropertyNames.GetInterfaceTypeNamePropertyNameFor(type);
 
-		public IStructureProperty[] GetIndexableProperties(Type type)
-		{
-			Ensure.That(type, "type").IsNotNull();
+            return properties.SingleOrDefault(p => p.Name.Equals(propertyName));
+        }
 
-			return GetIndexableProperties(type, null, NonIndexableSystemMembers, null);
-		}
+        public IStructureProperty GetConcurrencyTokenProperty(Type type)
+        {
+            var propertyInfo = type.GetProperty("ConcurrencyToken", PropertyBindingFlags);
 
-		public IStructureProperty[] GetIndexablePropertiesExcept(Type type, ICollection<string> nonIndexablePaths)
-		{
-			Ensure.That(type, "type").IsNotNull();
-			Ensure.That(nonIndexablePaths, "nonIndexablePaths").HasItems();
+            return propertyInfo == null
+                ? null
+                : StructureProperty.CreateFrom(propertyInfo);
+        }
 
-			return GetIndexableProperties(type, null, NonIndexableSystemMembers.MergeWith(nonIndexablePaths).ToArray(), null);
-		}
+        public IStructureProperty[] GetIndexableProperties(Type type)
+        {
+            Ensure.That(type, "type").IsNotNull();
 
-		public IStructureProperty[] GetSpecificIndexableProperties(Type type, ICollection<string> indexablePaths)
-		{
-			Ensure.That(type, "type").IsNotNull();
-			Ensure.That(indexablePaths, "indexablePaths").HasItems();
+            return GetIndexableProperties(type, null, NonIndexableSystemMembers, null);
+        }
 
-			return GetIndexableProperties(type, null, NonIndexableSystemMembers, indexablePaths);
-		}
+        public IStructureProperty[] GetIndexablePropertiesExcept(Type type, ICollection<string> nonIndexablePaths)
+        {
+            Ensure.That(type, "type").IsNotNull();
+            Ensure.That(nonIndexablePaths, "nonIndexablePaths").HasItems();
 
-		private IStructureProperty[] GetIndexableProperties(
-			IReflect type,
-			IStructureProperty parent,
-			ICollection<string> nonIndexablePaths,
-			ICollection<string> indexablePaths)
-		{
-			var propertyInfos = type.GetProperties(PropertyBindingFlags);
-			if (propertyInfos.Length == 0)
-				return new IStructureProperty[] {};
+            return GetIndexableProperties(type, null, NonIndexableSystemMembers.MergeWith(nonIndexablePaths).ToArray(), null);
+        }
 
-			var properties = new List<IStructureProperty>();
-			
-			properties.AddRange(GetSimpleIndexablePropertyInfos(propertyInfos, parent, nonIndexablePaths, indexablePaths)
-				.Select(spi => StructureProperty.CreateFrom(parent, spi)));
+        public IStructureProperty[] GetSpecificIndexableProperties(Type type, ICollection<string> indexablePaths)
+        {
+            Ensure.That(type, "type").IsNotNull();
+            Ensure.That(indexablePaths, "indexablePaths").HasItems();
 
-			foreach (var complexPropertyInfo in GetComplexIndexablePropertyInfos(propertyInfos, parent, nonIndexablePaths, indexablePaths))
-			{
-				var complexProperty = StructureProperty.CreateFrom(parent, complexPropertyInfo);
-				var simpleComplexProps = GetIndexableProperties(
-					complexProperty.PropertyType, complexProperty, nonIndexablePaths, indexablePaths);
+            return GetIndexableProperties(type, null, NonIndexableSystemMembers, indexablePaths);
+        }
 
-				var beforeCount = properties.Count;
-				properties.AddRange(simpleComplexProps);
+        private IStructureProperty[] GetIndexableProperties(
+            IReflect type,
+            IStructureProperty parent,
+            ICollection<string> nonIndexablePaths,
+            ICollection<string> indexablePaths)
+        {
+            var propertyInfos = type.GetProperties(PropertyBindingFlags);
+            if (propertyInfos.Length == 0)
+                return new IStructureProperty[] { };
 
-				if (properties.Count == beforeCount && complexProperty.PropertyType.IsValueType)
-					properties.Add(complexProperty);
-			}
+            var properties = new List<IStructureProperty>();
 
-			foreach (var enumerablePropertyInfo in GetEnumerableIndexablePropertyInfos(propertyInfos, parent, nonIndexablePaths, indexablePaths))
-			{
-				var enumerableProperty = StructureProperty.CreateFrom(parent, enumerablePropertyInfo);
-				if (enumerableProperty.ElementType.IsSimpleType())
-				{
-					properties.Add(enumerableProperty);
-					continue;
-				}
+            properties.AddRange(GetSimpleIndexablePropertyInfos(propertyInfos, parent, nonIndexablePaths, indexablePaths)
+                .Select(spi => StructureProperty.CreateFrom(parent, spi)));
 
-				var elementProperties = GetIndexableProperties(enumerableProperty.ElementType,
-															   enumerableProperty,
-															   nonIndexablePaths,
-															   indexablePaths);
-				properties.AddRange(elementProperties);
-			}
+            foreach (var complexPropertyInfo in GetComplexIndexablePropertyInfos(propertyInfos, parent, nonIndexablePaths, indexablePaths))
+            {
+                var complexProperty = StructureProperty.CreateFrom(parent, complexPropertyInfo);
+                var simpleComplexProps = GetIndexableProperties(
+                    complexProperty.PropertyType, complexProperty, nonIndexablePaths, indexablePaths);
 
-			return properties.ToArray();
-		}
+                var beforeCount = properties.Count;
+                properties.AddRange(simpleComplexProps);
 
-		internal static IEnumerable<PropertyInfo> GetSimpleIndexablePropertyInfos(PropertyInfo[] properties, IStructureProperty parent = null, ICollection<string> nonIndexablePaths = null, ICollection<string> indexablePaths = null)
-		{
-			if (properties.Length == 0)
-				return properties;
+                if (properties.Count == beforeCount && complexProperty.PropertyType.IsValueType)
+                    properties.Add(complexProperty);
+            }
 
-			var filteredProperties = properties.Where(p => p.PropertyType.IsSimpleType());
+            foreach (var enumerablePropertyInfo in GetEnumerableIndexablePropertyInfos(propertyInfos, parent, nonIndexablePaths, indexablePaths))
+            {
+                var enumerableProperty = StructureProperty.CreateFrom(parent, enumerablePropertyInfo);
+                if (enumerableProperty.ElementType.IsSimpleType())
+                {
+                    properties.Add(enumerableProperty);
+                    continue;
+                }
 
-			if (nonIndexablePaths != null)
-				filteredProperties = filteredProperties.Where(p => !nonIndexablePaths.Contains(
-					PropertyPathBuilder.BuildPath(parent, p.Name)));
+                var elementProperties = GetIndexableProperties(enumerableProperty.ElementType,
+                                                               enumerableProperty,
+                                                               nonIndexablePaths,
+                                                               indexablePaths);
+                properties.AddRange(elementProperties);
+            }
 
-			if (indexablePaths != null)
-				filteredProperties = filteredProperties.Where(p => indexablePaths.Contains(
-					PropertyPathBuilder.BuildPath(parent, p.Name)));
+            return properties.ToArray();
+        }
 
-			return filteredProperties.ToArray();
-		}
+        internal static IEnumerable<PropertyInfo> GetSimpleIndexablePropertyInfos(PropertyInfo[] properties, IStructureProperty parent = null, ICollection<string> nonIndexablePaths = null, ICollection<string> indexablePaths = null)
+        {
+            if (properties.Length == 0)
+                return properties;
 
-		internal IEnumerable<PropertyInfo> GetComplexIndexablePropertyInfos(PropertyInfo[] properties, IStructureProperty parent = null, ICollection<string> nonIndexablePaths = null, ICollection<string> indexablePaths = null)
-		{
-			if (properties.Length == 0)
-				return properties;
+            var filteredProperties = properties.Where(p => p.PropertyType.IsSimpleType());
 
-			var filteredProperties = properties.Where(p =>
-				!p.PropertyType.IsSimpleType() &&
-				!p.PropertyType.IsEnumerableType() &&
-				GetIdProperty(p.PropertyType) == null);
+            if (nonIndexablePaths != null)
+                filteredProperties = filteredProperties.Where(p => !nonIndexablePaths.Contains(
+                    PropertyPathBuilder.BuildPath(parent, p.Name)));
 
-			if (nonIndexablePaths != null)
-				filteredProperties = filteredProperties.Where(p => !nonIndexablePaths.Contains(
-					PropertyPathBuilder.BuildPath(parent, p.Name)));
+            if (indexablePaths != null)
+                filteredProperties = filteredProperties.Where(p => indexablePaths.Contains(
+                    PropertyPathBuilder.BuildPath(parent, p.Name)));
 
-			if (indexablePaths != null)
-				filteredProperties = filteredProperties.Where(p => indexablePaths.Contains(
-					PropertyPathBuilder.BuildPath(parent, p.Name)));
+            return filteredProperties.ToArray();
+        }
 
-			return filteredProperties.ToArray();
-		}
+        internal IEnumerable<PropertyInfo> GetComplexIndexablePropertyInfos(PropertyInfo[] properties, IStructureProperty parent = null, ICollection<string> nonIndexablePaths = null, ICollection<string> indexablePaths = null)
+        {
+            if (properties.Length == 0)
+                return properties;
 
-		internal IEnumerable<PropertyInfo> GetEnumerableIndexablePropertyInfos(PropertyInfo[] properties, IStructureProperty parent = null, ICollection<string> nonIndexablePaths = null, ICollection<string> indexablePaths = null)
-		{
-			if (properties.Length == 0)
-				return properties;
+            var filteredProperties = properties.Where(p =>
+                !p.PropertyType.IsSimpleType() &&
+                !p.PropertyType.IsEnumerableType() &&
+                GetIdProperty(p.PropertyType) == null);
 
-			var filteredProperties = properties.Where(p =>
-				!p.PropertyType.IsSimpleType() &&
-				p.PropertyType.IsEnumerableType() &&
-				!p.PropertyType.IsEnumerableBytesType());
+            if (nonIndexablePaths != null)
+                filteredProperties = filteredProperties.Where(p => !nonIndexablePaths.Contains(
+                    PropertyPathBuilder.BuildPath(parent, p.Name)));
 
-			if (nonIndexablePaths != null)
-				filteredProperties = filteredProperties.Where(p => !nonIndexablePaths.Contains(
-					PropertyPathBuilder.BuildPath(parent, p.Name)));
+            if (indexablePaths != null)
+                filteredProperties = filteredProperties.Where(p => indexablePaths.Contains(
+                    PropertyPathBuilder.BuildPath(parent, p.Name)));
 
-			if (indexablePaths != null)
-				filteredProperties = filteredProperties.Where(p => indexablePaths.Contains(
-					PropertyPathBuilder.BuildPath(parent, p.Name)));
+            return filteredProperties.ToArray();
+        }
 
-			return filteredProperties.ToArray();
-		}
-	}
+        internal IEnumerable<PropertyInfo> GetEnumerableIndexablePropertyInfos(PropertyInfo[] properties, IStructureProperty parent = null, ICollection<string> nonIndexablePaths = null, ICollection<string> indexablePaths = null)
+        {
+            if (properties.Length == 0)
+                return properties;
+
+            var filteredProperties = properties.Where(p =>
+                !p.PropertyType.IsSimpleType() &&
+                p.PropertyType.IsEnumerableType() &&
+                !p.PropertyType.IsEnumerableBytesType());
+
+            if (nonIndexablePaths != null)
+                filteredProperties = filteredProperties.Where(p => !nonIndexablePaths.Contains(
+                    PropertyPathBuilder.BuildPath(parent, p.Name)));
+
+            if (indexablePaths != null)
+                filteredProperties = filteredProperties.Where(p => indexablePaths.Contains(
+                    PropertyPathBuilder.BuildPath(parent, p.Name)));
+
+            return filteredProperties.ToArray();
+        }
+    }
 }

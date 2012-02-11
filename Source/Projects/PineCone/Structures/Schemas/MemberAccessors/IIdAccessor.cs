@@ -4,10 +4,8 @@
     {
         StructureIdTypes IdType { get; }
 
-        IStructureId GetValue<T>(T item)
-            where T : class;
+        IStructureId GetValue<T>(T item) where T : class;
 
-        void SetValue<T>(T item, IStructureId value)
-            where T : class;
+        void SetValue<T>(T item, IStructureId value) where T : class;
     }
 }

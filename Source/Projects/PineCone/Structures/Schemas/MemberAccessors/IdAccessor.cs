@@ -14,7 +14,7 @@ namespace PineCone.Structures.Schemas.MemberAccessors
             : base(property)
         {
             if (!property.IsRootMember)
-                throw new PineConeException(ExceptionMessages.IdAccessor_GetIdValue_InvalidLevel);
+                throw new PineConeException(ExceptionMessages.IdAccessor_InvalidLevel);
 
             if (!StructureId.IsValidDataType(property.PropertyType))
                 throw new PineConeException(ExceptionMessages.IdAccessor_UnsupportedPropertyType.Inject(Property.PropertyType.Name));

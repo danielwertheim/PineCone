@@ -30,11 +30,13 @@ namespace PineCone.Structures.Schemas
                 return new StructureType(
                     type,
                     Reflecter.GetIdProperty(type),
+                    Reflecter.GetConcurrencyTokenProperty(type),
                     Reflecter.GetIndexableProperties(type).ToArray());
 
             return new StructureType(
                 type,
                 Reflecter.GetIdProperty(type),
+                Reflecter.GetConcurrencyTokenProperty(type),
                 ((config.MemberPathsNotBeingIndexed.Count > 0)
                 ? Reflecter.GetIndexablePropertiesExcept(type, config.MemberPathsNotBeingIndexed) //Scenario: Index ALL EXCEPT
                 : Reflecter.GetSpecificIndexableProperties(type, config.MemberPathsBeingIndexed)).ToArray());//Scenario: Index only THIS

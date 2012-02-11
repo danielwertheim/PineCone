@@ -123,8 +123,8 @@
   <data name="AutoSchemaBuilder_MissingIndexableMembers" xml:space="preserve">
     <value>The Item of type '{0}' has no members that are indexable. There's no point in treating items that has nothing to index.</value>
   </data>
-  <data name="IdAccessor_GetIdValue_InvalidLevel" xml:space="preserve">
-    <value>Id values must lie on the root object.</value>
+  <data name="IdAccessor_InvalidLevel" xml:space="preserve">
+    <value>Id members must lie on the root object.</value>
   </data>
   <data name="IdAccessor_UnsupportedPropertyType" xml:space="preserve">
     <value>The Property.PropertyType '{0}' is not supported by the IdAccessor. Supported types are: Guid, Nullable-Guid, Int32, Nullable-Int32, Int64 and Nullable-Int64.</value>
@@ -161,5 +161,11 @@
   </data>
   <data name="StructureId_CompareTo_DifferentIdTypes" xml:space="preserve">
     <value>Can not compare StructureId's of different IdTypes.</value>
+  </data>
+  <data name="ConcurrencyTokenAccessor_InvalidLevel" xml:space="preserve">
+    <value>Concurrency token member '{0}' must lie on the root object.</value>
+  </data>
+  <data name="ConcurrencyTokenAccessor_Invalid_Type" xml:space="preserve">
+    <value>The type of the Concurrency token member '{0}' should be a Guid.</value>
   </data>
 </root>

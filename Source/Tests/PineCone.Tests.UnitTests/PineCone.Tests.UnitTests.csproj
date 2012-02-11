@@ -94,6 +94,7 @@
     <Compile Include="Structures\DataTypeCodeTests.cs" />
     <Compile Include="Structures\Schemas\Configuration\StructureTypeConfigurationsTests.cs" />
     <Compile Include="Structures\Schemas\Configuration\StuctureTypeConfigTests.cs" />
+    <Compile Include="Structures\Schemas\MemberAccessors\ConcurrencyTokenAccessorTests.cs" />
     <Compile Include="Structures\Schemas\MemberAccessors\IndexAccessorGetValuesOnDeepGraphTests.cs" />
     <Compile Include="Structures\Schemas\MemberAccessors\IndexAccessorGetValuesOnSubItemTests.cs" />
     <Compile Include="Structures\Schemas\MemberAccessors\IndexAccessorSetValuesOnSubItemTests.cs" />
@@ -104,6 +105,7 @@
     <Compile Include="Structures\Schemas\StructureSchemasTests.cs" />
     <Compile Include="Structures\Schemas\StructureTypeFactoryTests.cs" />
     <Compile Include="Structures\Schemas\StructureTypeReflecterTests\StructureTypeReflecterComplexIndexablePropertiesTests.cs" />
+    <Compile Include="Structures\Schemas\StructureTypeReflecterTests\StructureTypeReflecterConcurrencyTokenPropertyTests.cs" />
     <Compile Include="Structures\Schemas\StructureTypeReflecterTests\StructureTypeReflecterGetIndexablePropertiesExceptTests.cs" />
     <Compile Include="Structures\Schemas\StructureTypeReflecterTests\StructureTypeReflecterGetSpecificIndexablePropertiesTests.cs" />
     <Compile Include="Structures\IdGenerators\SequentialGuidStructureIdGeneratorTests.cs" />

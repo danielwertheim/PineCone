@@ -40,11 +40,20 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas
         }
 
         [Test]
+        public void Ctor_WhenConcurrencyTokenAccessorIsNull_DoesNotThrowArgumentNullException()
+        {
+            var typeFake = new Mock<IStructureType>();
+
+            Assert.DoesNotThrow(() => new StructureSchema(typeFake.Object, "FakeHash", idAccessor: null, concurrencyTokenAccessor: null));
+        }
+
+        [Test]
         public void Ctor_WhenUniqueIndexAccessorsInjected_ExistsInBothListOfIndexAccessors()
         {
 			var typeFake = new Mock<IStructureType>();
 
             var idAccessorFake = new Mock<IIdAccessor>();
+            var conTokenFake = new Mock<IConcurrencyTokenAccessor>();
             var indexAccessorFake = new Mock<IIndexAccessor>();
 
             indexAccessorFake.Setup(x => x.Path).Returns("Plain");
@@ -58,6 +67,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas
                 typeFake.Object,
                 "FakeHash",
                 idAccessorFake.Object,
+                conTokenFake.Object,
                 new[] {indexAccessorFake.Object, uniqueIndexAccessorFake.Object});
 
             Assert.IsTrue(schema.IndexAccessors.Any(iac => iac.Path == indexAccessorFake.Object.Path));

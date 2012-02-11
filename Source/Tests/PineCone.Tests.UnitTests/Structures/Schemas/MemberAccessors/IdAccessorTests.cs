@@ -21,7 +21,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.MemberAccessors
 
             var ex = Assert.Throws<PineConeException>(() => new IdAccessor(intProperty));
 
-            Assert.AreEqual(ExceptionMessages.IdAccessor_GetIdValue_InvalidLevel, ex.Message);
+            Assert.AreEqual(ExceptionMessages.IdAccessor_InvalidLevel, ex.Message);
         }
 
         [Test]
@@ -35,7 +35,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.MemberAccessors
 
             var ex = Assert.Throws<PineConeException>(() => new IdAccessor(guidProperty));
 
-            Assert.AreEqual(ExceptionMessages.IdAccessor_GetIdValue_InvalidLevel, ex.Message);
+            Assert.AreEqual(ExceptionMessages.IdAccessor_InvalidLevel, ex.Message);
         }
 
         [Test]
@@ -49,7 +49,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.MemberAccessors
 
             var ex = Assert.Throws<PineConeException>(() => new IdAccessor(guidProperty));
 
-            Assert.AreEqual(ExceptionMessages.IdAccessor_GetIdValue_InvalidLevel, ex.Message);
+            Assert.AreEqual(ExceptionMessages.IdAccessor_InvalidLevel, ex.Message);
         }
 
         [Test]

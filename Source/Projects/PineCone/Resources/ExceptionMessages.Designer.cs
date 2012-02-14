@@ -79,7 +79,7 @@ namespace PineCone.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The type of the Concurrency token member &apos;{0}&apos; should be a Guid..
+        ///   Looks up a localized string similar to The type of the Concurrency token member &apos;{0}&apos; should be a Guid, Int, or Long..
         /// </summary>
         internal static string ConcurrencyTokenAccessor_Invalid_Type {
             get {

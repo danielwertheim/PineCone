@@ -12,18 +12,27 @@ namespace PineCone.Structures.Schemas.MemberAccessors
             if (!property.IsRootMember)
                 throw new PineConeException(ExceptionMessages.ConcurrencyTokenAccessor_InvalidLevel.Inject(Property.Name));
 
-            if (property.PropertyType != TypeFor<Guid>.Type)
+            if (property.PropertyType != TypeFor<Guid>.Type && property.PropertyType != TypeFor<int>.Type && property.PropertyType != TypeFor<long>.Type)
                 throw new PineConeException(ExceptionMessages.ConcurrencyTokenAccessor_Invalid_Type.Inject(Property.Name));
         }
 
-        public Guid GetValue<T>(T item)
-            where T : class
+        public object GetValue<T>(T item) where T : class
         {
-            return (Guid)Property.GetValue(item);
+            return Property.GetValue(item);
         }
         
         public void SetValue<T>(T item, Guid value)
             where T : class
+        {
+            Property.SetValue(item, value);
+        }
+
+        public void SetValue<T>(T item, int value) where T : class
+        {
+            Property.SetValue(item, value);
+        }
+
+        public void SetValue<T>(T item, long value) where T : class
         {
             Property.SetValue(item, value);
         }

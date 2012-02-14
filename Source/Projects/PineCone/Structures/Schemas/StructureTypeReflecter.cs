@@ -10,7 +10,9 @@ namespace PineCone.Structures.Schemas
 {
     public class StructureTypeReflecter : IStructureTypeReflecter
     {
-        private static readonly string[] NonIndexableSystemMembers = new string[] { };
+        private const string ConcurrencyTokenMemberName = "ConcurrencyToken";
+
+        private static readonly string[] NonIndexableSystemMembers = new string[] { ConcurrencyTokenMemberName };
 
         public const BindingFlags IdPropertyBindingFlags =
             BindingFlags.Public | BindingFlags.Instance | BindingFlags.GetProperty;
@@ -75,7 +77,7 @@ namespace PineCone.Structures.Schemas
 
         public IStructureProperty GetConcurrencyTokenProperty(Type type)
         {
-            var propertyInfo = type.GetProperty("ConcurrencyToken", PropertyBindingFlags);
+            var propertyInfo = type.GetProperty(ConcurrencyTokenMemberName, PropertyBindingFlags);
 
             return propertyInfo == null
                 ? null

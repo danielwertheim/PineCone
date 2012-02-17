@@ -16,12 +16,11 @@
 	<tags>indexing,structures,key-value,hierarcial-data</tags>
 	<dependencies>
       <dependency id="Ensure.That" version="0.5.0" />
+	  <dependency id="NCore" version="0.27.0" />
 	</dependencies>
   </metadata>
   <files>
-    <file src="**\NCore.dll" target="lib\net40\"/>
 	<file src="**\PineCone.dll" target="lib\net40\"/>
-	<file src="**\NCore.xml" target="lib\net40\"/>
 	<file src="**\PineCone.xml" target="lib\net40\"/>
   </files>
 </package>

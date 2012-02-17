@@ -59,6 +59,9 @@ namespace PineCone.Structures
 
             structureSchema.IdAccessor.SetValue(item, structureId);
 
+            if (structureSchema.HasTimeStamp)
+                structureSchema.TimeStampAccessor.SetValue(item, DateTime.Now);
+
             return new Structure(
                 structureSchema.Name,
                 structureId,

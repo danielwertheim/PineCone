@@ -15,17 +15,20 @@ namespace PineCone.Structures.Schemas
 
         public IStructureProperty IdProperty { get; private set; }
 
+        public IStructureProperty TimeStampProperty { get; private set; }
+
         public IStructureProperty ConcurrencyTokenProperty { get; private set; }
 
         public IStructureProperty[] IndexableProperties { get; private set; }
 
-        public StructureType(Type type, IStructureProperty idProperty = null, IStructureProperty concurrencyTokenProperty = null, IStructureProperty[] indexableProperties = null)
+        public StructureType(Type type, IStructureProperty idProperty = null, IStructureProperty concurrencyTokenProperty = null, IStructureProperty timeStampProperty = null, IStructureProperty[] indexableProperties = null)
         {
 			Ensure.That(type, "type").IsNotNull();
 
 			Type = type;
             IdProperty = idProperty;
             ConcurrencyTokenProperty = concurrencyTokenProperty;
+            TimeStampProperty = timeStampProperty;
             IndexableProperties = indexableProperties ?? new IStructureProperty[]{};
         }
     }

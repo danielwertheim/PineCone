@@ -168,4 +168,10 @@
   <data name="ConcurrencyTokenAccessor_Invalid_Type" xml:space="preserve">
     <value>The type of the Concurrency token member '{0}' should be a Guid, Int, or Long.</value>
   </data>
+  <data name="TimeStampAccessor_InvalidLevel" xml:space="preserve">
+    <value>Time stamp member '{0}' must lie on the root object.</value>
+  </data>
+  <data name="TimeStampAccessor_Invalid_Type" xml:space="preserve">
+    <value>The type of the Time stamp member '{0}' should be a Date.</value>
+  </data>
 </root>

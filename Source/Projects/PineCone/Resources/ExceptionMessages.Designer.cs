@@ -205,6 +205,24 @@ namespace PineCone.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The type of the Time stamp member &apos;{0}&apos; should be a Date..
+        /// </summary>
+        internal static string TimeStampAccessor_Invalid_Type {
+            get {
+                return ResourceManager.GetString("TimeStampAccessor_Invalid_Type", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Time stamp member &apos;{0}&apos; must lie on the root object..
+        /// </summary>
+        internal static string TimeStampAccessor_InvalidLevel {
+            get {
+                return ResourceManager.GetString("TimeStampAccessor_InvalidLevel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The UniqueModes &apos;{0}&apos; is unknow and cant be mapped..
         /// </summary>
         internal static string UniqueModesCantBeMapped {

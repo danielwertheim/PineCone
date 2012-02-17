@@ -2,9 +2,11 @@ using System;
 
 namespace PineCone.Structures.Schemas
 {
-	public static class StructureIdPropertyNames
+    public static class StructureIdPropertyNames
 	{
-		public enum Names
+        public const string Indicator = "Id";
+
+	    private enum Names
 		{
 			StructureId = 0,
 			TypeNameSuffixedWithId = 1,
@@ -26,21 +28,16 @@ namespace PineCone.Structures.Schemas
 			};
 		}
 
-		public static int GetIndexOf(string value)
-		{
-			return Array.IndexOf(NamesInEvaluationOrder, value);
-		}
-
 		public static string GetTypeNamePropertyNameFor(Type type)
 		{
-			return type.Name + "Id";
+			return type.Name + Indicator;
 		}
 
 		public static string GetInterfaceTypeNamePropertyNameFor(Type type)
 		{
-			return type.Name.StartsWith("I") 
-				? type.Name.Substring(1) + "Id" 
-				: type.Name + "Id";
+			return type.Name.StartsWith("I")
+                ? type.Name.Substring(1) + Indicator
+                : type.Name + Indicator;
 		}
 	}
 }

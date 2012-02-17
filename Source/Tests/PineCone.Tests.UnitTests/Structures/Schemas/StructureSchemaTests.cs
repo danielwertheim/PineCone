@@ -36,7 +36,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas
         {
 			var typeFake = new Mock<IStructureType>();
 
-			Assert.DoesNotThrow(() => new StructureSchema(typeFake.Object, "FakeHash", null));
+            Assert.DoesNotThrow(() => new StructureSchema(typeFake.Object, "FakeHash", idAccessor: null, concurrencyTokenAccessor: null, indexAccessors: null));
         }
 
         [Test]
@@ -44,7 +44,15 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas
         {
             var typeFake = new Mock<IStructureType>();
 
-            Assert.DoesNotThrow(() => new StructureSchema(typeFake.Object, "FakeHash", idAccessor: null, concurrencyTokenAccessor: null));
+            Assert.DoesNotThrow(() => new StructureSchema(typeFake.Object, "FakeHash", idAccessor: null, concurrencyTokenAccessor: null, indexAccessors: null));
+        }
+
+        [Test]
+        public void Ctor_WhenTimeStampAccessorIsNull_DoesNotThrowArgumentNullException()
+        {
+            var typeFake = new Mock<IStructureType>();
+
+            Assert.DoesNotThrow(() => new StructureSchema(typeFake.Object, "FakeHash", idAccessor: null, concurrencyTokenAccessor: null, indexAccessors: null));
         }
 
         [Test]
@@ -54,6 +62,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas
 
             var idAccessorFake = new Mock<IIdAccessor>();
             var conTokenFake = new Mock<IConcurrencyTokenAccessor>();
+            var timeStampFake = new Mock<ITimeStampAccessor>();
             var indexAccessorFake = new Mock<IIndexAccessor>();
 
             indexAccessorFake.Setup(x => x.Path).Returns("Plain");
@@ -68,6 +77,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas
                 "FakeHash",
                 idAccessorFake.Object,
                 conTokenFake.Object,
+                timeStampFake.Object,
                 new[] {indexAccessorFake.Object, uniqueIndexAccessorFake.Object});
 
             Assert.IsTrue(schema.IndexAccessors.Any(iac => iac.Path == indexAccessorFake.Object.Path));

@@ -9,9 +9,13 @@ namespace PineCone.Structures.Schemas
 
         bool HasConcurrencyTokenProperty(Type type);
 
+        bool HasTimeStampProperty(Type type);
+
         IStructureProperty GetIdProperty(Type type);
 
         IStructureProperty GetConcurrencyTokenProperty(Type type);
+
+        IStructureProperty GetTimeStampProperty(Type type);
 
 		IStructureProperty[] GetIndexableProperties(Type type);
 						  

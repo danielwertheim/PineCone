@@ -18,6 +18,9 @@ namespace PineCone.Structures
         public override IStructure CreateStructure<T>(T item, IStructureSchema structureSchema)
         {
             var structureId = structureSchema.IdAccessor.GetValue(item);
+            
+            if (structureSchema.HasTimeStamp)
+                structureSchema.TimeStampAccessor.SetValue(item, DateTime.Now);
 
             return new Structure(
                 structureSchema.Name,

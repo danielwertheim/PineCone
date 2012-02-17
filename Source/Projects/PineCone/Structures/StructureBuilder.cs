@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using EnsureThat;
 using PineCone.Serializers;
 using PineCone.Structures.IdGenerators;
@@ -76,13 +77,17 @@ namespace PineCone.Structures
 		{
 			var structureIds = StructureIdGenerator.Generate(structureSchema, items.Length);
 			var structures = new IStructure[items.Length];
-
+    	    var timeStamp = DateTime.Now;
+    	    
 			Parallel.For(0, items.Length, i =>
 			{
 				var id = structureIds[i];
 				var itm = items[i];
 
 				structureSchema.IdAccessor.SetValue(itm, id);
+
+                if (structureSchema.HasTimeStamp)
+                    structureSchema.TimeStampAccessor.SetValue(itm, timeStamp);
 
 				structures[i] = new Structure(
 					structureSchema.Name,
@@ -97,13 +102,17 @@ namespace PineCone.Structures
 		protected virtual IStructure[] CreateStructuresInSerial<T>(T[] items, IStructureSchema structureSchema) where T : class
 		{
 			var structures = new IStructure[items.Length];
+            var timeStamp = DateTime.Now;
 
-			for(var i = 0; i < structures.Length; i++)
+            for(var i = 0; i < structures.Length; i++)
 			{
 				var id = StructureIdGenerator.Generate(structureSchema);
 				var itm = items[i];
 
 				structureSchema.IdAccessor.SetValue(itm, id);
+
+                if(structureSchema.HasTimeStamp)
+                    structureSchema.TimeStampAccessor.SetValue(itm, timeStamp);
 
 				structures[i] = new Structure(
 					structureSchema.Name,

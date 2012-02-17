@@ -15,9 +15,13 @@ namespace PineCone.Structures.Schemas
 
         bool HasConcurrencyToken { get; }
 
+        bool HasTimeStamp { get; }
+
         IIdAccessor IdAccessor { get; }
 
         IConcurrencyTokenAccessor ConcurrencyTokenAccessor { get; }
+
+        ITimeStampAccessor TimeStampAccessor { get; }
 
         IList<IIndexAccessor> IndexAccessors { get; }
 

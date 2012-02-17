@@ -62,6 +62,9 @@
     <Compile Include="IPineConizer.cs" />
     <Compile Include="Structures\Schemas\MemberAccessors\ConcurrencyTokenAccessor.cs" />
     <Compile Include="Structures\Schemas\MemberAccessors\IConcurrencyTokenAccessor.cs" />
+    <Compile Include="Structures\Schemas\MemberAccessors\ITimeStampAccessor.cs" />
+    <Compile Include="Structures\Schemas\MemberAccessors\TimeStampAccessor.cs" />
+    <Compile Include="Structures\Schemas\StructureTimeStampPropertyNames.cs" />
     <Compile Include="Structures\StructureIdInterval.cs" />
     <Compile Include="Structures\DataTypeCode.cs" />
     <Compile Include="Structures\IdGenerators\EmptyStructureIdGenerator.cs" />

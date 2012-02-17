@@ -12,7 +12,7 @@ namespace PineCone.Structures.Schemas
     {
         private const string ConcurrencyTokenMemberName = "ConcurrencyToken";
 
-        private static readonly string[] NonIndexableSystemMembers = new string[] { ConcurrencyTokenMemberName };
+        private static readonly string[] NonIndexableSystemMembers = new[] { ConcurrencyTokenMemberName };
 
         public const BindingFlags IdPropertyBindingFlags =
             BindingFlags.Public | BindingFlags.Instance | BindingFlags.GetProperty;
@@ -30,9 +30,14 @@ namespace PineCone.Structures.Schemas
             return GetConcurrencyTokenProperty(type) != null;
         }
 
+        public bool HasTimeStampProperty(Type type)
+        {
+            return GetTimeStampProperty(type) != null;
+        }
+
         public IStructureProperty GetIdProperty(Type type)
         {
-            var properties = type.GetProperties(IdPropertyBindingFlags).Where(p => p.Name.EndsWith("Id")).ToArray();
+            var properties = type.GetProperties(IdPropertyBindingFlags).Where(p => p.Name.EndsWith(StructureIdPropertyNames.Indicator)).ToArray();
 
             var defaultProp = GetDefaultStructureIdProperty(properties);
             if (defaultProp != null)
@@ -46,7 +51,7 @@ namespace PineCone.Structures.Schemas
             if (interfaceNamedIdProp != null)
                 return StructureProperty.CreateFrom(interfaceNamedIdProp);
 
-            var idProp = properties.SingleOrDefault(p => p.Name.Equals("Id"));
+            var idProp = properties.SingleOrDefault(p => p.Name.Equals(StructureIdPropertyNames.Indicator));
             if (idProp != null)
                 return StructureProperty.CreateFrom(idProp);
 
@@ -71,6 +76,51 @@ namespace PineCone.Structures.Schemas
                 return null;
 
             var propertyName = StructureIdPropertyNames.GetInterfaceTypeNamePropertyNameFor(type);
+
+            return properties.SingleOrDefault(p => p.Name.Equals(propertyName));
+        }
+
+        public IStructureProperty GetTimeStampProperty(Type type)
+        {
+            var properties = type.GetProperties(PropertyBindingFlags).Where(p => p.Name.EndsWith(StructureTimeStampPropertyNames.Indicator)).ToArray();
+
+            var defaultProp = GetDefaultStructureTimeStampProperty(properties);
+            if (defaultProp != null)
+                return StructureProperty.CreateFrom(defaultProp);
+
+            var typeNamedProp = GetTypeNamedStructureTimeStampProperty(type, properties);
+            if (typeNamedProp != null)
+                return StructureProperty.CreateFrom(typeNamedProp);
+
+            var interfaceNamedProp = GetInterfaceNamedStructureTimeStampProperty(type, properties);
+            if (interfaceNamedProp != null)
+                return StructureProperty.CreateFrom(interfaceNamedProp);
+
+            var prop = properties.SingleOrDefault(p => p.Name.Equals(StructureTimeStampPropertyNames.Indicator));
+            if (prop != null)
+                return StructureProperty.CreateFrom(prop);
+
+            return null;
+        }
+
+        private static PropertyInfo GetDefaultStructureTimeStampProperty(IEnumerable<PropertyInfo> properties)
+        {
+            return properties.SingleOrDefault(p => p.Name.Equals(StructureTimeStampPropertyNames.Default));
+        }
+
+        private static PropertyInfo GetTypeNamedStructureTimeStampProperty(Type type, IEnumerable<PropertyInfo> properties)
+        {
+            var propertyName = StructureTimeStampPropertyNames.GetTypeNamePropertyNameFor(type);
+
+            return properties.SingleOrDefault(p => p.Name.Equals(propertyName));
+        }
+
+        private static PropertyInfo GetInterfaceNamedStructureTimeStampProperty(Type type, IEnumerable<PropertyInfo> properties)
+        {
+            if (!type.IsInterface)
+                return null;
+
+            var propertyName = StructureTimeStampPropertyNames.GetInterfaceTypeNamePropertyNameFor(type);
 
             return properties.SingleOrDefault(p => p.Name.Equals(propertyName));
         }

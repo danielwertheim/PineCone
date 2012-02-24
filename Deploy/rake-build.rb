@@ -17,18 +17,13 @@ require 'albacore'
 @env_buildname = "#{@env_solutionname}-v#{@env_buildversion}-#{@env_buildconfigname}"
 @env_buildfolderpath = 'build'
 #--------------------------------------
-#optional if no remote nuget actions should be performed
-@env_nugetPublishApiKey = ENV['env_nugetPublishApiKey']
-@env_nugetPublishUrl = ENV['env_nugetPublishUrl']
-@env_nugetSourceUrl = ENV['env_nugetSourceUrl']
-#--------------------------------------
 # Reusable vars
 #--------------------------------------
 pineConeOutputPath = "#{@env_buildfolderpath}/#{@env_projectnamePineCone}"
 #--------------------------------------
 # Albacore flow controlling tasks
 #--------------------------------------
-task :ci => [:buildIt, :copyPineCone, :testIt, :zipIt, :packIt, :publishIt]
+task :ci => [:buildIt, :copyPineCone, :testIt, :zipIt, :packIt]
 
 task :local => [:buildIt, :copyPineCone, :testIt, :zipIt, :packIt]
 #--------------------------------------
@@ -37,8 +32,6 @@ task :testIt => [:unittests]
 task :zipIt => [:zipPineCone]
 
 task :packIt => [:packPineConeNuGet]
-
-task :publishIt => [:publishPineConeNuGet]
 #--------------------------------------
 # Albacore tasks
 #--------------------------------------
@@ -82,9 +75,4 @@ end
 exec :packPineConeNuGet do |cmd|
 	cmd.command = "NuGet.exe"
 	cmd.parameters = "pack #{@env_projectnamePineCone}.nuspec -version #{@env_buildversion} -basepath #{pineConeOutputPath} -outputdirectory #{@env_buildfolderpath}"
-end
-
-exec :publishPineConeNuGet do |cmd|
-	cmd.command = "NuGet.exe"
-	cmd.parameters = "push #{@env_buildfolderpath}/#{@env_projectnamePineCone}.#{@env_buildversion}.nupkg #{@env_nugetPublishApiKey} -src #{@env_nugetPublishUrl}"
 end

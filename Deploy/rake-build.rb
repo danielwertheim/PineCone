@@ -10,12 +10,15 @@ require 'albacore'
 # Environment vars
 #--------------------------------------
 @env_solutionname = 'PineCone'
-@env_projectnamePineCone = 'PineCone'
 @env_solutionfolderpath = "../Source"
-@env_buildversion = "0.64.0" + (ENV['env_buildnumber'].to_s.empty? ? "" : ".#{ENV['env_buildnumber'].to_s}")
+
+@env_projectnamePineCone = 'PineCone'
+
+@env_buildfolderpath = 'build'
+@env_version = "0.65.0"
+@env_buildversion = @env_version + (ENV['env_buildnumber'].to_s.empty? ? "" : ".#{ENV['env_buildnumber'].to_s}")
 @env_buildconfigname = ENV['env_buildconfigname'].to_s.empty? ? "Release" : ENV['env_buildconfigname'].to_s
 @env_buildname = "#{@env_solutionname}-v#{@env_buildversion}-#{@env_buildconfigname}"
-@env_buildfolderpath = 'build'
 #--------------------------------------
 # Reusable vars
 #--------------------------------------
@@ -23,9 +26,9 @@ pineConeOutputPath = "#{@env_buildfolderpath}/#{@env_projectnamePineCone}"
 #--------------------------------------
 # Albacore flow controlling tasks
 #--------------------------------------
-task :ci => [:buildIt, :copyPineCone, :testIt, :zipIt, :packIt]
+task :ci => [:installNuGetPackages, :buildIt, :copyPineCone, :testIt, :zipIt, :packIt]
 
-task :local => [:buildIt, :copyPineCone, :testIt, :zipIt, :packIt]
+task :local => [:installNuGetPackages, :buildIt, :copyPineCone, :testIt, :zipIt, :packIt]
 #--------------------------------------
 task :testIt => [:unittests]
 
@@ -35,12 +38,18 @@ task :packIt => [:packPineConeNuGet]
 #--------------------------------------
 # Albacore tasks
 #--------------------------------------
+task :installNuGetPackages do
+	FileList["#{@env_solutionfolderpath}/**/packages.config"].each { |filepath|
+		sh "NuGet.exe i #{filepath} -o #{@env_solutionfolderpath}/packages"
+	}
+end
+
 assemblyinfo :versionIt do |asm|
 	sharedAssemblyInfoPath = "#{@env_solutionfolderpath}/SharedAssemblyInfo.cs"
 
 	asm.input_file = sharedAssemblyInfoPath
 	asm.output_file = sharedAssemblyInfoPath
-	asm.version = @env_buildversion
+	asm.version = @env_version
 	asm.file_version = @env_buildversion  
 end
 
@@ -61,7 +70,7 @@ task :copyPineCone do
 end
 
 nunit :unittests do |nunit|
-	nunit.command = "#{@env_solutionfolderpath}/packages/NUnit.2.5.10.11092/tools/nunit-console.exe"
+	nunit.command = "nunit-console.exe"
 	nunit.options "/framework=v4.0.30319","/xml=#{@env_buildfolderpath}/NUnit-Report-#{@env_solutionname}-UnitTests.xml"
 	nunit.assemblies FileList["#{@env_solutionfolderpath}/Tests/#{@env_solutionname}.**UnitTests/bin/#{@env_buildconfigname}/#{@env_solutionname}.**UnitTests.dll"]
 end
@@ -74,5 +83,5 @@ end
 
 exec :packPineConeNuGet do |cmd|
 	cmd.command = "NuGet.exe"
-	cmd.parameters = "pack #{@env_projectnamePineCone}.nuspec -version #{@env_buildversion} -basepath #{pineConeOutputPath} -outputdirectory #{@env_buildfolderpath}"
+	cmd.parameters = "pack #{@env_projectnamePineCone}.nuspec -version #{@env_version} -basepath #{pineConeOutputPath} -outputdirectory #{@env_buildfolderpath}"
 end

@@ -12,10 +12,5 @@ namespace PineCone
         public static readonly StringComparer StringComparer = StringComparer.OrdinalIgnoreCase;
 
     	public static readonly StringComparison StringComparision = StringComparison.OrdinalIgnoreCase;
-
-    	public static DateTime Now()
-        {
-            return DateTime.Now;
-        }
     }
 }

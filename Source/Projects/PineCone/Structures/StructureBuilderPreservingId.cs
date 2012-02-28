@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using NCore;
 using PineCone.Serializers;
 using PineCone.Structures.IdGenerators;
 using PineCone.Structures.Schemas;
@@ -20,7 +21,7 @@ namespace PineCone.Structures
             var structureId = structureSchema.IdAccessor.GetValue(item);
             
             if (structureSchema.HasTimeStamp)
-                structureSchema.TimeStampAccessor.SetValue(item, DateTime.Now);
+                structureSchema.TimeStampAccessor.SetValue(item, SysDateTime.Now);
 
             return new Structure(
                 structureSchema.Name,
@@ -39,7 +40,7 @@ namespace PineCone.Structures
 		protected override IStructure[] CreateStructuresInParallel<T>(T[] items, IStructureSchema structureSchema)
 		{
 			var structures = new IStructure[items.Length];
-            var timeStamp = DateTime.Now;
+            var timeStamp = SysDateTime.Now;
 
 			Parallel.For(0, items.Length, i =>
 			{
@@ -64,7 +65,7 @@ namespace PineCone.Structures
 		protected override IStructure[] CreateStructuresInSerial<T>(T[] items, IStructureSchema structureSchema)
 		{
 			var structures = new IStructure[items.Length];
-            var timeStamp = DateTime.Now;
+            var timeStamp = SysDateTime.Now;
 
 			for (var i = 0; i < structures.Length; i++)
 			{

@@ -174,4 +174,7 @@
   <data name="TimeStampAccessor_Invalid_Type" xml:space="preserve">
     <value>The type of the Time stamp member '{0}' should be a Date.</value>
   </data>
+  <data name="StructureId_CreateByIdType" xml:space="preserve">
+    <value>The value with type '{0}' can not be used to create a StructureId of type '{1}'.</value>
+  </data>
 </root>

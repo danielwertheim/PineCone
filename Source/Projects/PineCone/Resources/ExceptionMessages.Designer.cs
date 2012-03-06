@@ -160,6 +160,15 @@ namespace PineCone.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The value with type &apos;{0}&apos; can not be used to create a StructureId of type &apos;{1}&apos;..
+        /// </summary>
+        internal static string StructureId_CreateByIdType {
+            get {
+                return ResourceManager.GetString("StructureId_CreateByIdType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The type &apos;{0}&apos; is not supported for StructureId. Supported types are: Guid, Nullable-Guid, Int32, Nullable-Int32, Int64 and Nullable-Int64..
         /// </summary>
         internal static string StructureId_InvalidType {

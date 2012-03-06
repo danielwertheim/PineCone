@@ -3,7 +3,7 @@
   <metadata>
     <id>PineCone</id>    
     <title>PineCone</title>
-	<version>0.0.0.0</version>
+	<version>$version$</version>
 	<authors>danielwertheim</authors>
 	<copyright>Daniel Wertheim</copyright>
 	<summary>PineCone takes an object graph and gives you indexes for it.</summary>
@@ -15,7 +15,7 @@
 	<requireLicenseAcceptance>false</requireLicenseAcceptance>
 	<tags>indexing,structures,key-value,hierarcial-data</tags>
 	<dependencies>
-      <dependency id="Ensure.That" version="0.6.0" />
+      <dependency id="Ensure.That" version="0.7.0" />
 	  <dependency id="NCore" version="0.28.0" />
 	</dependencies>
   </metadata>

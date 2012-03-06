@@ -61,6 +61,149 @@ namespace PineCone.Tests.UnitTests.Structures
         }
 
         [Test]
+        public void ConvertFrom_WhenGuid_WithSpecificIdType_ValuesAreReflected()
+        {
+            Guid value = Guid.Parse("ec20922b-195e-4787-89a8-68bc2b4c0fe6");
+
+            var id = StructureId.Create(value, StructureIdTypes.Guid);
+
+            Assert.IsTrue(id.HasValue);
+            Assert.AreEqual(value, id.Value);
+            Assert.AreEqual(typeof(Guid), id.DataType);
+            Assert.AreEqual(StructureIdTypes.Guid, id.IdType);
+        }
+
+        [Test]
+        public void ConvertFrom_WhenStringGuidAsObject_WithSpecificIdType_ValuesAreReflected()
+        {
+            object value = "ec20922b-195e-4787-89a8-68bc2b4c0fe6";
+
+            var id = StructureId.Create(value, StructureIdTypes.Guid);
+
+            Assert.IsTrue(id.HasValue);
+            Assert.AreEqual(Guid.Parse(value.ToString()), id.Value);
+            Assert.AreEqual(typeof(Guid), id.DataType);
+            Assert.AreEqual(StructureIdTypes.Guid, id.IdType);
+        }
+
+        [Test]
+        public void ConvertFrom_WhenGuidAsObject_WithSpecificIdType_ValuesAreReflected()
+        {
+            object value = Guid.Parse("ec20922b-195e-4787-89a8-68bc2b4c0fe6");
+
+            var id = StructureId.Create(value, StructureIdTypes.Guid);
+
+            Assert.IsTrue(id.HasValue);
+            Assert.AreEqual(value, id.Value);
+            Assert.AreEqual(typeof(Guid), id.DataType);
+            Assert.AreEqual(StructureIdTypes.Guid, id.IdType);
+        }
+
+        [Test]
+        public void ConvertFrom_WhenInt_WithSpecificIdType_ValuesAreReflected()
+        {
+            int value = 42;
+
+            var id = StructureId.Create(value, StructureIdTypes.Identity);
+
+            Assert.IsTrue(id.HasValue);
+            Assert.AreEqual(value, id.Value);
+            Assert.AreEqual(typeof(int), id.DataType);
+            Assert.AreEqual(StructureIdTypes.Identity, id.IdType);
+        }
+
+        [Test]
+        public void ConvertFrom_WhenStringIntAsObject_WithSpecificIdType_ValuesAreReflected()
+        {
+            object value = "42";
+
+            var id = StructureId.Create(value, StructureIdTypes.Identity);
+
+            Assert.IsTrue(id.HasValue);
+            Assert.AreEqual(int.Parse(value.ToString()), id.Value);
+            Assert.AreEqual(typeof(int), id.DataType);
+            Assert.AreEqual(StructureIdTypes.Identity, id.IdType);
+        }
+
+        [Test]
+        public void ConvertFrom_WhenIntAsObject_WithSpecificIdType_ValuesAreReflected()
+        {
+            object value = 42;
+
+            var id = StructureId.Create(value, StructureIdTypes.Identity);
+
+            Assert.IsTrue(id.HasValue);
+            Assert.AreEqual(value, id.Value);
+            Assert.AreEqual(typeof(int), id.DataType);
+            Assert.AreEqual(StructureIdTypes.Identity, id.IdType);
+        }
+
+        [Test]
+        public void ConvertFrom_WhenLong_WithSpecificIdType_ValuesAreReflected()
+        {
+            long value = 42;
+
+            var id = StructureId.Create(value, StructureIdTypes.BigIdentity);
+
+            Assert.IsTrue(id.HasValue);
+            Assert.AreEqual(value, id.Value);
+            Assert.AreEqual(typeof(long), id.DataType);
+            Assert.AreEqual(StructureIdTypes.BigIdentity, id.IdType);
+        }
+
+        [Test]
+        public void ConvertFrom_WhenStringLongAsObject_WithSpecificIdType_ValuesAreReflected()
+        {
+            object value = "42";
+
+            var id = StructureId.Create(value, StructureIdTypes.BigIdentity);
+
+            Assert.IsTrue(id.HasValue);
+            Assert.AreEqual(long.Parse(value.ToString()), id.Value);
+            Assert.AreEqual(typeof(long), id.DataType);
+            Assert.AreEqual(StructureIdTypes.BigIdentity, id.IdType);
+        }
+
+        [Test]
+        public void ConvertFrom_WhenLongAsObject_WithSpecificIdType_ValuesAreReflected()
+        {
+            object value = (long)42;
+
+            var id = StructureId.Create(value, StructureIdTypes.BigIdentity);
+
+            Assert.IsTrue(id.HasValue);
+            Assert.AreEqual(value, id.Value);
+            Assert.AreEqual(typeof(long), id.DataType);
+            Assert.AreEqual(StructureIdTypes.BigIdentity, id.IdType);
+        }
+
+        [Test]
+        public void ConvertFrom_WhenString_WithSpecificIdType_ValuesAreReflected()
+        {
+            string value = "keyA";
+
+            var id = StructureId.Create(value, StructureIdTypes.String);
+
+            Assert.IsTrue(id.HasValue);
+            Assert.AreEqual(value, id.Value);
+            Assert.AreEqual(typeof(string), id.DataType);
+            Assert.AreEqual(StructureIdTypes.String, id.IdType);
+        }
+
+        [Test]
+        public void ConvertFrom_WhenStringAsObject_WithSpecificIdType_ValuesAreReflected()
+        {
+            object value = "keyA";
+
+            var id = StructureId.Create(value, StructureIdTypes.String);
+
+            Assert.IsTrue(id.HasValue);
+            Assert.AreEqual(value, id.Value);
+            Assert.AreEqual(typeof(string), id.DataType);
+            Assert.AreEqual(StructureIdTypes.String, id.IdType);
+        }
+        
+        [Test]
         public void Create_WhenString_ValuesAreReflected()
         {
             var value = "My string id.";

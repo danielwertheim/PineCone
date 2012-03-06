@@ -1,4 +1,5 @@
 using System;
+using EnsureThat;
 using NCore;
 using NCore.Reflections;
 using PineCone.Resources;
@@ -26,7 +27,7 @@ namespace PineCone.Structures
             get { return _idType; }
         }
 
-        public object Value 
+        public object Value
         {
             get { return _value; }
         }
@@ -96,13 +97,38 @@ namespace PineCone.Structures
             return new StructureId(value, NullableLongType);
         }
 
-    	public static IStructureId GetSmallest(IStructureId x, IStructureId y)
-		{
-			return x.CompareTo(y) == -1
-				? x
-				: y;
-		}
-        
+        public static IStructureId Create(object value, StructureIdTypes idType)
+        {
+            Ensure.That(value, "value").IsNotNull();
+
+            switch (idType)
+            {
+                case StructureIdTypes.Guid:
+                    return value is string
+                        ? Create(Guid.Parse(value.ToString()))
+                        : Create((Guid)value);
+                case StructureIdTypes.Identity:
+                    return value is string
+                        ? Create(int.Parse(value.ToString()))
+                        : Create((int)value);
+                case StructureIdTypes.BigIdentity:
+                    return value is string
+                        ? Create(long.Parse(value.ToString()))
+                        : Create((long)value);
+                case StructureIdTypes.String:
+                    return Create(value.ToString());
+            }
+
+            throw new PineConeException(ExceptionMessages.StructureId_CreateByIdType.Inject(value.GetType(), idType));
+        }
+
+        public static IStructureId GetSmallest(IStructureId x, IStructureId y)
+        {
+            return x.CompareTo(y) == -1
+                ? x
+                : y;
+        }
+
         private StructureId(string value, Type dataType)
         {
             _value = value;
@@ -153,51 +179,51 @@ namespace PineCone.Structures
             return false;
         }
 
-    	public int CompareTo(IStructureId other)
-    	{
-    		if (other.IdType != IdType)
-    			throw new PineConeException(ExceptionMessages.StructureId_CompareTo_DifferentIdTypes);
+        public int CompareTo(IStructureId other)
+        {
+            if (other.IdType != IdType)
+                throw new PineConeException(ExceptionMessages.StructureId_CompareTo_DifferentIdTypes);
 
-			if (Equals(other))
-				return 0;
+            if (Equals(other))
+                return 0;
 
-			if (IdType == StructureIdTypes.Identity)
-			{
-				var x = (int?) Value;
-				var y = (int?) other.Value;
+            if (IdType == StructureIdTypes.Identity)
+            {
+                var x = (int?)Value;
+                var y = (int?)other.Value;
 
-				if (x.HasValue && y.HasValue)
-					return x.Value.CompareTo(y.Value);
+                if (x.HasValue && y.HasValue)
+                    return x.Value.CompareTo(y.Value);
 
-				return x.HasValue ? -1 : 1;
-			}
+                return x.HasValue ? -1 : 1;
+            }
 
-			if (IdType == StructureIdTypes.BigIdentity)
-			{
-				var x = (long?)Value;
-				var y = (long?)other.Value;
+            if (IdType == StructureIdTypes.BigIdentity)
+            {
+                var x = (long?)Value;
+                var y = (long?)other.Value;
 
-				if (x.HasValue && y.HasValue)
-					return x.Value.CompareTo(y.Value);
+                if (x.HasValue && y.HasValue)
+                    return x.Value.CompareTo(y.Value);
 
-				return x.HasValue ? -1 : 1;
-			}
+                return x.HasValue ? -1 : 1;
+            }
 
-			if (IdType.IsGuid())
-			{
-				var x = (Guid?)Value;
-				var y = (Guid?)other.Value;
+            if (IdType.IsGuid())
+            {
+                var x = (Guid?)Value;
+                var y = (Guid?)other.Value;
 
-				if (x.HasValue && y.HasValue)
-					return x.Value.CompareTo(y.Value);
+                if (x.HasValue && y.HasValue)
+                    return x.Value.CompareTo(y.Value);
 
-				return x.HasValue ? -1 : 1;
-			}
+                return x.HasValue ? -1 : 1;
+            }
 
-    		return Value.ToString().CompareTo(other.Value.ToString());
-    	}
+            return Value.ToString().CompareTo(other.Value.ToString());
+        }
 
-    	public override bool Equals(object obj)
+        public override bool Equals(object obj)
         {
             return Equals(obj as IStructureId);
         }
@@ -207,10 +233,10 @@ namespace PineCone.Structures
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
 
-			if (IdType == StructureIdTypes.String)
-				return string.Equals(Value as string, other.Value as string, Sys.StringComparision);
-			
-        	return Equals(other.Value, Value);
+            if (IdType == StructureIdTypes.String)
+                return string.Equals(Value as string, other.Value as string, Sys.StringComparision);
+
+            return Equals(other.Value, Value);
         }
 
         public override int GetHashCode()

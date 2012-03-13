@@ -35,13 +35,14 @@ namespace PineCone.Structures
                     var subIndexes = new IStructureIndex[values.Count];
                     Parallel.For(0, subIndexes.Length, subC =>
                     {
-                        subIndexes[subC] = new StructureIndex(structureId, indexAccessor.Path, values[subC], indexAccessor.ElementType ?? indexAccessor.DataType, indexAccessor.UniqueMode.ToStructureIndexType());
+                        if(values[subC] != null)
+                            subIndexes[subC] = new StructureIndex(structureId, indexAccessor.Path, values[subC], indexAccessor.ElementType ?? indexAccessor.DataType, indexAccessor.UniqueMode.ToStructureIndexType());
                     });
                     indexes[c] = subIndexes;
                 }
             });
 
-            return indexes.Where(i => i != null).SelectMany(i => i).ToArray();
+            return indexes.Where(i => i != null).SelectMany(i => i).Where(i => i != null).ToArray();
         }
     }
 }

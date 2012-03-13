@@ -54,6 +54,18 @@ namespace PineCone.Tests.UnitTests.Structures
         }
 
         [Test]
+        public void GetIndexes_WhenItemWithNullString_ReturnsNoIndex()
+        {
+            var item = new WithNoArray { StringValue = null };
+            var schemaStub = StructureSchemaTestFactory.CreateRealFrom<WithNoArray>();
+
+            var factory = new StructureIndexesFactory();
+            var indexes = factory.CreateIndexes(schemaStub, item, _structureIdGenerator.Invoke()).ToList();
+
+            Assert.IsNull(indexes.SingleOrDefault(i => i.Path == "StringValue"));
+        }
+
+        [Test]
         public void GetIndexes_WhenItemWithAssignedString_ReturnsIndexWithStringValue()
         {
             var item = new WithNoArray { StringValue = "A" };
@@ -75,6 +87,30 @@ namespace PineCone.Tests.UnitTests.Structures
             var indexes = factory.CreateIndexes(schemaStub, item, _structureIdGenerator.Invoke()).ToList();
 
             Assert.AreEqual(42, indexes.Single(i => i.Path == "IntValue").Value);
+        }
+
+        [Test]
+        public void GetIndexes_WhenItemWithEnumerableWithOneNullInt_ReturnsNullIndex()
+        {
+            var item = new WithArray { NullableIntValues = new int?[] { null } };
+            var schemaStub = StructureSchemaTestFactory.CreateRealFrom<WithArray>();
+
+            var factory = new StructureIndexesFactory();
+            var indexes = factory.CreateIndexes(schemaStub, item, _structureIdGenerator.Invoke()).ToList();
+
+            Assert.IsNull(indexes.SingleOrDefault(i => i.Path == "NullableIntValues"));
+        }
+
+        [Test]
+        public void GetIndexes_WhenItemWithEnumerableWithOneNullString_ReturnsNullIndex()
+        {
+            var item = new WithArray { StringValues = new string[] { null } };
+            var schemaStub = StructureSchemaTestFactory.CreateRealFrom<WithArray>();
+
+            var factory = new StructureIndexesFactory();
+            var indexes = factory.CreateIndexes(schemaStub, item, _structureIdGenerator.Invoke()).ToList();
+
+            Assert.IsNull(indexes.SingleOrDefault(i => i.Path == "StringValues"));
         }
 
         [Test]
@@ -191,6 +227,8 @@ namespace PineCone.Tests.UnitTests.Structures
             public string[] StringValues { get; set; }
 
             public int[] IntValues { get; set; }
+
+            public int?[] NullableIntValues { get; set; }
         }
     }
 }

@@ -220,7 +220,7 @@ namespace PineCone.Tests.UnitTests.Structures.StructureBuilderTests
 		}
 
 		[Test]
-		public void CreateStructure_WhenHashSetOfComplex_HasThreeNullItems_ReturnsOneIndexRepresentingNull()
+		public void CreateStructure_WhenHashSetOfComplex_HasThreeNullItems_ReturnsNoIndex()
 		{
 			var schema = StructureSchemaTestFactory.CreateRealFrom<TestItemWithHashSetOfComplex>();
 			var item = new TestItemWithHashSetOfComplex { HashSetOfComplex = new HashSet<Value> { null, null, null } };
@@ -228,8 +228,7 @@ namespace PineCone.Tests.UnitTests.Structures.StructureBuilderTests
 			var structure = Builder.CreateStructure(item, schema);
 
 			var actual = structure.Indexes.SingleOrDefault(si => si.Path.StartsWith("HashSetOfComplex.Is"));
-			Assert.IsNotNull(actual);
-			Assert.AreEqual(2, structure.Indexes.Count);
+			Assert.IsNull(actual);
 		}
 
 		[Test]

@@ -78,6 +78,54 @@ namespace PineCone.Tests.UnitTests.Structures
         }
 
         [Test]
+        public void GetIndexes_WhenItemWithEnumerableWithOneNullInt_ReturnsNullIndex()
+        {
+            var item = new WithArray { NullableIntValues = new int?[] { null } };
+            var schemaStub = StructureSchemaTestFactory.CreateRealFrom<WithArray>();
+
+            var factory = new StructureIndexesFactory();
+            var indexes = factory.CreateIndexes(schemaStub, item, _structureIdGenerator.Invoke()).ToList();
+
+            Assert.AreEqual(null, indexes.Single(i => i.Path == "NullableIntValues").Value);
+        }
+
+        [Test]
+        public void GetIndexes_WhenItemWithEnumerableWithOneNullInt_ReturnsIndexWithDataTypeOfStringElement()
+        {
+            var item = new WithArray { NullableIntValues = new int?[] { null } };
+            var schemaStub = StructureSchemaTestFactory.CreateRealFrom<WithArray>();
+
+            var factory = new StructureIndexesFactory();
+            var indexes = factory.CreateIndexes(schemaStub, item, _structureIdGenerator.Invoke()).ToList();
+
+            Assert.AreEqual(DataTypeCode.IntegerNumber, indexes.Single(i => i.Path == "NullableIntValues").DataTypeCode);
+        }
+
+        [Test]
+        public void GetIndexes_WhenItemWithEnumerableWithOneNullString_ReturnsNullIndex()
+        {
+            var item = new WithArray { StringValues = new string[] { null } };
+            var schemaStub = StructureSchemaTestFactory.CreateRealFrom<WithArray>();
+
+            var factory = new StructureIndexesFactory();
+            var indexes = factory.CreateIndexes(schemaStub, item, _structureIdGenerator.Invoke()).ToList();
+
+            Assert.AreEqual(null, indexes.Single(i => i.Path == "StringValues").Value);
+        }
+
+        [Test]
+        public void GetIndexes_WhenItemWithEnumerableWithOneNullString_ReturnsIndexWithDataTypeOfStringElement()
+        {
+            var item = new WithArray { StringValues = new string[] { null } };
+            var schemaStub = StructureSchemaTestFactory.CreateRealFrom<WithArray>();
+
+            var factory = new StructureIndexesFactory();
+            var indexes = factory.CreateIndexes(schemaStub, item, _structureIdGenerator.Invoke()).ToList();
+
+            Assert.AreEqual(DataTypeCode.String, indexes.Single(i => i.Path == "StringValues").DataTypeCode);
+        }
+
+        [Test]
         public void GetIndexes_WhenItemWithEnumerableWithOneString_ReturnsIndexWithString()
         {
             var item = new WithArray { StringValues = new[] { "A" } };
@@ -191,6 +239,8 @@ namespace PineCone.Tests.UnitTests.Structures
             public string[] StringValues { get; set; }
 
             public int[] IntValues { get; set; }
+
+            public int?[] NullableIntValues { get; set; }
         }
     }
 }

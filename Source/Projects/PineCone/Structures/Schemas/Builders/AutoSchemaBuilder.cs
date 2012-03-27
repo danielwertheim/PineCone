@@ -13,11 +13,7 @@ namespace PineCone.Structures.Schemas.Builders
         public AutoSchemaBuilder()
         {
             _hashService = new Crc32HashService();
-
-        	AllowMissingIdMember = false;
         }
-
-		public bool AllowMissingIdMember { get; set; }
 
     	public IStructureSchema CreateSchema(IStructureType structureType)
         {
@@ -37,13 +33,8 @@ namespace PineCone.Structures.Schemas.Builders
 
         private IIdAccessor GetIdAccessor(IStructureType structureType)
         {
-			if (structureType.IdProperty == null)
-			{
-				if(AllowMissingIdMember)
-					return null;
-
-				throw new PineConeException(ExceptionMessages.AutoSchemaBuilder_MissingIdMember.Inject(structureType.Name));
-			}
+            if (structureType.IdProperty == null)
+                throw new PineConeException(ExceptionMessages.AutoSchemaBuilder_MissingIdMember.Inject(structureType.Name));
 
             return new IdAccessor(structureType.IdProperty);
         }

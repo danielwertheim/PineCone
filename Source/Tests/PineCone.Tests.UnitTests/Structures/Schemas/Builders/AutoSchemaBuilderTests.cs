@@ -113,15 +113,6 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.Builders
             Assert.AreEqual(expectedMessage, ex.Message);
         }
 
-		[Test]
-		public void CreateSchema_WhenItemHasNoIdMember_AndAllowMissingIdMemberIsTrue_DoesNotThrowMissingIdMemberException()
-		{
-			var structureType = GetStructureTypeFor<WithNoId>();
-			_schemaBuilder.AllowMissingIdMember = true;
-
-			Assert.DoesNotThrow(() => _schemaBuilder.CreateSchema(structureType));
-		}
-
         [Test]
         public void CreateSchema_WhenItemHasIdMember_CreatesSchemaWithIdMemberAccessor()
         {

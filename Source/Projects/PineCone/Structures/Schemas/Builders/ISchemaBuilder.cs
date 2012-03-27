@@ -2,8 +2,6 @@
 {
     public interface ISchemaBuilder
     {
-		bool AllowMissingIdMember { get; set; }
-
     	IStructureSchema CreateSchema(IStructureType structureType);
     }
 }

@@ -108,6 +108,7 @@
     <Compile Include="Structures\IdGenerators\SequentialGuidStructureIdGeneratorTests.cs" />
     <Compile Include="Structures\Schemas\StructureTypeReflecterTests\StructureTypeReflecterTimeStampPropertyTests.cs" />
     <Compile Include="Structures\StructureBuilderTests\StructureBuilderEnumerableTests.cs" />
+    <Compile Include="Structures\StructureBuilderTests\StructureBuilderNullablesTests.cs" />
     <Compile Include="Structures\StructureBuilderTests\StructureBuilderPreservingIdsTests.cs" />
     <Compile Include="Structures\StructureIdIntervalTests.cs" />
     <Compile Include="Structures\StructureIdTests.cs" />

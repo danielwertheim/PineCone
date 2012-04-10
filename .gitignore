@@ -1,4 +1,4 @@
-#v0.4
+#v0.5
 # Dev stuff
 [Aa]pp_[Dd]ata/
 [Bb]uilds/
@@ -21,6 +21,7 @@ _ReSharper.*
 *.swp
 *.sdf
 *.orig
+.idea/
 
 #windows stuff
 Thumbs.db

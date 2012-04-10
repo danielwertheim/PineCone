@@ -61,7 +61,7 @@ namespace PineCone.Tests.UnitTests.Structures
         }
 
         [Test]
-        public void ConvertFrom_WhenGuid_WithSpecificIdType_ValuesAreReflected()
+        public void Create_WhenGuid_WithSpecificIdType_ValuesAreReflected()
         {
             Guid value = Guid.Parse("ec20922b-195e-4787-89a8-68bc2b4c0fe6");
 
@@ -74,7 +74,7 @@ namespace PineCone.Tests.UnitTests.Structures
         }
 
         [Test]
-        public void ConvertFrom_WhenStringGuidAsObject_WithSpecificIdType_ValuesAreReflected()
+        public void Create_WhenStringGuidAsObject_WithSpecificIdType_ValuesAreReflected()
         {
             object value = "ec20922b-195e-4787-89a8-68bc2b4c0fe6";
 
@@ -87,7 +87,7 @@ namespace PineCone.Tests.UnitTests.Structures
         }
 
         [Test]
-        public void ConvertFrom_WhenGuidAsObject_WithSpecificIdType_ValuesAreReflected()
+        public void Create_WhenGuidAsObject_WithSpecificIdType_ValuesAreReflected()
         {
             object value = Guid.Parse("ec20922b-195e-4787-89a8-68bc2b4c0fe6");
 
@@ -100,7 +100,7 @@ namespace PineCone.Tests.UnitTests.Structures
         }
 
         [Test]
-        public void ConvertFrom_WhenInt_WithSpecificIdType_ValuesAreReflected()
+        public void Create_WhenInt_WithSpecificIdType_ValuesAreReflected()
         {
             int value = 42;
 
@@ -113,7 +113,7 @@ namespace PineCone.Tests.UnitTests.Structures
         }
 
         [Test]
-        public void ConvertFrom_WhenStringIntAsObject_WithSpecificIdType_ValuesAreReflected()
+        public void Create_WhenStringIntAsObject_WithSpecificIdType_ValuesAreReflected()
         {
             object value = "42";
 
@@ -126,7 +126,7 @@ namespace PineCone.Tests.UnitTests.Structures
         }
 
         [Test]
-        public void ConvertFrom_WhenIntAsObject_WithSpecificIdType_ValuesAreReflected()
+        public void Create_WhenIntAsObject_WithSpecificIdType_ValuesAreReflected()
         {
             object value = 42;
 
@@ -139,7 +139,7 @@ namespace PineCone.Tests.UnitTests.Structures
         }
 
         [Test]
-        public void ConvertFrom_WhenLong_WithSpecificIdType_ValuesAreReflected()
+        public void Create_WhenLong_WithSpecificIdType_ValuesAreReflected()
         {
             long value = 42;
 
@@ -152,7 +152,7 @@ namespace PineCone.Tests.UnitTests.Structures
         }
 
         [Test]
-        public void ConvertFrom_WhenStringLongAsObject_WithSpecificIdType_ValuesAreReflected()
+        public void Create_WhenStringLongAsObject_WithSpecificIdType_ValuesAreReflected()
         {
             object value = "42";
 
@@ -165,7 +165,7 @@ namespace PineCone.Tests.UnitTests.Structures
         }
 
         [Test]
-        public void ConvertFrom_WhenLongAsObject_WithSpecificIdType_ValuesAreReflected()
+        public void Create_WhenLongAsObject_WithSpecificIdType_ValuesAreReflected()
         {
             object value = (long)42;
 
@@ -178,7 +178,7 @@ namespace PineCone.Tests.UnitTests.Structures
         }
 
         [Test]
-        public void ConvertFrom_WhenString_WithSpecificIdType_ValuesAreReflected()
+        public void Create_WhenString_WithSpecificIdType_ValuesAreReflected()
         {
             string value = "keyA";
 
@@ -191,7 +191,7 @@ namespace PineCone.Tests.UnitTests.Structures
         }
 
         [Test]
-        public void ConvertFrom_WhenStringAsObject_WithSpecificIdType_ValuesAreReflected()
+        public void Create_WhenStringAsObject_WithSpecificIdType_ValuesAreReflected()
         {
             object value = "keyA";
 
@@ -202,7 +202,111 @@ namespace PineCone.Tests.UnitTests.Structures
             Assert.AreEqual(typeof(string), id.DataType);
             Assert.AreEqual(StructureIdTypes.String, id.IdType);
         }
-        
+
+        [Test]
+        public void Create_WhenIntAsString_WithSpecificIdType_ValuesAreReflected()
+        {
+            int value = 42;
+
+            var id = StructureId.Create(value.ToString(), StructureIdTypes.Identity);
+
+            Assert.IsTrue(id.HasValue);
+            Assert.AreEqual(value, id.Value);
+            Assert.AreEqual(typeof(int), id.DataType);
+            Assert.AreEqual(StructureIdTypes.Identity, id.IdType);
+        }
+
+        [Test]
+        public void Create_WhenNullableIntAsString_WithSpecificIdType_ValuesAreReflected()
+        {
+            int? value = null;
+
+            var id = StructureId.Create(value.ToString(), StructureIdTypes.Identity);
+
+            Assert.IsFalse(id.HasValue);
+            Assert.AreEqual(value, id.Value);
+            Assert.AreEqual(typeof(int?), id.DataType);
+            Assert.AreEqual(StructureIdTypes.Identity, id.IdType);
+        }
+
+        [Test]
+        public void Create_WhenLongAsString_WithSpecificIdType_ValuesAreReflected()
+        {
+            long value = 42;
+
+            var id = StructureId.Create(value.ToString(), StructureIdTypes.BigIdentity);
+
+            Assert.IsTrue(id.HasValue);
+            Assert.AreEqual(value, id.Value);
+            Assert.AreEqual(typeof(long), id.DataType);
+            Assert.AreEqual(StructureIdTypes.BigIdentity, id.IdType);
+        }
+
+        [Test]
+        public void Create_WhenNullableLongAsString_WithSpecificIdType_ValuesAreReflected()
+        {
+            long? value = null;
+
+            var id = StructureId.Create(value.ToString(), StructureIdTypes.BigIdentity);
+
+            Assert.IsFalse(id.HasValue);
+            Assert.AreEqual(value, id.Value);
+            Assert.AreEqual(typeof(long?), id.DataType);
+            Assert.AreEqual(StructureIdTypes.BigIdentity, id.IdType);
+        }
+
+        [Test]
+        public void Create_WhenGuidAsString_WithSpecificIdType_ValuesAreReflected()
+        {
+            Guid value = Guid.Parse("86141ed0-7000-43a0-8136-93c423573574");
+
+            var id = StructureId.Create(value.ToString(), StructureIdTypes.Guid);
+
+            Assert.IsTrue(id.HasValue);
+            Assert.AreEqual(value, id.Value);
+            Assert.AreEqual(typeof(Guid), id.DataType);
+            Assert.AreEqual(StructureIdTypes.Guid, id.IdType);
+        }
+
+        [Test]
+        public void Create_WhenNullableGuidAsString_WithSpecificIdType_ValuesAreReflected()
+        {
+            Guid? value = null;
+
+            var id = StructureId.Create(value.ToString(), StructureIdTypes.Guid);
+
+            Assert.IsFalse(id.HasValue);
+            Assert.AreEqual(value, id.Value);
+            Assert.AreEqual(typeof(Guid?), id.DataType);
+            Assert.AreEqual(StructureIdTypes.Guid, id.IdType);
+        }
+
+        [Test]
+        public void Create_WhenStringAsString_WithSpecificIdType_ValuesAreReflected()
+        {
+            string value = "keyA";
+
+            var id = StructureId.Create(value, StructureIdTypes.String);
+
+            Assert.IsTrue(id.HasValue);
+            Assert.AreEqual(value, id.Value);
+            Assert.AreEqual(typeof(string), id.DataType);
+            Assert.AreEqual(StructureIdTypes.String, id.IdType);
+        }
+
+        [Test]
+        public void Create_WhenNullStringAsString_WithSpecificIdType_ValuesAreReflected()
+        {
+            string value = null;
+
+            var id = StructureId.Create(value, StructureIdTypes.String);
+
+            Assert.IsFalse(id.HasValue);
+            Assert.AreEqual(value, id.Value);
+            Assert.AreEqual(typeof(string), id.DataType);
+            Assert.AreEqual(StructureIdTypes.String, id.IdType);
+        }
+
         [Test]
         public void Create_WhenString_ValuesAreReflected()
         {

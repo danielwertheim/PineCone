@@ -1,5 +1,4 @@
 using System;
-using EnsureThat;
 using NCore;
 using NCore.Reflections;
 using PineCone.Resources;
@@ -69,57 +68,89 @@ namespace PineCone.Structures
 
         public static IStructureId Create(Guid value)
         {
-            return new StructureId(value, GuidType);
+            return new StructureId(value, GuidType, StructureIdTypes.Guid);
         }
 
         public static IStructureId Create(Guid? value)
         {
-            return new StructureId(value, NullableGuidType);
+            return new StructureId(value, NullableGuidType, StructureIdTypes.Guid);
         }
 
         public static IStructureId Create(int value)
         {
-            return new StructureId(value, IntType);
+            return new StructureId(value, IntType, StructureIdTypes.Identity);
         }
 
         public static IStructureId Create(int? value)
         {
-            return new StructureId(value, NullableIntType);
+            return new StructureId(value, NullableIntType, StructureIdTypes.Identity);
         }
 
         public static IStructureId Create(long value)
         {
-            return new StructureId(value, LongType);
+            return new StructureId(value, LongType, StructureIdTypes.BigIdentity);
         }
 
         public static IStructureId Create(long? value)
         {
-            return new StructureId(value, NullableLongType);
+            return new StructureId(value, NullableLongType, StructureIdTypes.BigIdentity);
         }
 
         public static IStructureId Create(object value, StructureIdTypes idType)
         {
-            Ensure.That(value, "value").IsNotNull();
+            if (value is string)
+                return Create(value as string, idType);
+
+            var hasValue = value != null;
 
             switch (idType)
             {
-                case StructureIdTypes.Guid:
-                    return value is string
-                        ? Create(Guid.Parse(value.ToString()))
-                        : Create((Guid)value);
                 case StructureIdTypes.Identity:
-                    return value is string
-                        ? Create(int.Parse(value.ToString()))
-                        : Create((int)value);
+                    return hasValue
+                        ? Create((int)value)
+                        : Create((int?)null);
                 case StructureIdTypes.BigIdentity:
-                    return value is string
-                        ? Create(long.Parse(value.ToString()))
-                        : Create((long)value);
+                    return hasValue
+                        ? Create((long)value)
+                        : Create((long?)null);
+                case StructureIdTypes.Guid:
+                    return hasValue
+                        ? Create((Guid)value)
+                        : Create((Guid?)null);
                 case StructureIdTypes.String:
-                    return Create(value.ToString());
+                    return hasValue
+                        ? Create(value.ToString())
+                        : Create(null as string);
             }
 
-            throw new PineConeException(ExceptionMessages.StructureId_CreateByIdType.Inject(value.GetType(), idType));
+            throw new PineConeException(ExceptionMessages.StructureId_CreateByIdType.Inject(
+                hasValue ? value.GetType().Name : "null", 
+                idType));
+        }
+
+        public static IStructureId Create(string value, StructureIdTypes idType)
+        {
+            var hasValue = !string.IsNullOrWhiteSpace(value);
+
+            switch (idType)
+            {
+                case StructureIdTypes.Identity:
+                    return hasValue
+                        ? Create(int.Parse(value))
+                        : Create((int?)null);
+                case StructureIdTypes.BigIdentity:
+                    return hasValue
+                        ? Create(long.Parse(value))
+                        : Create((long?)null);
+                case StructureIdTypes.Guid:
+                    return hasValue
+                        ? Create(Guid.Parse(value))
+                        : Create((Guid?)null);
+                case StructureIdTypes.String:
+                    return Create(value);
+            }
+
+            throw new PineConeException(ExceptionMessages.StructureId_Create_FromString_WithSpecificId.Inject(value, idType.ToString()));
         }
 
         public static IStructureId GetSmallest(IStructureId x, IStructureId y)
@@ -134,15 +165,15 @@ namespace PineCone.Structures
             _value = value;
             _hasValue = value != null;
             _dataType = dataType;
-            _idType = GetIdTypeFrom(dataType);
+            _idType = StructureIdTypes.String;
         }
 
-        private StructureId(ValueType value, Type dataType)
+        private StructureId(ValueType value, Type dataType, StructureIdTypes idType)
         {
             _value = value;
             _hasValue = value != null;
             _dataType = dataType;
-            _idType = GetIdTypeFrom(dataType);
+            _idType = idType;
         }
 
         public static StructureIdTypes GetIdTypeFrom(Type type)
@@ -220,7 +251,7 @@ namespace PineCone.Structures
                 return x.HasValue ? -1 : 1;
             }
 
-            return Value.ToString().CompareTo(other.Value.ToString());
+            return Sys.StringComparer.Compare(Value.ToString(), other.Value.ToString());
         }
 
         public override bool Equals(object obj)

@@ -177,4 +177,7 @@
   <data name="StructureId_CreateByIdType" xml:space="preserve">
     <value>The value with type '{0}' can not be used to create a StructureId of type '{1}'.</value>
   </data>
+  <data name="StructureId_Create_FromString_WithSpecificId" xml:space="preserve">
+    <value>The sent string value '{0}' can not be converted to Id-type '{1}'.</value>
+  </data>
 </root>

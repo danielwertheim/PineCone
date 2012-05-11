@@ -14,8 +14,6 @@ namespace PineCone.Structures.Schemas
             get { return Type.Name; }
         }
 
-        public string Hash { get; private set; }
-
         public bool HasId
         {
             get { return IdAccessor != null; }
@@ -37,13 +35,11 @@ namespace PineCone.Structures.Schemas
         public IList<IIndexAccessor> IndexAccessors { get; private set; }
         public IList<IIndexAccessor> UniqueIndexAccessors { get; private set; }
 
-        public StructureSchema(IStructureType type, string hash, IIdAccessor idAccessor = null, IConcurrencyTokenAccessor concurrencyTokenAccessor = null, ITimeStampAccessor timeStampAccessor = null, ICollection<IIndexAccessor> indexAccessors = null)
+        public StructureSchema(IStructureType type, IIdAccessor idAccessor = null, IConcurrencyTokenAccessor concurrencyTokenAccessor = null, ITimeStampAccessor timeStampAccessor = null, ICollection<IIndexAccessor> indexAccessors = null)
         {
             Ensure.That(type, "type").IsNotNull();
-            Ensure.That(hash, "hash").IsNotNullOrWhiteSpace();
 
             Type = type;
-            Hash = hash;
             IdAccessor = idAccessor;
             ConcurrencyTokenAccessor = concurrencyTokenAccessor;
             TimeStampAccessor = timeStampAccessor;

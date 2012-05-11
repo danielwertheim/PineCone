@@ -15,20 +15,9 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas
         {
             var idAccessorFake = new Mock<IIdAccessor>();
 
-            var ex = Assert.Throws<ArgumentNullException>(() => new StructureSchema(null, "FakeHash", idAccessorFake.Object));
+            var ex = Assert.Throws<ArgumentNullException>(() => new StructureSchema(null, idAccessorFake.Object));
 
             Assert.AreEqual("type", ex.ParamName);
-        }
-
-        [Test]
-        public void Ctor_WhenHashIsWhiteSpaceEmpty_ThrowsArgumentNullException()
-        {
-        	var typeFake = new Mock<IStructureType>();
-            var idAccessorFake = new Mock<IIdAccessor>();
-
-            var ex = Assert.Throws<ArgumentException>(() => new StructureSchema(typeFake.Object, " ", idAccessorFake.Object));
-
-            Assert.AreEqual("hash", ex.ParamName);
         }
 
         [Test]
@@ -36,7 +25,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas
         {
 			var typeFake = new Mock<IStructureType>();
 
-            Assert.DoesNotThrow(() => new StructureSchema(typeFake.Object, "FakeHash", idAccessor: null, concurrencyTokenAccessor: null, indexAccessors: null));
+            Assert.DoesNotThrow(() => new StructureSchema(typeFake.Object, idAccessor: null, concurrencyTokenAccessor: null, indexAccessors: null));
         }
 
         [Test]
@@ -44,7 +33,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas
         {
             var typeFake = new Mock<IStructureType>();
 
-            Assert.DoesNotThrow(() => new StructureSchema(typeFake.Object, "FakeHash", idAccessor: null, concurrencyTokenAccessor: null, indexAccessors: null));
+            Assert.DoesNotThrow(() => new StructureSchema(typeFake.Object, idAccessor: null, concurrencyTokenAccessor: null, indexAccessors: null));
         }
 
         [Test]
@@ -52,7 +41,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas
         {
             var typeFake = new Mock<IStructureType>();
 
-            Assert.DoesNotThrow(() => new StructureSchema(typeFake.Object, "FakeHash", idAccessor: null, concurrencyTokenAccessor: null, indexAccessors: null));
+            Assert.DoesNotThrow(() => new StructureSchema(typeFake.Object, idAccessor: null, concurrencyTokenAccessor: null, indexAccessors: null));
         }
 
         [Test]
@@ -74,7 +63,6 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas
 
             var schema = new StructureSchema(
                 typeFake.Object,
-                "FakeHash",
                 idAccessorFake.Object,
                 conTokenFake.Object,
                 timeStampFake.Object,

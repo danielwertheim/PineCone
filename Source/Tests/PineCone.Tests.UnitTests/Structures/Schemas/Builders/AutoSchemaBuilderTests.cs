@@ -37,17 +37,6 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.Builders
         }
 
         [Test]
-        public void CreateSchema_WhenNestedType_SchemaHashReflectsTypeName()
-        {
-            const string expectedHash = "16ed4f23";
-            var structureType = GetStructureTypeFor<WithIdAndIndexableFirstLevelMembers>();
-
-            var schema = _schemaBuilder.CreateSchema(structureType);
-
-            Assert.AreEqual(expectedHash, schema.Hash);
-        }
-
-        [Test]
         public void CreateSchema_WhenSecondLevelIndexablePropertiesExists_IndexAccessorsAreCreated()
         {
             var structureType = GetStructureTypeFor<WithFirstSecondAndThirdLevelMembers>();

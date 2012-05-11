@@ -9,8 +9,6 @@ namespace PineCone.Structures.Schemas
 
     	string Name { get; }
 
-        string Hash { get; }
-
     	bool HasId { get; }
 
         bool HasConcurrencyToken { get; }

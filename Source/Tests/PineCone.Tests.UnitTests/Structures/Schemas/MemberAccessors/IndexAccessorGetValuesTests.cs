@@ -12,9 +12,9 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.MemberAccessors
         {
             const string initialValue = "Hello tester!";
             var item = new Dummy { StringProp = initialValue };
-
-            var property = StructurePropertyTestHelper.GetProperty<Dummy>("StringProp");
+            var property = StructurePropertyTestFactory.GetPropertyByPath<Dummy>("StringProp");
             var indexAccessor = new IndexAccessor(property);
+            
             var retrievedValues = indexAccessor.GetValues(item);
 
             CollectionAssert.AreEqual(new[] { initialValue }, retrievedValues);
@@ -25,9 +25,9 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.MemberAccessors
         {
             const string initialValue = null;
             var item = new Dummy { StringProp = initialValue };
-
-            var property = StructurePropertyTestHelper.GetProperty<Dummy>("StringProp");
+            var property = StructurePropertyTestFactory.GetPropertyByPath<Dummy>("StringProp");
             var indexAccessor = new IndexAccessor(property);
+
             var retrievedValues = indexAccessor.GetValues(item);
 
             Assert.IsNull(retrievedValues);
@@ -38,9 +38,9 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.MemberAccessors
         {
             const int initialValue = 12345;
             var item = new Dummy { IntProp = initialValue };
-
-            var property = StructurePropertyTestHelper.GetProperty<Dummy>("IntProp");
+            var property = StructurePropertyTestFactory.GetPropertyByPath<Dummy>("IntProp");
             var indexAccessor = new IndexAccessor(property);
+
             var retrievedValues = indexAccessor.GetValues(item);
 
             CollectionAssert.AreEqual(new[] { initialValue }, retrievedValues);
@@ -51,14 +51,12 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.MemberAccessors
         {
             const decimal initialValue = 12.56M;
             var item = new Dummy { DecimalProp = initialValue };
-
-            var property = StructurePropertyTestHelper.GetProperty<Dummy>("DecimalProp");
+            var property = StructurePropertyTestFactory.GetPropertyByPath<Dummy>("DecimalProp");
             var indexAccessor = new IndexAccessor(property);
+
             var retrievedValues = indexAccessor.GetValues(item);
 
-            CollectionAssert.AreEqual(
-                new[] { initialValue },
-                retrievedValues);
+            CollectionAssert.AreEqual(new[] { initialValue }, retrievedValues);
         }
 
         [Test]
@@ -66,14 +64,12 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.MemberAccessors
         {
             decimal? initialValue = 13.34M;
             var item = new Dummy { NullableDecimalProp = initialValue };
-
-            var property = StructurePropertyTestHelper.GetProperty<Dummy>("NullableDecimalProp");
+            var property = StructurePropertyTestFactory.GetPropertyByPath<Dummy>("NullableDecimalProp");
             var indexAccessor = new IndexAccessor(property);
+
             var retrievedValues = indexAccessor.GetValues(item);
 
-            CollectionAssert.AreEqual(
-                new[] { initialValue.GetValueOrDefault() },
-                retrievedValues);
+            CollectionAssert.AreEqual(new[] { initialValue.GetValueOrDefault() }, retrievedValues);
         }
 
         [Test]
@@ -81,9 +77,9 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.MemberAccessors
         {
             decimal? initialValue = null;
             var item = new Dummy { NullableDecimalProp = initialValue };
-
-            var property = StructurePropertyTestHelper.GetProperty<Dummy>("NullableDecimalProp");
+            var property = StructurePropertyTestFactory.GetPropertyByPath<Dummy>("NullableDecimalProp");
             var indexAccessor = new IndexAccessor(property);
+
             var retrievedValues = indexAccessor.GetValues(item);
 
             Assert.IsNull(retrievedValues);
@@ -94,14 +90,12 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.MemberAccessors
         {
             var initialValue = new DateTime(2010, 2, 3);
             var item = new Dummy { DateTimeProp = initialValue };
-
-            var property = StructurePropertyTestHelper.GetProperty<Dummy>("DateTimeProp");
+            var property = StructurePropertyTestFactory.GetPropertyByPath<Dummy>("DateTimeProp");
             var indexAccessor = new IndexAccessor(property);
+
             var retrievedValues = indexAccessor.GetValues(item);
 
-            CollectionAssert.AreEqual(
-                new[] { initialValue },
-                retrievedValues);
+            CollectionAssert.AreEqual(new[] { initialValue }, retrievedValues);
         }
 
         [Test]
@@ -109,9 +103,9 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.MemberAccessors
         {
             const bool initialValue = true;
             var item = new Dummy { BoolProp = initialValue };
-
-            var property = StructurePropertyTestHelper.GetProperty<Dummy>("BoolProp");
+            var property = StructurePropertyTestFactory.GetPropertyByPath<Dummy>("BoolProp");
             var indexAccessor = new IndexAccessor(property);
+
             var retrievedValues = indexAccessor.GetValues(item);
 
             CollectionAssert.AreEqual(new[] { initialValue }, retrievedValues);

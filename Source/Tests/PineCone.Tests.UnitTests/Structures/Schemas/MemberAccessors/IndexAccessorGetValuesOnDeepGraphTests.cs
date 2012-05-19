@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using NUnit.Framework;
-using PineCone.Structures.Schemas;
 using PineCone.Structures.Schemas.MemberAccessors;
 
 namespace PineCone.Tests.UnitTests.Structures.Schemas.MemberAccessors
@@ -11,17 +10,8 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.MemberAccessors
         [Test]
         public void GetValues_WhenDeepGraphWithEnumerables_CanExtractValues()
         {
-            var ordersPropertyInfo = typeof(TestCustomer).GetProperty("Orders");
-            var ordersProperty = StructureProperty.CreateFrom(ordersPropertyInfo);
-
-            var linesPropertyInfo = typeof(TestOrder).GetProperty("Lines");
-            var linesProperty = StructureProperty.CreateFrom(ordersProperty, linesPropertyInfo);
-
-            var prodNoPropertyInfo = typeof(TestOrderLine).GetProperty("ProductNo");
-            var prodNoProperty = StructureProperty.CreateFrom(linesProperty, prodNoPropertyInfo);
-
-            var pricesPropertyInfo = typeof(TestOrderLine).GetProperty("Prices");
-            var pricesProperty = StructureProperty.CreateFrom(linesProperty, pricesPropertyInfo);
+            var prodNoProperty = StructurePropertyTestFactory.GetPropertyByPath<TestCustomer>("Orders.Lines.ProductNo");
+            var pricesProperty = StructurePropertyTestFactory.GetPropertyByPath<TestCustomer>("Orders.Lines.Prices");
 
             var graph = new TestCustomer
             {

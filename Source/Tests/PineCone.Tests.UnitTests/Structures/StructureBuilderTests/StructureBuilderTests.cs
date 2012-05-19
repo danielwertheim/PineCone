@@ -197,7 +197,7 @@ namespace PineCone.Tests.UnitTests.Structures.StructureBuilderTests
         }
 
         [Test]
-        public void CreateStructure_WhenStructureContainsConcurrencyTokenOfGuid_ItIsPresentInSchemaButNotInStructure()
+        public void CreateStructure_WhenStructureContainsConcurrencyTokenOfGuid_ItIsPresentInSchemaAsWellAsInStructure()
         {
             var schema = StructureSchemaTestFactory.CreateRealFrom<IHaveConcurrencyTokenOfGuid>();
             var item = new IHaveConcurrencyTokenOfGuid();
@@ -205,8 +205,9 @@ namespace PineCone.Tests.UnitTests.Structures.StructureBuilderTests
             var structure = Builder.CreateStructure(item, schema);
 
             Assert.IsTrue(schema.HasConcurrencyToken);
-            Assert.AreEqual(1, structure.Indexes.Count);
+            Assert.AreEqual(2, structure.Indexes.Count);
             Assert.AreEqual("StructureId", structure.Indexes[0].Path);
+            Assert.AreEqual("ConcurrencyToken", structure.Indexes[1].Path);
         }
 
         private class TestItemForFirstLevel

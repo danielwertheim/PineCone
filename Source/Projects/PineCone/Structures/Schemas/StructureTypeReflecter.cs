@@ -11,14 +11,32 @@ namespace PineCone.Structures.Schemas
     public class StructureTypeReflecter : IStructureTypeReflecter
     {
         private const string ConcurrencyTokenMemberName = "ConcurrencyToken";
-
-        private static readonly string[] NonIndexableSystemMembers = new[] { ConcurrencyTokenMemberName };
+        private static readonly string[] NonIndexableSystemMembers = new string[0];
+        private IStructurePropertyFactory _propertyFactory;
 
         public const BindingFlags IdPropertyBindingFlags =
             BindingFlags.Public | BindingFlags.Instance | BindingFlags.GetProperty;
 
         public const BindingFlags PropertyBindingFlags =
             BindingFlags.Public | BindingFlags.Instance | BindingFlags.GetProperty;
+
+        public IStructurePropertyFactory PropertyFactory
+        {
+            get
+            {
+                return _propertyFactory;
+            }
+            set
+            {
+                Ensure.That(value, "PropertyFactory").IsNotNull();
+                _propertyFactory = value;
+            }
+        }
+
+        public StructureTypeReflecter()
+        {
+            PropertyFactory = new StructurePropertyFactory();
+        }
 
         public bool HasIdProperty(Type type)
         {
@@ -41,19 +59,19 @@ namespace PineCone.Structures.Schemas
 
             var defaultProp = GetDefaultStructureIdProperty(properties);
             if (defaultProp != null)
-                return StructureProperty.CreateFrom(defaultProp);
+                return PropertyFactory.CreateRootPropertyFrom(defaultProp);
 
             var typeNamedIdProp = GetTypeNamedStructureIdProperty(type, properties);
             if (typeNamedIdProp != null)
-                return StructureProperty.CreateFrom(typeNamedIdProp);
+                return PropertyFactory.CreateRootPropertyFrom(typeNamedIdProp);
 
             var interfaceNamedIdProp = GetInterfaceNamedStructureIdProperty(type, properties);
             if (interfaceNamedIdProp != null)
-                return StructureProperty.CreateFrom(interfaceNamedIdProp);
+                return PropertyFactory.CreateRootPropertyFrom(interfaceNamedIdProp);
 
             var idProp = properties.SingleOrDefault(p => p.Name.Equals(StructureIdPropertyNames.Indicator));
             if (idProp != null)
-                return StructureProperty.CreateFrom(idProp);
+                return PropertyFactory.CreateRootPropertyFrom(idProp);
 
             return null;
         }
@@ -86,19 +104,19 @@ namespace PineCone.Structures.Schemas
 
             var defaultProp = GetDefaultStructureTimeStampProperty(properties);
             if (defaultProp != null)
-                return StructureProperty.CreateFrom(defaultProp);
+                return PropertyFactory.CreateRootPropertyFrom(defaultProp);
 
             var typeNamedProp = GetTypeNamedStructureTimeStampProperty(type, properties);
             if (typeNamedProp != null)
-                return StructureProperty.CreateFrom(typeNamedProp);
+                return PropertyFactory.CreateRootPropertyFrom(typeNamedProp);
 
             var interfaceNamedProp = GetInterfaceNamedStructureTimeStampProperty(type, properties);
             if (interfaceNamedProp != null)
-                return StructureProperty.CreateFrom(interfaceNamedProp);
+                return PropertyFactory.CreateRootPropertyFrom(interfaceNamedProp);
 
             var prop = properties.SingleOrDefault(p => p.Name.Equals(StructureTimeStampPropertyNames.Indicator));
             if (prop != null)
-                return StructureProperty.CreateFrom(prop);
+                return PropertyFactory.CreateRootPropertyFrom(prop);
 
             return null;
         }
@@ -131,7 +149,7 @@ namespace PineCone.Structures.Schemas
 
             return propertyInfo == null
                 ? null
-                : StructureProperty.CreateFrom(propertyInfo);
+                : PropertyFactory.CreateRootPropertyFrom(propertyInfo);
         }
 
         public virtual IStructureProperty[] GetIndexableProperties(Type type)
@@ -170,11 +188,11 @@ namespace PineCone.Structures.Schemas
             var properties = new List<IStructureProperty>();
 
             properties.AddRange(GetSimpleIndexablePropertyInfos(propertyInfos, parent, nonIndexablePaths, indexablePaths)
-                .Select(spi => StructureProperty.CreateFrom(parent, spi)));
+                .Select(spi => PropertyFactory.CreateChildPropertyFrom(parent, spi)));
 
             foreach (var complexPropertyInfo in GetComplexIndexablePropertyInfos(propertyInfos, parent, nonIndexablePaths, indexablePaths))
             {
-                var complexProperty = StructureProperty.CreateFrom(parent, complexPropertyInfo);
+                var complexProperty = PropertyFactory.CreateChildPropertyFrom(parent, complexPropertyInfo);
                 var simpleComplexProps = GetIndexableProperties(
                     complexProperty.DataType, complexProperty, nonIndexablePaths, indexablePaths);
 
@@ -187,7 +205,7 @@ namespace PineCone.Structures.Schemas
 
             foreach (var enumerablePropertyInfo in GetEnumerableIndexablePropertyInfos(propertyInfos, parent, nonIndexablePaths, indexablePaths))
             {
-                var enumerableProperty = StructureProperty.CreateFrom(parent, enumerablePropertyInfo);
+                var enumerableProperty = PropertyFactory.CreateChildPropertyFrom(parent, enumerablePropertyInfo);
                 if (enumerableProperty.ElementDataType.IsSimpleType())
                 {
                     properties.Add(enumerableProperty);
@@ -211,11 +229,11 @@ namespace PineCone.Structures.Schemas
 
             var filteredProperties = properties.Where(p => p.PropertyType.IsSimpleType());
 
-            if (nonIndexablePaths != null)
+            if (nonIndexablePaths != null && nonIndexablePaths.Any())
                 filteredProperties = filteredProperties.Where(p => !nonIndexablePaths.Contains(
                     PropertyPathBuilder.BuildPath(parent, p.Name)));
 
-            if (indexablePaths != null)
+            if (indexablePaths != null && indexablePaths.Any())
                 filteredProperties = filteredProperties.Where(p => indexablePaths.Contains(
                     PropertyPathBuilder.BuildPath(parent, p.Name)));
 
@@ -232,11 +250,11 @@ namespace PineCone.Structures.Schemas
                 !p.PropertyType.IsEnumerableType() &&
                 GetIdProperty(p.PropertyType) == null);
 
-            if (nonIndexablePaths != null)
+            if (nonIndexablePaths != null && nonIndexablePaths.Any())
                 filteredProperties = filteredProperties.Where(p => !nonIndexablePaths.Contains(
                     PropertyPathBuilder.BuildPath(parent, p.Name)));
 
-            if (indexablePaths != null)
+            if (indexablePaths != null && indexablePaths.Any())
                 filteredProperties = filteredProperties.Where(p => indexablePaths.Contains(
                     PropertyPathBuilder.BuildPath(parent, p.Name)));
 
@@ -253,11 +271,11 @@ namespace PineCone.Structures.Schemas
                 p.PropertyType.IsEnumerableType() &&
                 !p.PropertyType.IsEnumerableBytesType());
 
-            if (nonIndexablePaths != null)
+            if (nonIndexablePaths != null && nonIndexablePaths.Any())
                 filteredProperties = filteredProperties.Where(p => !nonIndexablePaths.Contains(
                     PropertyPathBuilder.BuildPath(parent, p.Name)));
 
-            if (indexablePaths != null)
+            if (indexablePaths != null && indexablePaths.Any())
                 filteredProperties = filteredProperties.Where(p => indexablePaths.Contains(
                     PropertyPathBuilder.BuildPath(parent, p.Name)));
 

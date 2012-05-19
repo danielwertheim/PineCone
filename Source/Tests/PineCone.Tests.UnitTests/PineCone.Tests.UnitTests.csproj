@@ -96,7 +96,6 @@
     <Compile Include="Structures\Schemas\MemberAccessors\TimeStampAccessorTests.cs" />
     <Compile Include="Structures\Schemas\StructureIdPropertyNamesTests.cs" />
     <Compile Include="Structures\Schemas\StructurePropertyTestFactory.cs" />
-    <Compile Include="Structures\Schemas\StructurePropertyTestHelper.cs" />
     <Compile Include="Structures\Schemas\StructurePropertyTests\StructurePropertyGetPrimitiveValueTests.cs" />
     <Compile Include="Structures\Schemas\StructureSchemasTests.cs" />
     <Compile Include="Structures\Schemas\StructureTimeStampPropertyNamesTests.cs" />

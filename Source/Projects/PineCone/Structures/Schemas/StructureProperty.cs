@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Reflection;
 using EnsureThat;
 using NCore;
@@ -12,8 +11,6 @@ namespace PineCone.Structures.Schemas
     [Serializable]
     public class StructureProperty : IStructureProperty
     {
-        private static readonly Type UniqueAttributeType = typeof(UniqueAttribute);
-
         private readonly DynamicGetter _getter;
         private readonly DynamicSetter _setter;
 
@@ -34,7 +31,7 @@ namespace PineCone.Structures.Schemas
             get { return UniqueMode.HasValue; }
         }
 
-        public UniqueModes? UniqueMode { get; private set; }
+        public UniqueMode? UniqueMode { get; private set; }
 
         public bool IsEnumerable { get; private set; }
 
@@ -46,28 +43,11 @@ namespace PineCone.Structures.Schemas
 
         public bool IsReadOnly { get; private set; }
 
-        public static StructureProperty CreateFrom(PropertyInfo propertyInfo)
-        {
-            return CreateFrom(null, propertyInfo);
-        }
+        public StructureProperty(PropertyInfo property, DynamicGetter getter, DynamicSetter setter = null, UniqueMode? uniqueMode = null)
+            : this(null, property, getter, setter, uniqueMode)
+        { }
 
-        public static StructureProperty CreateFrom(IStructureProperty parent, PropertyInfo propertyInfo)
-        {
-            var uniqueAttribute = (UniqueAttribute)propertyInfo.GetCustomAttributes(UniqueAttributeType, true).FirstOrDefault();
-
-            UniqueModes? uniqueMode = null;
-            if (uniqueAttribute != null)
-                uniqueMode = uniqueAttribute.Mode;
-
-            return new StructureProperty(
-                parent,
-                propertyInfo,
-                DynamicPropertyFactory.GetterFor(propertyInfo),
-                DynamicPropertyFactory.SetterFor(propertyInfo),
-                uniqueMode);
-        }
-
-        private StructureProperty(IStructureProperty parent, PropertyInfo property, DynamicGetter getter, DynamicSetter setter = null, UniqueModes? uniqueMode = null)
+        public StructureProperty(IStructureProperty parent, PropertyInfo property, DynamicGetter getter, DynamicSetter setter = null, UniqueMode? uniqueMode = null)
         {
             Ensure.That(property, "property").IsNotNull();
             Ensure.That(getter, "getter").IsNotNull();
@@ -78,7 +58,7 @@ namespace PineCone.Structures.Schemas
             Parent = parent;
             Name = property.Name;
             DataType = property.PropertyType;
-            DataTypeCode = DataType.ToDataTypeCode();
+            DataTypeCode = property.PropertyType.ToDataTypeCode();
             IsRootMember = parent == null;
             IsReadOnly = _setter == null;
             UniqueMode = uniqueMode;
@@ -88,7 +68,7 @@ namespace PineCone.Structures.Schemas
             ElementDataType = IsEnumerable ? DataType.GetEnumerableElementType() : null;
             ElementDataTypeCode = ElementDataType != null ? ElementDataType.ToDataTypeCode() : (DataTypeCode?)null;
             IsElement = Parent != null && (Parent.IsElement || Parent.IsEnumerable);
-            
+
             if (IsUnique && !isSimpleOrValueType)
                 throw new PineConeException(ExceptionMessages.StructureProperty_Ctor_UniqueOnNonSimpleType);
 

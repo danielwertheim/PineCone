@@ -61,7 +61,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
 
         private class WithUniqueAndNonUniqueComplexProperties
         {
-            [Unique(UniqueModes.PerInstance)]
+            [Unique(UniqueMode.PerInstance)]
             public Item UqComplex1 { get; set; }
 
             public Item UqComplex2 { get; set; }

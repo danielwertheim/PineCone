@@ -7,7 +7,7 @@ namespace PineCone.Annotations
     /// be applied as a constraint in the model.
     /// </summary>
     [Serializable]
-    public enum UniqueModes
+    public enum UniqueMode
     {
         /// <summary>
         /// Unique per type, e.g OrderNo

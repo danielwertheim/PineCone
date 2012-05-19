@@ -2,7 +2,6 @@ using System;
 using NUnit.Framework;
 using PineCone.Resources;
 using PineCone.Structures;
-using PineCone.Structures.Schemas;
 using PineCone.Structures.Schemas.MemberAccessors;
 
 namespace PineCone.Tests.UnitTests.Structures.Schemas.MemberAccessors
@@ -13,13 +12,10 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.MemberAccessors
         [Test]
         public void Ctor_WhenIntNotOnFirstLevel_ThrowsPineConeException()
         {
-            var itemPropertyInfo = typeof(Container).GetProperty("NestedWithIdentity");
-            var itemProperty = StructureProperty.CreateFrom(itemPropertyInfo);
+            var parent = StructurePropertyTestFactory.GetRawProperty<Container>("NestedWithIdentity");
+            var idProperty = StructurePropertyTestFactory.GetRawProperty<IdentityDummy>("StructureId", parent);
 
-            var intPropertyInfo = typeof(IdentityDummy).GetProperty("StructureId");
-            var intProperty = StructureProperty.CreateFrom(itemProperty, intPropertyInfo);
-
-            var ex = Assert.Throws<PineConeException>(() => new IdAccessor(intProperty));
+            var ex = Assert.Throws<PineConeException>(() => new IdAccessor(idProperty));
 
             Assert.AreEqual(ExceptionMessages.IdAccessor_InvalidLevel, ex.Message);
         }
@@ -27,13 +23,10 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.MemberAccessors
         [Test]
         public void Ctor_WhenGuidNotOnFirstLevel_ThrowsPineConeException()
         {
-            var itemPropertyInfo = typeof(Container).GetProperty("NestedWithGuid");
-            var itemProperty = StructureProperty.CreateFrom(itemPropertyInfo);
+            var parent = StructurePropertyTestFactory.GetRawProperty<Container>("NestedWithGuid");
+            var idProperty = StructurePropertyTestFactory.GetRawProperty<GuidDummy>("StructureId", parent);
 
-            var guidPropertyInfo = typeof(GuidDummy).GetProperty("StructureId");
-            var guidProperty = StructureProperty.CreateFrom(itemProperty, guidPropertyInfo);
-
-            var ex = Assert.Throws<PineConeException>(() => new IdAccessor(guidProperty));
+            var ex = Assert.Throws<PineConeException>(() => new IdAccessor(idProperty));
 
             Assert.AreEqual(ExceptionMessages.IdAccessor_InvalidLevel, ex.Message);
         }
@@ -41,13 +34,10 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.MemberAccessors
         [Test]
         public void Ctor_WhenStringNotOnFirstLevel_ThrowsPineConeException()
         {
-            var itemPropertyInfo = typeof(Container).GetProperty("NestedWithString");
-            var itemProperty = StructureProperty.CreateFrom(itemPropertyInfo);
+            var parent = StructurePropertyTestFactory.GetRawProperty<Container>("NestedWithString");
+            var idProperty = StructurePropertyTestFactory.GetRawProperty<StringDummy>("StructureId", parent);
 
-            var guidPropertyInfo = typeof(GuidDummy).GetProperty("StructureId");
-            var guidProperty = StructureProperty.CreateFrom(itemProperty, guidPropertyInfo);
-
-            var ex = Assert.Throws<PineConeException>(() => new IdAccessor(guidProperty));
+            var ex = Assert.Throws<PineConeException>(() => new IdAccessor(idProperty));
 
             Assert.AreEqual(ExceptionMessages.IdAccessor_InvalidLevel, ex.Message);
         }
@@ -60,7 +50,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.MemberAccessors
             var property = StructurePropertyTestFactory.GetIdProperty<StringDummy>();
 
             var idAccessor = new IdAccessor(property);
-            var idViaAccessor = idAccessor.GetValue<StringDummy>(item);
+            var idViaAccessor = idAccessor.GetValue(item);
 
             Assert.AreEqual(id, idViaAccessor.Value);
         }
@@ -73,7 +63,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.MemberAccessors
             var property = StructurePropertyTestFactory.GetIdProperty<GuidDummy>();
 
             var idAccessor = new IdAccessor(property);
-            var idViaAccessor = idAccessor.GetValue<GuidDummy>(item);
+            var idViaAccessor = idAccessor.GetValue(item);
 
             Assert.AreEqual(id, idViaAccessor.Value);
         }
@@ -150,7 +140,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.MemberAccessors
             var property = StructurePropertyTestFactory.GetIdProperty<IdentityDummy>();
 
             var idAccessor = new IdAccessor(property);
-            var idViaAccessor = idAccessor.GetValue<IdentityDummy>(item);
+            var idViaAccessor = idAccessor.GetValue(item);
 
             Assert.AreEqual(id, idViaAccessor.Value);
         }
@@ -214,7 +204,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.MemberAccessors
             var property = StructurePropertyTestFactory.GetIdProperty<BigIdentityDummy>();
 
             var idAccessor = new IdAccessor(property);
-            var idViaAccessor = idAccessor.GetValue<BigIdentityDummy>(item);
+            var idViaAccessor = idAccessor.GetValue(item);
 
             Assert.AreEqual(id, idViaAccessor.Value);
         }

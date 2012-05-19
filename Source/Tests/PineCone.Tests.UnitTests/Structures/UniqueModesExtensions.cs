@@ -10,7 +10,7 @@ namespace PineCone.Tests.UnitTests.Structures
         [Test]
         public void ToStructureIndexType_WhenPerInstance_MapsToUniquePerInstance()
         {
-            var mappedValue = UniqueModes.PerInstance.ToStructureIndexType();
+            var mappedValue = UniqueMode.PerInstance.ToStructureIndexType();
 
             Assert.AreEqual(StructureIndexType.UniquePerInstance, mappedValue);
         }
@@ -18,7 +18,7 @@ namespace PineCone.Tests.UnitTests.Structures
         [Test]
         public void ToStructureIndexType_WhenPerType_MapsToUniquePerType()
         {
-            var mappedValue = UniqueModes.PerType.ToStructureIndexType();
+            var mappedValue = UniqueMode.PerType.ToStructureIndexType();
 
             Assert.AreEqual(StructureIndexType.UniquePerType, mappedValue);
         }

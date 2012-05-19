@@ -1,0 +1,42 @@
+using System;
+using System.Linq;
+using System.Reflection;
+using PineCone.Annotations;
+
+namespace PineCone.Structures.Schemas
+{
+    public class StructurePropertyFactory : IStructurePropertyFactory
+    {
+        private static readonly Type UniqueAttributeType = typeof(UniqueAttribute);
+
+        public virtual IStructureProperty CreateRootPropertyFrom(PropertyInfo propertyInfo)
+        {
+            return new StructureProperty(
+                propertyInfo,
+                DynamicPropertyFactory.GetterFor(propertyInfo),
+                DynamicPropertyFactory.SetterFor(propertyInfo),
+                GetUniqueMode(propertyInfo));
+        }
+
+        public virtual IStructureProperty CreateChildPropertyFrom(IStructureProperty parent, PropertyInfo propertyInfo)
+        {
+            return new StructureProperty(
+                parent,
+                propertyInfo,
+                DynamicPropertyFactory.GetterFor(propertyInfo),
+                DynamicPropertyFactory.SetterFor(propertyInfo),
+                GetUniqueMode(propertyInfo));
+        }
+
+        protected virtual UniqueMode? GetUniqueMode(PropertyInfo propertyInfo)
+        {
+            var uniqueAttribute = (UniqueAttribute)propertyInfo.GetCustomAttributes(UniqueAttributeType, true).FirstOrDefault();
+
+            UniqueMode? uniqueMode = null;
+            if (uniqueAttribute != null)
+                uniqueMode = uniqueAttribute.Mode;
+
+            return uniqueMode;
+        }
+    }
+}

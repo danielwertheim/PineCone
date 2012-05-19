@@ -11,8 +11,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.MemberAccessors
         {
             const string newValue = "Test";
             var item = new Item { StringProp = null };
-
-            var property = StructurePropertyTestHelper.GetProperty<Item>("StringProp");
+            var property = StructurePropertyTestFactory.GetPropertyByPath<Item>("StringProp");
             var indexAccessor = new IndexAccessor(property);
 
             indexAccessor.SetValue(item, newValue);
@@ -25,8 +24,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.MemberAccessors
         {
             const string newValue = "Override with this";
             var item = new Item { StringProp = "Test" };
-
-            var property = StructurePropertyTestHelper.GetProperty<Item>("StringProp");
+            var property = StructurePropertyTestFactory.GetPropertyByPath<Item>("StringProp");
             var indexAccessor = new IndexAccessor(property);
 
             indexAccessor.SetValue(item, newValue);
@@ -39,8 +37,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.MemberAccessors
         {
             const int newValue = 42;
             var item = new Item { IntProp = 0 };
-
-            var property = StructurePropertyTestHelper.GetProperty<Item>("IntProp");
+            var property = StructurePropertyTestFactory.GetPropertyByPath<Item>("IntProp");
             var indexAccessor = new IndexAccessor(property);
 
             indexAccessor.SetValue(item, newValue);
@@ -53,8 +50,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.MemberAccessors
         {
             const int newValue = 42;
             var item = new Item { NullableIntProp = null };
-
-            var property = StructurePropertyTestHelper.GetProperty<Item>("NullableIntProp");
+            var property = StructurePropertyTestFactory.GetPropertyByPath<Item>("NullableIntProp");
             var indexAccessor = new IndexAccessor(property);
 
             indexAccessor.SetValue(item, newValue);
@@ -67,8 +63,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.MemberAccessors
         {
             const int newValue = 42;
             var item = new Item { NullableIntProp = 1 };
-
-            var property = StructurePropertyTestHelper.GetProperty<Item>("NullableIntProp");
+            var property = StructurePropertyTestFactory.GetPropertyByPath<Item>("NullableIntProp");
             var indexAccessor = new IndexAccessor(property);
 
             indexAccessor.SetValue(item, newValue);

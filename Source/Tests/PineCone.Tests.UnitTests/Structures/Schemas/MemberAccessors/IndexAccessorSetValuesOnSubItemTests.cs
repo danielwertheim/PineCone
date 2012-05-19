@@ -11,10 +11,9 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.MemberAccessors
         {
             const string newValue = "Test";
             var item = new Item { SingleSubItem = null };
-
-            var subItemProp = StructurePropertyTestHelper.GetProperty<Item>("SingleSubItem");
-
+            var subItemProp = StructurePropertyTestFactory.GetRawProperty<Item>("SingleSubItem");
             var indexAccessor = new IndexAccessor(subItemProp);
+            
             indexAccessor.SetValue(item, new SubItem { Value = newValue });
 
             Assert.AreEqual(newValue, item.SingleSubItem.Value);
@@ -25,14 +24,12 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.MemberAccessors
         {
             const string newValue = "Test";
             var item = new Item
-                       {
-                           SingleSubItem = new SubItem { Value = null }
-                       };
-
-            var subItemProp = StructurePropertyTestHelper.GetProperty<Item>("SingleSubItem");
-            var valueProp = StructurePropertyTestHelper.GetProperty<SubItem>("Value", subItemProp);
-
+            {
+                SingleSubItem = new SubItem { Value = null }
+            };
+            var valueProp = StructurePropertyTestFactory.GetPropertyByPath<Item>("SingleSubItem.Value");
             var indexAccessor = new IndexAccessor(valueProp);
+
             indexAccessor.SetValue(item, newValue);
 
             Assert.AreEqual(newValue, item.SingleSubItem.Value);
@@ -46,11 +43,9 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.MemberAccessors
             {
                 SingleSubItem = new SubItem { Value = "Not" + newValue }
             };
-
-            var subItemProp = StructurePropertyTestHelper.GetProperty<Item>("SingleSubItem");
-            var valueProp = StructurePropertyTestHelper.GetProperty<SubItem>("Value", subItemProp);
-
+            var valueProp = StructurePropertyTestFactory.GetPropertyByPath<Item>("SingleSubItem.Value");
             var indexAccessor = new IndexAccessor(valueProp);
+            
             indexAccessor.SetValue(item, newValue);
 
             Assert.AreEqual(newValue, item.SingleSubItem.Value);

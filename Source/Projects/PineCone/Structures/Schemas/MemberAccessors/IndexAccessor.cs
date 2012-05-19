@@ -36,7 +36,7 @@ namespace PineCone.Structures.Schemas.MemberAccessors
             get { return Property.ElementDataTypeCode; }
         }
 
-        public UniqueModes? UniqueMode
+        public UniqueMode? UniqueMode
         {
             get { return Property.UniqueMode; }
         }

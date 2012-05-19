@@ -21,5 +21,25 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas
         {
             return Reflecter.GetIndexableProperties(typeof(T)).Single(i => i.Name == name);
         }
+
+        internal static IStructureProperty GetRawProperty<T>(string name) where T : class 
+        {
+            var type = typeof(T);
+            var propertyInfo = type.GetProperty(name);
+
+            var property = Reflecter.PropertyFactory.CreateRootPropertyFrom(propertyInfo);
+
+            return property;
+        }
+
+        internal static IStructureProperty GetRawProperty<T>(string name, IStructureProperty parent) where T : class 
+        {
+            var type = typeof(T);
+            var propertyInfo = type.GetProperty(name);
+
+            var property = Reflecter.PropertyFactory.CreateChildPropertyFrom(parent, propertyInfo);
+
+            return property;
+        }
     }
 }

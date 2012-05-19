@@ -277,14 +277,15 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.Builders
         }
 
         [Test]
-        public void CreateSchema_WhenClassContainsConcurrencyToken_IsRepresentedAsSpecificMemberInsteadOfAsIndexAccessor()
+        public void CreateSchema_WhenClassContainsConcurrencyToken_IsRepresentedAsSpecificMemberAsWellAsIndexAccessor()
         {
             var structureType = GetStructureTypeFor<WithConcurrencyToken>();
 
             var schema = _schemaBuilder.CreateSchema(structureType);
 
-            Assert.AreEqual(1, schema.IndexAccessors.Count);
+            Assert.AreEqual(2, schema.IndexAccessors.Count);
             Assert.AreEqual("StructureId", schema.IndexAccessors[0].Path);
+            Assert.AreEqual("ConcurrencyToken", schema.IndexAccessors[1].Path);
 
             Assert.IsTrue(schema.HasConcurrencyToken);
             Assert.AreEqual(typeof(Guid), schema.ConcurrencyTokenAccessor.DataType);

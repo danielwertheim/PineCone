@@ -14,7 +14,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructurePropertyTests
             var property = GetProperty<DummyForUniquesTests>("Uq1");
 
             Assert.IsTrue(property.IsUnique);
-            Assert.AreEqual(UniqueModes.PerInstance, property.UniqueMode);
+            Assert.AreEqual(UniqueMode.PerInstance, property.UniqueMode);
         }
 
         [Test]
@@ -41,16 +41,16 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructurePropertyTests
             Assert.IsFalse(property.IsEnumerable);
         }
 
-        private static IStructureProperty GetProperty<T>(string name)
+        private static IStructureProperty GetProperty<T>(string name) where T : class
         {
-            return StructurePropertyTestHelper.GetProperty<T>(name);
+            return StructurePropertyTestFactory.GetPropertyByPath<T>(name);
         }
 
         private class DummyForUniquesTests
         {
             public int Int1 { get; set; }
 
-            [Unique(UniqueModes.PerInstance)]
+            [Unique(UniqueMode.PerInstance)]
             public int Uq1 { get; set; }
         }
 

@@ -11,7 +11,7 @@ namespace PineCone.Structures.Schemas.MemberAccessors
         bool IsUnique { get; }
         Type ElementDataType { get; }
         DataTypeCode? ElementDataTypeCode { get; }
-        UniqueModes? UniqueMode { get; }
+        UniqueMode? UniqueMode { get; }
         
         IList<object> GetValues<T>(T item) where T : class;
         void SetValue<T>(T item, object value) where T : class;

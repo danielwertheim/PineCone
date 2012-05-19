@@ -10,10 +10,12 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
     [TestFixture]
     public class StructureTypeReflecterSimpleIndexablePropertiesTests : UnitTestBase
     {
+        private readonly TestableReflecter _reflecter = new TestableReflecter();
+
         [Test]
         public void GetSimpleIndexableProperties_WhenMultiplePublicSimplePropertiesExistsAndNoExclusions_ReturnsAllPublicSimpleProperties()
         {
-            var properties = StructureTypeReflecter.GetSimpleIndexablePropertyInfos(
+            var properties = _reflecter.InvokeGetSimpleIndexablePropertyInfos(
                 typeof(WithSimpleProperties).GetProperties(StructureTypeReflecter.PropertyBindingFlags));
 
             var names = properties.Select(p => p.Name).ToArray();
@@ -29,7 +31,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
         [Test]
         public void GetSimpleIndexableProperties_WhenByteArray_NotReturned()
         {
-            var properties = StructureTypeReflecter.GetSimpleIndexablePropertyInfos(
+            var properties = _reflecter.InvokeGetSimpleIndexablePropertyInfos(
                 typeof(WithNonSimpleProperties).GetProperties(StructureTypeReflecter.PropertyBindingFlags));
 
             Assert.AreEqual(0, properties.Count());
@@ -38,7 +40,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
         [Test]
         public void GetSimpleIndexableProperties_WhenExclusionIsPassed_DoesNotReturnExcludedProperties()
         {
-            var properties = StructureTypeReflecter.GetSimpleIndexablePropertyInfos(
+            var properties = _reflecter.InvokeGetSimpleIndexablePropertyInfos(
                 typeof(WithSimpleProperties).GetProperties(StructureTypeReflecter.PropertyBindingFlags),
                 null,
                 nonIndexablePaths: new[] { "StructureId", "Name" });
@@ -51,7 +53,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
         [Test]
         public void GetSimpleIndexableProperties_WhenExclusionIsPassed_DoesReturnNonExcludedProperties()
         {
-            var properties = StructureTypeReflecter.GetSimpleIndexablePropertyInfos(
+            var properties = _reflecter.InvokeGetSimpleIndexablePropertyInfos(
                 typeof(WithSimpleProperties).GetProperties(StructureTypeReflecter.PropertyBindingFlags),
                 null,
                 nonIndexablePaths: new[] { "StructureId", "Name" });
@@ -65,7 +67,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
         [Test]
         public void GetSimpleIndexableProperties_WhenSimplePrivatePropertyExists_PrivatePropertyIsNotReturned()
         {
-            var properties = StructureTypeReflecter.GetSimpleIndexablePropertyInfos(
+            var properties = _reflecter.InvokeGetSimpleIndexablePropertyInfos(
                 typeof(WithPrivateProperty).GetProperties(StructureTypeReflecter.PropertyBindingFlags));
 
             Assert.AreEqual(0, properties.Count());
@@ -74,7 +76,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
         [Test]
         public void GetSimpleIndexableProperties_WhenSimpleAndComplexPropertiesExists_ReturnsOnlySimpleProperties()
         {
-            var properties = StructureTypeReflecter.GetSimpleIndexablePropertyInfos(
+            var properties = _reflecter.InvokeGetSimpleIndexablePropertyInfos(
                 typeof(WithSimpleAndComplexProperties).GetProperties(StructureTypeReflecter.PropertyBindingFlags));
 
             var complex = properties.Where(p => !p.PropertyType.IsSimpleType());
@@ -88,7 +90,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
         [Test]
         public void GetSimpleIndexableProperties_WhenUniquesExists_ReturnsSimpleUniqueProperties()
         {
-            var properties = StructureTypeReflecter.GetSimpleIndexablePropertyInfos(
+            var properties = _reflecter.InvokeGetSimpleIndexablePropertyInfos(
                 typeof(WithUniqueIndexes).GetProperties(StructureTypeReflecter.PropertyBindingFlags));
 
             var names = properties.Select(p => p.Name).ToArray();
@@ -100,7 +102,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
         [Test]
         public void GetSimpleIndexableProperties_WhenMultiplePublicNullableSimplePropertiesExistsAndNoExclusions_ReturnsAllPublicSimpleProperties()
         {
-            var properties = StructureTypeReflecter.GetSimpleIndexablePropertyInfos(
+            var properties = _reflecter.InvokeGetSimpleIndexablePropertyInfos(
                 typeof(WithNullableValueTypes).GetProperties(StructureTypeReflecter.PropertyBindingFlags));
 
             var names = properties.Select(p => p.Name).ToArray();

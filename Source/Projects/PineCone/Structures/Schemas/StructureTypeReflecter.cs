@@ -204,7 +204,7 @@ namespace PineCone.Structures.Schemas
             return properties.ToArray();
         }
 
-        internal static IEnumerable<PropertyInfo> GetSimpleIndexablePropertyInfos(PropertyInfo[] properties, IStructureProperty parent = null, ICollection<string> nonIndexablePaths = null, ICollection<string> indexablePaths = null)
+        protected virtual IEnumerable<PropertyInfo> GetSimpleIndexablePropertyInfos(PropertyInfo[] properties, IStructureProperty parent = null, ICollection<string> nonIndexablePaths = null, ICollection<string> indexablePaths = null)
         {
             if (properties.Length == 0)
                 return properties;
@@ -222,7 +222,7 @@ namespace PineCone.Structures.Schemas
             return filteredProperties.ToArray();
         }
 
-        internal IEnumerable<PropertyInfo> GetComplexIndexablePropertyInfos(PropertyInfo[] properties, IStructureProperty parent = null, ICollection<string> nonIndexablePaths = null, ICollection<string> indexablePaths = null)
+        protected virtual IEnumerable<PropertyInfo> GetComplexIndexablePropertyInfos(PropertyInfo[] properties, IStructureProperty parent = null, ICollection<string> nonIndexablePaths = null, ICollection<string> indexablePaths = null)
         {
             if (properties.Length == 0)
                 return properties;
@@ -243,7 +243,7 @@ namespace PineCone.Structures.Schemas
             return filteredProperties.ToArray();
         }
 
-        internal IEnumerable<PropertyInfo> GetEnumerableIndexablePropertyInfos(PropertyInfo[] properties, IStructureProperty parent = null, ICollection<string> nonIndexablePaths = null, ICollection<string> indexablePaths = null)
+        protected virtual IEnumerable<PropertyInfo> GetEnumerableIndexablePropertyInfos(PropertyInfo[] properties, IStructureProperty parent = null, ICollection<string> nonIndexablePaths = null, ICollection<string> indexablePaths = null)
         {
             if (properties.Length == 0)
                 return properties;

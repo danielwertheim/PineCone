@@ -35,7 +35,7 @@ namespace PineCone.Structures.Schemas
             return GetTimeStampProperty(type) != null;
         }
 
-        public IStructureProperty GetIdProperty(Type type)
+        public virtual IStructureProperty GetIdProperty(Type type)
         {
             var properties = type.GetProperties(IdPropertyBindingFlags).Where(p => p.Name.EndsWith(StructureIdPropertyNames.Indicator)).ToArray();
 
@@ -58,19 +58,19 @@ namespace PineCone.Structures.Schemas
             return null;
         }
 
-        private static PropertyInfo GetDefaultStructureIdProperty(IEnumerable<PropertyInfo> properties)
+        protected virtual PropertyInfo GetDefaultStructureIdProperty(IEnumerable<PropertyInfo> properties)
         {
             return properties.SingleOrDefault(p => p.Name.Equals(StructureIdPropertyNames.Default));
         }
 
-        private static PropertyInfo GetTypeNamedStructureIdProperty(Type type, IEnumerable<PropertyInfo> properties)
+        protected virtual PropertyInfo GetTypeNamedStructureIdProperty(Type type, IEnumerable<PropertyInfo> properties)
         {
             var propertyName = StructureIdPropertyNames.GetTypeNamePropertyNameFor(type);
 
             return properties.SingleOrDefault(p => p.Name.Equals(propertyName));
         }
 
-        private static PropertyInfo GetInterfaceNamedStructureIdProperty(Type type, IEnumerable<PropertyInfo> properties)
+        protected virtual PropertyInfo GetInterfaceNamedStructureIdProperty(Type type, IEnumerable<PropertyInfo> properties)
         {
             if (!type.IsInterface)
                 return null;
@@ -80,7 +80,7 @@ namespace PineCone.Structures.Schemas
             return properties.SingleOrDefault(p => p.Name.Equals(propertyName));
         }
 
-        public IStructureProperty GetTimeStampProperty(Type type)
+        public virtual IStructureProperty GetTimeStampProperty(Type type)
         {
             var properties = type.GetProperties(PropertyBindingFlags).Where(p => p.Name.EndsWith(StructureTimeStampPropertyNames.Indicator)).ToArray();
 
@@ -103,19 +103,19 @@ namespace PineCone.Structures.Schemas
             return null;
         }
 
-        private static PropertyInfo GetDefaultStructureTimeStampProperty(IEnumerable<PropertyInfo> properties)
+        protected virtual PropertyInfo GetDefaultStructureTimeStampProperty(IEnumerable<PropertyInfo> properties)
         {
             return properties.SingleOrDefault(p => p.Name.Equals(StructureTimeStampPropertyNames.Default));
         }
 
-        private static PropertyInfo GetTypeNamedStructureTimeStampProperty(Type type, IEnumerable<PropertyInfo> properties)
+        protected virtual PropertyInfo GetTypeNamedStructureTimeStampProperty(Type type, IEnumerable<PropertyInfo> properties)
         {
             var propertyName = StructureTimeStampPropertyNames.GetTypeNamePropertyNameFor(type);
 
             return properties.SingleOrDefault(p => p.Name.Equals(propertyName));
         }
 
-        private static PropertyInfo GetInterfaceNamedStructureTimeStampProperty(Type type, IEnumerable<PropertyInfo> properties)
+        protected virtual PropertyInfo GetInterfaceNamedStructureTimeStampProperty(Type type, IEnumerable<PropertyInfo> properties)
         {
             if (!type.IsInterface)
                 return null;
@@ -125,7 +125,7 @@ namespace PineCone.Structures.Schemas
             return properties.SingleOrDefault(p => p.Name.Equals(propertyName));
         }
 
-        public IStructureProperty GetConcurrencyTokenProperty(Type type)
+        public virtual IStructureProperty GetConcurrencyTokenProperty(Type type)
         {
             var propertyInfo = type.GetProperty(ConcurrencyTokenMemberName, PropertyBindingFlags);
 
@@ -134,14 +134,14 @@ namespace PineCone.Structures.Schemas
                 : StructureProperty.CreateFrom(propertyInfo);
         }
 
-        public IStructureProperty[] GetIndexableProperties(Type type)
+        public virtual IStructureProperty[] GetIndexableProperties(Type type)
         {
             Ensure.That(type, "type").IsNotNull();
 
             return GetIndexableProperties(type, null, NonIndexableSystemMembers, null);
         }
 
-        public IStructureProperty[] GetIndexablePropertiesExcept(Type type, ICollection<string> nonIndexablePaths)
+        public virtual IStructureProperty[] GetIndexablePropertiesExcept(Type type, ICollection<string> nonIndexablePaths)
         {
             Ensure.That(type, "type").IsNotNull();
             Ensure.That(nonIndexablePaths, "nonIndexablePaths").HasItems();
@@ -149,7 +149,7 @@ namespace PineCone.Structures.Schemas
             return GetIndexableProperties(type, null, NonIndexableSystemMembers.MergeWith(nonIndexablePaths).ToArray(), null);
         }
 
-        public IStructureProperty[] GetSpecificIndexableProperties(Type type, ICollection<string> indexablePaths)
+        public virtual IStructureProperty[] GetSpecificIndexableProperties(Type type, ICollection<string> indexablePaths)
         {
             Ensure.That(type, "type").IsNotNull();
             Ensure.That(indexablePaths, "indexablePaths").HasItems();
@@ -157,7 +157,7 @@ namespace PineCone.Structures.Schemas
             return GetIndexableProperties(type, null, NonIndexableSystemMembers, indexablePaths);
         }
 
-        private IStructureProperty[] GetIndexableProperties(
+        protected virtual IStructureProperty[] GetIndexableProperties(
             IReflect type,
             IStructureProperty parent,
             ICollection<string> nonIndexablePaths,

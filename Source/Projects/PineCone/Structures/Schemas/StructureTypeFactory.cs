@@ -16,12 +16,12 @@ namespace PineCone.Structures.Schemas
             Configurations = configurations ?? new StructureTypeConfigurations();
         }
 
-        public IStructureType CreateFor<T>() where T : class 
+        public virtual IStructureType CreateFor<T>() where T : class 
         {
             return CreateFor(TypeFor<T>.Type);
         }
 
-        public IStructureType CreateFor(Type type)
+        public virtual IStructureType CreateFor(Type type)
         {
             var config = Configurations.GetConfiguration(type);
 

@@ -176,25 +176,25 @@ namespace PineCone.Structures.Schemas
             {
                 var complexProperty = StructureProperty.CreateFrom(parent, complexPropertyInfo);
                 var simpleComplexProps = GetIndexableProperties(
-                    complexProperty.PropertyType, complexProperty, nonIndexablePaths, indexablePaths);
+                    complexProperty.DataType, complexProperty, nonIndexablePaths, indexablePaths);
 
                 var beforeCount = properties.Count;
                 properties.AddRange(simpleComplexProps);
 
-                if (properties.Count == beforeCount && complexProperty.PropertyType.IsValueType)
+                if (properties.Count == beforeCount && complexProperty.DataType.IsValueType)
                     properties.Add(complexProperty);
             }
 
             foreach (var enumerablePropertyInfo in GetEnumerableIndexablePropertyInfos(propertyInfos, parent, nonIndexablePaths, indexablePaths))
             {
                 var enumerableProperty = StructureProperty.CreateFrom(parent, enumerablePropertyInfo);
-                if (enumerableProperty.ElementType.IsSimpleType())
+                if (enumerableProperty.ElementDataType.IsSimpleType())
                 {
                     properties.Add(enumerableProperty);
                     continue;
                 }
 
-                var elementProperties = GetIndexableProperties(enumerableProperty.ElementType,
+                var elementProperties = GetIndexableProperties(enumerableProperty.ElementDataType,
                                                                enumerableProperty,
                                                                nonIndexablePaths,
                                                                indexablePaths);

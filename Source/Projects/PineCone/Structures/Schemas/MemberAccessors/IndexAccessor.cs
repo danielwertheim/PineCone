@@ -26,9 +26,14 @@ namespace PineCone.Structures.Schemas.MemberAccessors
             get { return Property.IsUnique; }
         }
 
-        public Type ElementType
+        public Type ElementDataType
         {
-            get { return Property.ElementType; }
+            get { return Property.ElementDataType; }
+        }
+
+        public DataTypeCode? ElementDataTypeCode
+        {
+            get { return Property.ElementDataTypeCode; }
         }
 
         public UniqueModes? UniqueMode

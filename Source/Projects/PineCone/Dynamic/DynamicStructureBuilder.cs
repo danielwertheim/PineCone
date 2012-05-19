@@ -24,13 +24,13 @@ namespace PineCone.Dynamic
                 var value = kvs[mem.Name];
 
                 if (!mem.Type.IsEnumerableType())
-                    indexes.Add(new StructureIndex(id, mem.Name, value, mem.Type));
+                    indexes.Add(new StructureIndex(id, mem.Name, value, mem.Type, mem.Type.ToDataTypeCode()));
                 else
                 {
                     var subIndexes = new List<IStructureIndex>();
 
                     foreach (var element in (ICollection)value)
-                        subIndexes.Add(new StructureIndex(id, mem.Name, element, mem.Type));
+                        subIndexes.Add(new StructureIndex(id, mem.Name, element, mem.Type, mem.Type.ToDataTypeCode()));
 
                     indexes.AddRange(subIndexes);
                 }

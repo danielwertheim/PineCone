@@ -138,6 +138,19 @@ namespace PineCone.Tests.UnitTests.Structures
         }
 
         [Test]
+        public void GetIndexes_WhenItemWithComplexEnumerable_ReturnsIndexWithDataTypeOfStringElement()
+        {
+            var item = new WithComplexArray { Items = new[] { new Complex {Name = "Foo", Value = 42} } };
+            var schemaStub = StructureSchemaTestFactory.CreateRealFrom<WithComplexArray>();
+
+            var factory = new StructureIndexesFactory();
+            var indexes = factory.CreateIndexes(schemaStub, item, _structureIdGenerator.Invoke()).ToList();
+
+            Assert.AreEqual(DataTypeCode.String, indexes.Single(i => i.Path == "Items.Name").DataTypeCode);
+            Assert.AreEqual(DataTypeCode.IntegerNumber, indexes.Single(i => i.Path == "Items.Value").DataTypeCode);
+        }
+
+        [Test]
         public void GetIndexes_WhenItemWithEnumerableWithOneInt_ReturnsIndexWithInt()
         {
             var item = new WithArray { IntValues = new[] { 42 } };
@@ -229,6 +242,19 @@ namespace PineCone.Tests.UnitTests.Structures
             public int[] IntValues { get; set; }
 
             public int?[] NullableIntValues { get; set; }
+        }
+
+        private class WithComplexArray
+        {
+            public Guid StructureId { get; set; }
+
+            public Complex[] Items { get; set; }
+        }
+
+        private class Complex
+        {
+            public string Name { get; set; }
+            public int Value { get; set; }
         }
     }
 }

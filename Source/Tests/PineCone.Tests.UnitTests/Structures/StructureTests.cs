@@ -11,10 +11,12 @@ namespace PineCone.Tests.UnitTests.Structures
         public void Ctor_WhenIndexesContainsNonUniqueUniqueIndex_ThrowsPineConeException()
         {
             var structureId = StructureId.Create(1);
+            var dataType = typeof (string);
+            var dataTypeCode = dataType.ToDataTypeCode();
             var indexes = new List<IStructureIndex>
             {
-                new StructureIndex(structureId, "UniqueIndex1", "Value1", typeof(string), StructureIndexType.UniquePerInstance),
-                new StructureIndex(structureId, "UniqueIndex1", "Value1", typeof(string), StructureIndexType.UniquePerInstance)
+                new StructureIndex(structureId, "UniqueIndex1", "Value1", dataType, dataTypeCode, StructureIndexType.UniquePerInstance),
+                new StructureIndex(structureId, "UniqueIndex1", "Value1", dataType, dataTypeCode,  StructureIndexType.UniquePerInstance)
             };
             
             Assert.Throws<PineConeException>(() => new Structure("Name", structureId, indexes.ToArray()));

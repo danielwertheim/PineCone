@@ -9,9 +9,10 @@ namespace PineCone.Structures.Schemas.MemberAccessors
         bool IsEnumerable { get; }
         bool IsElement { get; }
         bool IsUnique { get; }
-        Type ElementType { get; }
+        Type ElementDataType { get; }
+        DataTypeCode? ElementDataTypeCode { get; }
         UniqueModes? UniqueMode { get; }
-
+        
         IList<object> GetValues<T>(T item) where T : class;
         void SetValue<T>(T item, object value) where T : class;
     }

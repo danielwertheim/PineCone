@@ -153,7 +153,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.Builders
                 idProp.Setup(i => i.Name).Returns("StructureId");
                 idProp.Setup(i => i.Path).Returns("StructureId");
                 idProp.Setup(i => i.IsRootMember).Returns(true);
-                idProp.Setup(i => i.PropertyType).Returns(typeof(Guid));
+                idProp.Setup(i => i.DataType).Returns(typeof(Guid));
                 return idProp.Object;
             });
 
@@ -175,7 +175,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.Builders
                 idProp.Setup(i => i.Name).Returns("StructureId");
                 idProp.Setup(i => i.Path).Returns("StructureId");
                 idProp.Setup(i => i.IsRootMember).Returns(true);
-                idProp.Setup(i => i.PropertyType).Returns(typeof(Guid));
+                idProp.Setup(i => i.DataType).Returns(typeof(Guid));
                 return idProp.Object;
             });
 

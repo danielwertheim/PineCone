@@ -21,7 +21,7 @@ namespace PineCone.Structures
 
         public bool IsUnique { get; private set; }
 
-        public StructureIndex(IStructureId structureId, string path, object value, Type dataType, StructureIndexType indexType = StructureIndexType.Normal)
+        public StructureIndex(IStructureId structureId, string path, object value, Type dataType, DataTypeCode dataTypeCode, StructureIndexType indexType = StructureIndexType.Normal)
         {
             var valueIsOkType = value is string || value is ValueType;
 
@@ -36,7 +36,7 @@ namespace PineCone.Structures
             Path = path;
             Value = value;
         	DataType = dataType;
-			DataTypeCode = dataType.ToDataTypeCode();
+			DataTypeCode = dataTypeCode;
             IndexType = indexType;
             IsUnique = indexType.IsUnique();
         }

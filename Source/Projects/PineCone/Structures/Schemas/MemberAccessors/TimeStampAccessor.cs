@@ -13,7 +13,7 @@ namespace PineCone.Structures.Schemas.MemberAccessors
             if (!property.IsRootMember)
                 throw new PineConeException(ExceptionMessages.TimeStampAccessor_InvalidLevel.Inject(Property.Name));
 
-            if (!property.PropertyType.IsAnyDateTimeType())
+            if (!property.DataType.IsAnyDateTimeType())
                 throw new PineConeException(ExceptionMessages.TimeStampAccessor_Invalid_Type.Inject(Property.Name));
         }
 

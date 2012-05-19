@@ -45,7 +45,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas
         }
 
         [Test]
-        public void Ctor_WhenUniqueIndexAccessorsInjected_ExistsInBothListOfIndexAccessors()
+        public void Ctor_WhenUniqueIndexAccessorsIsInjected_ItExistsInListOfIndexAccessors()
         {
 			var typeFake = new Mock<IStructureType>();
 
@@ -69,9 +69,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas
                 new[] {indexAccessorFake.Object, uniqueIndexAccessorFake.Object});
 
             Assert.IsTrue(schema.IndexAccessors.Any(iac => iac.Path == indexAccessorFake.Object.Path));
-            Assert.IsFalse(schema.UniqueIndexAccessors.Any(iac => iac.Path == indexAccessorFake.Object.Path));
             Assert.IsTrue(schema.IndexAccessors.Any(iac => iac.Path == uniqueIndexAccessorFake.Object.Path));
-            Assert.IsTrue(schema.UniqueIndexAccessors.Any(iac => iac.Path == uniqueIndexAccessorFake.Object.Path));
         }
     }
 }

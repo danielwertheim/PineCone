@@ -14,21 +14,22 @@ namespace PineCone.Structures.Schemas
     {
         private static readonly Type UniqueAttributeType = typeof(UniqueAttribute);
 
-        private readonly PropertyInfo _property;
         private readonly DynamicGetter _getter;
         private readonly DynamicSetter _setter;
 
-        public string Name { get { return _property.Name; } }
+        public string Name { get; private set; }
 
         public string Path { get; private set; }
 
-        public Type PropertyType { get { return _property.PropertyType; } }
+        public Type DataType { get; private set; }
+
+        public DataTypeCode DataTypeCode { get; private set; }
 
         public IStructureProperty Parent { get; private set; }
 
         public bool IsRootMember { get; private set; }
 
-        public bool IsUnique 
+        public bool IsUnique
         {
             get { return UniqueMode.HasValue; }
         }
@@ -39,7 +40,9 @@ namespace PineCone.Structures.Schemas
 
         public bool IsElement { get; private set; }
 
-        public Type ElementType { get; private set; }
+        public Type ElementDataType { get; private set; }
+
+        public DataTypeCode? ElementDataTypeCode { get; private set; }
 
         public bool IsReadOnly { get; private set; }
 
@@ -57,7 +60,7 @@ namespace PineCone.Structures.Schemas
                 uniqueMode = uniqueAttribute.Mode;
 
             return new StructureProperty(
-                parent, 
+                parent,
                 propertyInfo,
                 DynamicPropertyFactory.GetterFor(propertyInfo),
                 DynamicPropertyFactory.SetterFor(propertyInfo),
@@ -68,35 +71,38 @@ namespace PineCone.Structures.Schemas
         {
             Ensure.That(property, "property").IsNotNull();
             Ensure.That(getter, "getter").IsNotNull();
-            
-            _property = property;
+
             _getter = getter;
             _setter = setter;
 
             Parent = parent;
+            Name = property.Name;
+            DataType = property.PropertyType;
+            DataTypeCode = DataType.ToDataTypeCode();
             IsRootMember = parent == null;
             IsReadOnly = _setter == null;
             UniqueMode = uniqueMode;
 
-            var isSimpleOrValueType = PropertyType.IsSimpleType() || PropertyType.IsValueType;
-			IsEnumerable = !isSimpleOrValueType && PropertyType.IsEnumerableType();
-            ElementType = IsEnumerable ? PropertyType.GetEnumerableElementType() : null;
+            var isSimpleOrValueType = DataType.IsSimpleType() || DataType.IsValueType;
+            IsEnumerable = !isSimpleOrValueType && DataType.IsEnumerableType();
+            ElementDataType = IsEnumerable ? DataType.GetEnumerableElementType() : null;
+            ElementDataTypeCode = ElementDataType != null ? ElementDataType.ToDataTypeCode() : (DataTypeCode?)null;
             IsElement = Parent != null && (Parent.IsElement || Parent.IsEnumerable);
-
-			if (IsUnique && !isSimpleOrValueType)
+            
+            if (IsUnique && !isSimpleOrValueType)
                 throw new PineConeException(ExceptionMessages.StructureProperty_Ctor_UniqueOnNonSimpleType);
 
             Path = PropertyPathBuilder.BuildPath(this);
         }
 
-        public object GetValue(object item)
+        public virtual object GetValue(object item)
         {
             return _getter.GetValue(item);
         }
 
-        public void SetValue(object target, object value)
+        public virtual void SetValue(object target, object value)
         {
-            if(IsReadOnly)
+            if (IsReadOnly)
                 throw new PineConeException(ExceptionMessages.StructureProperty_Setter_IsReadOnly.Inject(Path));
 
             _setter.SetValue(target, value);

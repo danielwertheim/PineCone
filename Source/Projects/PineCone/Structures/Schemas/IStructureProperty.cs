@@ -7,14 +7,16 @@ namespace PineCone.Structures.Schemas
     {
         string Name { get; }
         string Path { get; }
-        Type PropertyType { get; }
+        Type DataType { get; }
+        DataTypeCode DataTypeCode { get; }
         IStructureProperty Parent { get; }
         bool IsRootMember { get; }
         bool IsUnique { get; }
         UniqueModes? UniqueMode { get; }
         bool IsEnumerable { get; }
         bool IsElement { get; }
-        Type ElementType { get; }
+        Type ElementDataType { get; }
+        DataTypeCode? ElementDataTypeCode { get; }
         bool IsReadOnly { get; }
         object GetValue(object item);
         void SetValue(object target, object value);

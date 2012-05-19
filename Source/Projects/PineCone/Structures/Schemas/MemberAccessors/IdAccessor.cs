@@ -16,13 +16,13 @@ namespace PineCone.Structures.Schemas.MemberAccessors
             if (!property.IsRootMember)
                 throw new PineConeException(ExceptionMessages.IdAccessor_InvalidLevel);
 
-            if (!StructureId.IsValidDataType(property.PropertyType))
-                throw new PineConeException(ExceptionMessages.IdAccessor_UnsupportedPropertyType.Inject(Property.PropertyType.Name));
+            if (!StructureId.IsValidDataType(property.DataType))
+                throw new PineConeException(ExceptionMessages.IdAccessor_UnsupportedPropertyType.Inject(Property.DataType.Name));
 
-            IdType = StructureId.GetIdTypeFrom(property.PropertyType);
+            IdType = StructureId.GetIdTypeFrom(property.DataType);
 
-            _getter = StructureIdGetters.For(IdType, Property.PropertyType);
-            _setter = StructureIdSetters.For(IdType, Property.PropertyType);
+            _getter = StructureIdGetters.For(IdType, Property.DataType);
+            _setter = StructureIdSetters.For(IdType, Property.DataType);
         }
 
         public IStructureId GetValue<T>(T item)

@@ -22,7 +22,5 @@ namespace PineCone.Structures.Schemas
         ITimeStampAccessor TimeStampAccessor { get; }
 
         IList<IIndexAccessor> IndexAccessors { get; }
-
-        IList<IIndexAccessor> UniqueIndexAccessors { get; }
     }
 }

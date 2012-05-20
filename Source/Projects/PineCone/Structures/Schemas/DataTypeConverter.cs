@@ -22,31 +22,34 @@ namespace PineCone.Structures.Schemas
 
         public virtual DataTypeCode Convert(IStructureProperty property)
         {
-            var type = property.ElementDataType ?? property.DataType;
+            return Convert(property.ElementDataType ?? property.DataType, property.Name);
+        }
 
-            if (type.IsAnyIntegerNumberType())
+        public virtual DataTypeCode Convert(Type dataType, string memberName)
+        {
+            if (dataType.IsAnyIntegerNumberType())
                 return DataTypeCode.IntegerNumber;
 
-            if (type.IsAnyFractalNumberType())
+            if (dataType.IsAnyFractalNumberType())
                 return DataTypeCode.FractalNumber;
 
-            if (type.IsAnyBoolType())
+            if (dataType.IsAnyBoolType())
                 return DataTypeCode.Bool;
 
-            if (type.IsAnyDateTimeType())
+            if (dataType.IsAnyDateTimeType())
                 return DataTypeCode.DateTime;
 
-            if (type.IsAnyGuidType())
+            if (dataType.IsAnyGuidType())
                 return DataTypeCode.Guid;
 
-            if (type.IsStringType())
+            if (dataType.IsStringType())
             {
-                return MemberNameIsForTextType(property.Name)
-                           ? DataTypeCode.Text
-                           : DataTypeCode.String;
+                return MemberNameIsForTextType(memberName)
+                    ? DataTypeCode.Text
+                    : DataTypeCode.String;
             }
 
-            if (type.IsAnyEnumType())
+            if (dataType.IsAnyEnumType())
                 return DataTypeCode.Enum;
 
             return DataTypeCode.Unknown;

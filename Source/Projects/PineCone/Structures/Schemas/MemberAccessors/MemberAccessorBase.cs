@@ -16,11 +16,6 @@ namespace PineCone.Structures.Schemas.MemberAccessors
             get { return Property.DataType; }
         }
 
-        public DataTypeCode DataTypeCode
-        {
-            get { return Property.DataTypeCode; }
-        }
-
         protected MemberAccessorBase(IStructureProperty property)
         {
             Property = property;

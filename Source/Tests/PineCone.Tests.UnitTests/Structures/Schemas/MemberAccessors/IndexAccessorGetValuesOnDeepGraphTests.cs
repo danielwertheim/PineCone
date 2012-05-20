@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using NUnit.Framework;
-using PineCone.Structures.Schemas.MemberAccessors;
 
 namespace PineCone.Tests.UnitTests.Structures.Schemas.MemberAccessors
 {
@@ -28,8 +27,8 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.MemberAccessors
                 }
             };
 
-            var productNos = new IndexAccessor(prodNoProperty).GetValues(graph);
-            var prices = new IndexAccessor(pricesProperty).GetValues(graph);
+            var productNos = IndexAccessorTestFactory.CreateFor(prodNoProperty).GetValues(graph);
+            var prices = IndexAccessorTestFactory.CreateFor(pricesProperty).GetValues(graph);
 
             CollectionAssert.AreEqual(new[] { "P1", "P2" }, productNos);
             CollectionAssert.AreEqual(new[] { 42, 4242, 43, 4343 }, prices);

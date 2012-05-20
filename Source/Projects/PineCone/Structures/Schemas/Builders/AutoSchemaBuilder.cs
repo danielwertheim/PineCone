@@ -5,9 +5,16 @@ using PineCone.Structures.Schemas.MemberAccessors;
 
 namespace PineCone.Structures.Schemas.Builders
 {
-	public class AutoSchemaBuilder : ISchemaBuilder
+    public class AutoSchemaBuilder : ISchemaBuilder
     {
-    	public virtual IStructureSchema CreateSchema(IStructureType structureType)
+        public IDataTypeConverter DataTypeConverter { get; set; }
+
+        public AutoSchemaBuilder()
+        {
+            DataTypeConverter = new DataTypeConverter();
+        }
+
+        public virtual IStructureSchema CreateSchema(IStructureType structureType)
         {
             Ensure.That(structureType, "structureType").IsNotNull();
 
@@ -48,9 +55,12 @@ namespace PineCone.Structures.Schemas.Builders
         	var accessors = new IIndexAccessor[structureType.IndexableProperties.Length];
 
 			for (var i = 0; i < accessors.Length; i++)
-				accessors[i] = new IndexAccessor(structureType.IndexableProperties[i]);
+			{
+			    var property = structureType.IndexableProperties[i];
+			    accessors[i] = new IndexAccessor(property, DataTypeConverter.Convert(property));
+			}
 
-        	return accessors;
+	        return accessors;
         }
     }
 }

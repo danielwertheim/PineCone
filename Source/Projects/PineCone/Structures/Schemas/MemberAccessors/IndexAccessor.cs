@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using PineCone.Annotations;
@@ -10,6 +9,8 @@ namespace PineCone.Structures.Schemas.MemberAccessors
         private delegate void OnLastPropertyFound(IStructureProperty lastProperty, object currentNode);
 
         private readonly List<IStructureProperty> _callstack;
+
+        public DataTypeCode DataTypeCode { get; private set; }
 
         public bool IsEnumerable
         {
@@ -26,26 +27,17 @@ namespace PineCone.Structures.Schemas.MemberAccessors
             get { return Property.IsUnique; }
         }
 
-        public Type ElementDataType
-        {
-            get { return Property.ElementDataType; }
-        }
-
-        public DataTypeCode? ElementDataTypeCode
-        {
-            get { return Property.ElementDataTypeCode; }
-        }
-
         public UniqueMode? UniqueMode
         {
             get { return Property.UniqueMode; }
         }
 
-        public IndexAccessor(IStructureProperty property)
+        public IndexAccessor(IStructureProperty property, DataTypeCode dataTypeCode)
             : base(property)
         {
             _callstack = GetCallstack(Property);
             _callstack.Reverse();
+            DataTypeCode = dataTypeCode;
         }
 
         private static List<IStructureProperty> GetCallstack(IStructureProperty property)
@@ -118,7 +110,7 @@ namespace PineCone.Structures.Schemas.MemberAccessors
                 var nodeValue = property.GetValue(node);
                 if(nodeValue == null)
                 {
-                    values.Add(nodeValue);
+                    values.Add(null);
                     continue;
                 }
 
@@ -147,7 +139,6 @@ namespace PineCone.Structures.Schemas.MemberAccessors
         private static IList<object> CollectionOfValuesToList<T>(T elements) where T : IEnumerable
         {
             var values = elements is ICollection ? new List<object>(((ICollection)elements).Count) : new List<object>();
-
             foreach (var element in elements)
                 values.Add(element);
 

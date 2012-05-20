@@ -1,5 +1,4 @@
 using NUnit.Framework;
-using PineCone.Structures.Schemas.MemberAccessors;
 
 namespace PineCone.Tests.UnitTests.Structures.Schemas.MemberAccessors
 {
@@ -12,7 +11,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.MemberAccessors
             const string newValue = "Test";
             var item = new Item { SingleSubItem = null };
             var subItemProp = StructurePropertyTestFactory.GetRawProperty<Item>("SingleSubItem");
-            var indexAccessor = new IndexAccessor(subItemProp);
+            var indexAccessor = IndexAccessorTestFactory.CreateFor(subItemProp);
             
             indexAccessor.SetValue(item, new SubItem { Value = newValue });
 
@@ -28,7 +27,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.MemberAccessors
                 SingleSubItem = new SubItem { Value = null }
             };
             var valueProp = StructurePropertyTestFactory.GetPropertyByPath<Item>("SingleSubItem.Value");
-            var indexAccessor = new IndexAccessor(valueProp);
+            var indexAccessor = IndexAccessorTestFactory.CreateFor(valueProp);
 
             indexAccessor.SetValue(item, newValue);
 
@@ -44,7 +43,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.MemberAccessors
                 SingleSubItem = new SubItem { Value = "Not" + newValue }
             };
             var valueProp = StructurePropertyTestFactory.GetPropertyByPath<Item>("SingleSubItem.Value");
-            var indexAccessor = new IndexAccessor(valueProp);
+            var indexAccessor = IndexAccessorTestFactory.CreateFor(valueProp);
             
             indexAccessor.SetValue(item, newValue);
 

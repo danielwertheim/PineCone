@@ -85,9 +85,10 @@
     </Compile>
     <Compile Include="PineConizerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Structures\DataTypeCodeTests.cs" />
+    <Compile Include="Structures\Schemas\DataTypeConverterTests.cs" />
     <Compile Include="Structures\Schemas\Configuration\StructureTypeConfigurationsTests.cs" />
     <Compile Include="Structures\Schemas\Configuration\StuctureTypeConfigTests.cs" />
+    <Compile Include="Structures\Schemas\IndexAccessorTestFactory.cs" />
     <Compile Include="Structures\Schemas\MemberAccessors\ConcurrencyTokenAccessorTests.cs" />
     <Compile Include="Structures\Schemas\MemberAccessors\IndexAccessorGetValuesOnDeepGraphTests.cs" />
     <Compile Include="Structures\Schemas\MemberAccessors\IndexAccessorGetValuesOnSubItemTests.cs" />

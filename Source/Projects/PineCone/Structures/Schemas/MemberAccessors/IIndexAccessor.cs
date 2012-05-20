@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using PineCone.Annotations;
 
 namespace PineCone.Structures.Schemas.MemberAccessors
 {
     public interface IIndexAccessor : IMemberAccessor
     {
+        DataTypeCode DataTypeCode { get; }
         bool IsEnumerable { get; }
         bool IsElement { get; }
         bool IsUnique { get; }
-        Type ElementDataType { get; }
-        DataTypeCode? ElementDataTypeCode { get; }
         UniqueMode? UniqueMode { get; }
         
         IList<object> GetValues<T>(T item) where T : class;

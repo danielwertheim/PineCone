@@ -56,8 +56,9 @@
     <Compile Include="Annotations\UniqueMode.cs" />
     <Compile Include="Lists.cs" />
     <Compile Include="IPineConizer.cs" />
+    <Compile Include="Structures\Schemas\DataTypeConverter.cs" />
+    <Compile Include="Structures\Schemas\IDataTypeConverter.cs" />
     <Compile Include="Structures\Schemas\IStructurePropertyFactory.cs" />
-    <Compile Include="Structures\Schemas\StructurePropertyFactoryRules.cs" />
     <Compile Include="Structures\Schemas\MemberAccessors\ConcurrencyTokenAccessor.cs" />
     <Compile Include="Structures\Schemas\MemberAccessors\IConcurrencyTokenAccessor.cs" />
     <Compile Include="Structures\Schemas\MemberAccessors\ITimeStampAccessor.cs" />

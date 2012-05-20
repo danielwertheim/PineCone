@@ -6,6 +6,5 @@ namespace PineCone.Structures.Schemas.MemberAccessors
     {
         string Path { get; }
         Type DataType { get; }
-        DataTypeCode DataTypeCode { get; }
     }
 }

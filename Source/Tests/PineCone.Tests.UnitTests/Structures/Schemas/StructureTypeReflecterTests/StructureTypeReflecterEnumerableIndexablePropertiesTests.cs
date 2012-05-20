@@ -9,12 +9,12 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
     [TestFixture]
     public class StructureTypeReflecterEnumerableIndexablePropertiesTests : UnitTestBase
     {
-        private readonly StructureTypeReflecter _reflecter = new StructureTypeReflecter();
+        private readonly TestableReflecter _reflecter = new TestableReflecter();
 
         [Test]
         public void GetEnumerableIndexablePropertyInfos_WhenNoEnumerableIndexesExists_ReturnsEmptyList()
         {
-            var properties = _reflecter.GetEnumerableIndexablePropertyInfos(
+            var properties = _reflecter.InvokeGetEnumerableIndexablePropertyInfos(
                 typeof(WithNoEnumerableMembers).GetProperties(StructureTypeReflecter.PropertyBindingFlags));
 
             CollectionAssert.IsEmpty(properties);
@@ -23,7 +23,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
         [Test]
         public void GetEnumerableIndexablePropertyInfos_WhenIListOfTIndexesExists_ReturnsTheMember()
         {
-            var properties = _reflecter.GetEnumerableIndexablePropertyInfos(
+            var properties = _reflecter.InvokeGetEnumerableIndexablePropertyInfos(
                 typeof(WithCollectionIndexes).GetProperties(StructureTypeReflecter.PropertyBindingFlags))
                     .Where(p => p.Name == "IList1")
                     .SingleOrDefault();
@@ -34,7 +34,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
         [Test]
         public void GetEnumerableIndexablePropertyInfos_WhenIEnumerableOfTIndexesExists_ReturnsTheMember()
         {
-            var properties = _reflecter.GetEnumerableIndexablePropertyInfos(
+            var properties = _reflecter.InvokeGetEnumerableIndexablePropertyInfos(
                 typeof(WithCollectionIndexes).GetProperties(StructureTypeReflecter.PropertyBindingFlags))
                     .Where(p => p.Name == "IEnumerable1")
                     .SingleOrDefault();
@@ -45,7 +45,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
         [Test]
         public void GetEnumerableIndexablePropertyInfos_WhenIEnumerableOfTIndexesExists_DoesNotReturnTheElementMembers()
         {
-            var properties = _reflecter.GetEnumerableIndexablePropertyInfos(
+            var properties = _reflecter.InvokeGetEnumerableIndexablePropertyInfos(
                 typeof(WithCollectionIndexes).GetProperties(StructureTypeReflecter.PropertyBindingFlags))
                     .Where(p => p.Name == "ElementInt1")
                     .SingleOrDefault();
@@ -56,7 +56,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
         [Test]
         public void GetEnumerableIndexablePropertyInfos_WhenEnumerableOfBytes_NoPropertiesAreReturned()
         {
-            var properties = _reflecter.GetEnumerableIndexablePropertyInfos(
+            var properties = _reflecter.InvokeGetEnumerableIndexablePropertyInfos(
                 typeof(WithEnumarbleBytes).GetProperties(StructureTypeReflecter.PropertyBindingFlags));
 
             Assert.AreEqual(0, properties.Count());

@@ -3,9 +3,15 @@ using System.Collections.Generic;
 
 namespace PineCone.Structures.Schemas
 {
+    /// <summary>
+    /// Responsible for identifying the Properties that should be used as
+    /// StructureId, TimeStamp, ConcurrencyToken and plain indexes.
+    /// </summary>
     public interface IStructureTypeReflecter
     {
-		bool HasIdProperty(Type type);
+        IStructurePropertyFactory PropertyFactory { get; set; }
+
+        bool HasIdProperty(Type type);
 
         bool HasConcurrencyTokenProperty(Type type);
 

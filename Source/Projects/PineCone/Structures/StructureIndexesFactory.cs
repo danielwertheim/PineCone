@@ -29,14 +29,16 @@ namespace PineCone.Structures
                 }
 
                 if (!isCollectionOfValues)
-                    indexes[c] = new[] { new StructureIndex(structureId, indexAccessor.Path, values[0], indexAccessor.DataType, indexAccessor.UniqueMode.ToStructureIndexType()) };
+                    indexes[c] = new[] { new StructureIndex(structureId, indexAccessor.Path, values[0], indexAccessor.DataType, indexAccessor.DataTypeCode, indexAccessor.UniqueMode.ToStructureIndexType()) };
                 else
                 {
                     var subIndexes = new IStructureIndex[values.Count];
                     Parallel.For(0, subIndexes.Length, subC =>
                     {
-                        if(values[subC] != null)
-                            subIndexes[subC] = new StructureIndex(structureId, indexAccessor.Path, values[subC], indexAccessor.ElementType ?? indexAccessor.DataType, indexAccessor.UniqueMode.ToStructureIndexType());
+                        if (values[subC] != null)
+                            subIndexes[subC] = new StructureIndex(structureId, indexAccessor.Path, values[subC],
+                                                                  indexAccessor.DataType, indexAccessor.DataTypeCode,
+                                                                  indexAccessor.UniqueMode.ToStructureIndexType());
                     });
                     indexes[c] = subIndexes;
                 }

@@ -2,6 +2,8 @@
 {
     public interface ISchemaBuilder
     {
-    	IStructureSchema CreateSchema(IStructureType structureType);
+        IDataTypeConverter DataTypeConverter { get; set; }
+
+        IStructureSchema CreateSchema(IStructureType structureType);
     }
 }

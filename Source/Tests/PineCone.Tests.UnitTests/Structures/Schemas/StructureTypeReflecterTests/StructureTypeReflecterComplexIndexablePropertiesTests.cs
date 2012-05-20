@@ -9,12 +9,12 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
     [TestFixture]
     public class StructureTypeReflecterComplexIndexablePropertiesTests : UnitTestBase
     {
-        private readonly StructureTypeReflecter _reflecter = new StructureTypeReflecter();
+        private readonly TestableReflecter _reflecter = new TestableReflecter();
 
         [Test]
         public void GetComplexIndexableProperties_WhenRootWithSimpleAndComplexProperties_ReturnsOnlyComplexProperties()
         {
-            var properties = _reflecter.GetComplexIndexablePropertyInfos(
+            var properties = _reflecter.InvokeGetComplexIndexablePropertyInfos(
                 typeof(WithSimpleAndComplexProperties).GetProperties(StructureTypeReflecter.PropertyBindingFlags));
 
             Assert.AreEqual(1, properties.Count());
@@ -23,7 +23,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
         [Test]
         public void GetComplexProperties_WhenRootWithUniqeAndNonUniqueComplexProperties_ReturnsComplexUniqueProperties()
         {
-            var properties = _reflecter.GetComplexIndexablePropertyInfos(
+            var properties = _reflecter.InvokeGetComplexIndexablePropertyInfos(
                 typeof(WithUniqueAndNonUniqueComplexProperties).GetProperties(StructureTypeReflecter.PropertyBindingFlags));
 
             Assert.AreEqual(2, properties.Count());
@@ -32,7 +32,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
         [Test]
         public void GetComplexProperties_WhenRootWithEnumerable_EnumerableMemberIsNotReturnedAsComplex()
         {
-            var properties = _reflecter.GetComplexIndexablePropertyInfos(
+            var properties = _reflecter.InvokeGetComplexIndexablePropertyInfos(
                 typeof(WithEnumerable).GetProperties(StructureTypeReflecter.PropertyBindingFlags));
 
             Assert.AreEqual(0, properties.Count());
@@ -41,7 +41,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
         [Test]
         public void GetComplexProperties_WhenItIsContainedStructure_NotExtracted()
         {
-            var properties = _reflecter.GetComplexIndexablePropertyInfos(
+            var properties = _reflecter.InvokeGetComplexIndexablePropertyInfos(
                 typeof(WithContainedStructure).GetProperties(StructureTypeReflecter.PropertyBindingFlags));
 
             Assert.AreEqual(0, properties.Count());
@@ -61,7 +61,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
 
         private class WithUniqueAndNonUniqueComplexProperties
         {
-            [Unique(UniqueModes.PerInstance)]
+            [Unique(UniqueMode.PerInstance)]
             public Item UqComplex1 { get; set; }
 
             public Item UqComplex2 { get; set; }

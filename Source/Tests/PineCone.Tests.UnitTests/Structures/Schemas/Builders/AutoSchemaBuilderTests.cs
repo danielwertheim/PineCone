@@ -153,7 +153,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.Builders
                 idProp.Setup(i => i.Name).Returns("StructureId");
                 idProp.Setup(i => i.Path).Returns("StructureId");
                 idProp.Setup(i => i.IsRootMember).Returns(true);
-                idProp.Setup(i => i.PropertyType).Returns(typeof(Guid));
+                idProp.Setup(i => i.DataType).Returns(typeof(Guid));
                 return idProp.Object;
             });
 
@@ -175,7 +175,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.Builders
                 idProp.Setup(i => i.Name).Returns("StructureId");
                 idProp.Setup(i => i.Path).Returns("StructureId");
                 idProp.Setup(i => i.IsRootMember).Returns(true);
-                idProp.Setup(i => i.PropertyType).Returns(typeof(Guid));
+                idProp.Setup(i => i.DataType).Returns(typeof(Guid));
                 return idProp.Object;
             });
 
@@ -235,14 +235,62 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.Builders
 		[Test]
 		public void CreateSchema_WhenClassContainsStructMember_StructMemberIsRepresentedInSchema()
 		{
-			var structureType = GetStructureTypeFor<StructContainer>();
+			var structureType = GetStructureTypeFor<WithStruct>();
 
 			var schema = _schemaBuilder.CreateSchema(structureType);
 
 			Assert.AreEqual(2, schema.IndexAccessors.Count);
 			Assert.AreEqual("Content", schema.IndexAccessors[1].Path);
-			Assert.AreEqual(typeof(Text), schema.IndexAccessors[1].DataType);
+			Assert.AreEqual(typeof(MyText), schema.IndexAccessors[1].DataType);
 		}
+
+        [Test]
+        public void CreateSchema_WhenClassContainsTimeStamp_TimeStampMemberIsRepresentedInSchema()
+        {
+            var structureType = GetStructureTypeFor<WithTimeStamp>();
+
+            var schema = _schemaBuilder.CreateSchema(structureType);
+
+            Assert.AreEqual(2, schema.IndexAccessors.Count);
+            Assert.IsTrue(schema.HasTimeStamp);
+            Assert.AreEqual(typeof(DateTime), schema.TimeStampAccessor.DataType);
+            Assert.AreEqual("TimeStamp", schema.TimeStampAccessor.Path);
+
+            Assert.AreEqual("TimeStamp", schema.IndexAccessors[1].Path);
+            Assert.AreEqual(typeof(DateTime), schema.IndexAccessors[1].DataType);
+        }
+
+        [Test]
+        public void CreateSchema_WhenClassContainsNullableTimeStamp_TimeStampMemberIsRepresentedInSchema()
+        {
+            var structureType = GetStructureTypeFor<WithNullableTimeStamp>();
+
+            var schema = _schemaBuilder.CreateSchema(structureType);
+
+            Assert.AreEqual(2, schema.IndexAccessors.Count);
+            Assert.IsTrue(schema.HasTimeStamp);
+            Assert.AreEqual(typeof(DateTime?), schema.TimeStampAccessor.DataType);
+            Assert.AreEqual("TimeStamp", schema.TimeStampAccessor.Path);
+            
+            Assert.AreEqual("TimeStamp", schema.IndexAccessors[1].Path);
+            Assert.AreEqual(typeof(DateTime?), schema.IndexAccessors[1].DataType);
+        }
+
+        [Test]
+        public void CreateSchema_WhenClassContainsConcurrencyToken_IsRepresentedAsSpecificMemberAsWellAsIndexAccessor()
+        {
+            var structureType = GetStructureTypeFor<WithConcurrencyToken>();
+
+            var schema = _schemaBuilder.CreateSchema(structureType);
+
+            Assert.AreEqual(2, schema.IndexAccessors.Count);
+            Assert.AreEqual("StructureId", schema.IndexAccessors[0].Path);
+            Assert.AreEqual("ConcurrencyToken", schema.IndexAccessors[1].Path);
+
+            Assert.IsTrue(schema.HasConcurrencyToken);
+            Assert.AreEqual(typeof(Guid), schema.ConcurrencyTokenAccessor.DataType);
+            Assert.AreEqual("ConcurrencyToken", schema.ConcurrencyTokenAccessor.Path);
+        }
 
         private static bool HasLevel(IIndexAccessor iac, int level)
         {
@@ -342,34 +390,52 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.Builders
             public Collection<byte> Bytes6 { get; set; }
         }
 
-		private class StructContainer
+        private class WithTimeStamp
+        {
+            public Guid StructureId { get; set; }
+            public DateTime TimeStamp { get; set; }
+        }
+
+        private class WithNullableTimeStamp
+        {
+            public Guid StructureId { get; set; }
+            public DateTime? TimeStamp { get; set; }
+        }
+
+        private class WithConcurrencyToken
+        {
+            public Guid StructureId { get; set; }
+            public Guid ConcurrencyToken { get; set; }
+        }
+
+		private class WithStruct
 		{
 			public Guid StructureId { get; set; }
 
-			public Text Content { get; set; }
+			public MyText Content { get; set; }
 		}
 
 		[Serializable]
-		private struct Text
+		private struct MyText
 		{
 			private readonly string _value;
 
-			public Text(string value)
+			public MyText(string value)
 			{
 				_value = value;
 			}
 
-			public static Text Parse(string value)
+			public static MyText Parse(string value)
 			{
-				return value == null ? null : new Text(value);
+				return value == null ? null : new MyText(value);
 			}
 
-			public static implicit operator Text(string value)
+			public static implicit operator MyText(string value)
 			{
-				return new Text(value);
+				return new MyText(value);
 			}
 
-			public static implicit operator string(Text item)
+			public static implicit operator string(MyText item)
 			{
 				return item._value;
 			}

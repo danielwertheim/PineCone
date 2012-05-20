@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using EnsureThat;
 using PineCone.Structures.Schemas.MemberAccessors;
 
@@ -33,7 +32,6 @@ namespace PineCone.Structures.Schemas
         public IConcurrencyTokenAccessor ConcurrencyTokenAccessor { get; private set; }
         public ITimeStampAccessor TimeStampAccessor { get; private set; }
         public IList<IIndexAccessor> IndexAccessors { get; private set; }
-        public IList<IIndexAccessor> UniqueIndexAccessors { get; private set; }
 
         public StructureSchema(IStructureType type, IIdAccessor idAccessor = null, IConcurrencyTokenAccessor concurrencyTokenAccessor = null, ITimeStampAccessor timeStampAccessor = null, ICollection<IIndexAccessor> indexAccessors = null)
         {
@@ -44,10 +42,8 @@ namespace PineCone.Structures.Schemas
             ConcurrencyTokenAccessor = concurrencyTokenAccessor;
             TimeStampAccessor = timeStampAccessor;
 
-            IndexAccessors = indexAccessors != null ? new List<IIndexAccessor>(indexAccessors)
-                : new List<IIndexAccessor>();
-
-            UniqueIndexAccessors = indexAccessors != null ? new List<IIndexAccessor>(indexAccessors.Where(iac => iac.IsUnique))
+            IndexAccessors = indexAccessors != null 
+                ? new List<IIndexAccessor>(indexAccessors)
                 : new List<IIndexAccessor>();
         }
     }

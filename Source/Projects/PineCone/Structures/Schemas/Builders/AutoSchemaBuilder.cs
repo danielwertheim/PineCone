@@ -5,9 +5,16 @@ using PineCone.Structures.Schemas.MemberAccessors;
 
 namespace PineCone.Structures.Schemas.Builders
 {
-	public class AutoSchemaBuilder : ISchemaBuilder
+    public class AutoSchemaBuilder : ISchemaBuilder
     {
-    	public IStructureSchema CreateSchema(IStructureType structureType)
+        public IDataTypeConverter DataTypeConverter { get; set; }
+
+        public AutoSchemaBuilder()
+        {
+            DataTypeConverter = new DataTypeConverter();
+        }
+
+        public virtual IStructureSchema CreateSchema(IStructureType structureType)
         {
             Ensure.That(structureType, "structureType").IsNotNull();
 
@@ -21,7 +28,7 @@ namespace PineCone.Structures.Schemas.Builders
 			return new StructureSchema(structureType, idAccessor, concurrencyTokenAccessor, timeStampAccessor, indexAccessors);
         }
 
-        private IIdAccessor GetIdAccessor(IStructureType structureType)
+	    protected virtual IIdAccessor GetIdAccessor(IStructureType structureType)
         {
             if (structureType.IdProperty == null)
                 throw new PineConeException(ExceptionMessages.AutoSchemaBuilder_MissingIdMember.Inject(structureType.Name));
@@ -29,28 +36,31 @@ namespace PineCone.Structures.Schemas.Builders
             return new IdAccessor(structureType.IdProperty);
         }
 
-        private IConcurrencyTokenAccessor GetConcurrencyTokenAccessor(IStructureType structureType)
+	    protected virtual IConcurrencyTokenAccessor GetConcurrencyTokenAccessor(IStructureType structureType)
         {
             return structureType.ConcurrencyTokenProperty == null 
                 ? null 
                 : new ConcurrencyTokenAccessor(structureType.ConcurrencyTokenProperty);
         }
 
-        private ITimeStampAccessor GetTimeStampAccessor(IStructureType structureType)
+	    protected virtual ITimeStampAccessor GetTimeStampAccessor(IStructureType structureType)
         {
             return structureType.TimeStampProperty == null
                 ? null
                 : new TimeStampAccessor(structureType.TimeStampProperty);
         }
 
-	    private static IIndexAccessor[] GetIndexAccessors(IStructureType structureType)
+	    protected virtual IIndexAccessor[] GetIndexAccessors(IStructureType structureType)
         {
         	var accessors = new IIndexAccessor[structureType.IndexableProperties.Length];
 
 			for (var i = 0; i < accessors.Length; i++)
-				accessors[i] = new IndexAccessor(structureType.IndexableProperties[i]);
+			{
+			    var property = structureType.IndexableProperties[i];
+			    accessors[i] = new IndexAccessor(property, DataTypeConverter.Convert(property));
+			}
 
-        	return accessors;
+	        return accessors;
         }
     }
 }

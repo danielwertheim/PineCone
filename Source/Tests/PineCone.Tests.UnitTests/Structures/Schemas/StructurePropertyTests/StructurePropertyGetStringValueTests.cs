@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
-using PineCone.Structures.Schemas;
 
 namespace PineCone.Tests.UnitTests.Structures.Schemas.StructurePropertyTests
 {
@@ -10,8 +9,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructurePropertyTests
         [Test]
         public void GetValue_WhenSingleStringMember_SingleValueIsReturned()
         {
-            var propertyInfo = typeof(TestCustomer).GetProperty("CustomerNo");
-            var property = StructureProperty.CreateFrom(propertyInfo);
+            var property = StructurePropertyTestFactory.GetPropertyByPath<TestCustomer>("CustomerNo");
 
             var customer = new TestCustomer { CustomerNo = "1234" };
             var customerNos = (string)property.GetValue(customer);
@@ -22,8 +20,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructurePropertyTests
         [Test]
         public void GetValue_WhenArrayOfInt_ReturnsAValueArray()
         {
-            var propertyInfo = typeof(TestCustomer).GetProperty("Points");
-            var property = StructureProperty.CreateFrom(propertyInfo);
+            var property = StructurePropertyTestFactory.GetPropertyByPath<TestCustomer>("Points");
 
             var container = new TestCustomer { Points = new[] { 5, 4, 3, 2, 1 } };
             var values = (IEnumerable<int>)property.GetValue(container);

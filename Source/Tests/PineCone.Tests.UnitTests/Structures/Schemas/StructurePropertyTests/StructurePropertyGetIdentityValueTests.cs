@@ -1,5 +1,4 @@
 ﻿using NUnit.Framework;
-using PineCone.Structures.Schemas;
 
 namespace PineCone.Tests.UnitTests.Structures.Schemas.StructurePropertyTests
 {
@@ -9,13 +8,11 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructurePropertyTests
         [Test]
         public void GetIdValue_WhenIntOnFirstLevel_ReturnsInt()
         {
-            var intPropertyInfo = typeof(IdentityOnRoot).GetProperty("StructureId");
-            var intProperty = StructureProperty.CreateFrom(intPropertyInfo);
-
             const int expected = 42;
             var item = new IdentityOnRoot { StructureId = expected };
-
-            var actual = intProperty.GetValue(item);
+            var property = StructurePropertyTestFactory.GetPropertyByPath<IdentityOnRoot>("StructureId");
+            
+            var actual = property.GetValue(item);
 
             Assert.AreEqual(expected, actual);
         }
@@ -23,13 +20,11 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructurePropertyTests
         [Test]
         public void GetIdValue_WhenNullableIntOnFirstLevel_ReturnsInt()
         {
-            var intPropertyInfo = typeof(NullableIdentityOnRoot).GetProperty("StructureId");
-            var intProperty = StructureProperty.CreateFrom(intPropertyInfo);
-
             const int expectedInt = 42;
             var item = new NullableIdentityOnRoot { StructureId = expectedInt };
+            var property = StructurePropertyTestFactory.GetPropertyByPath<NullableIdentityOnRoot>("StructureId");
 
-            var actual = intProperty.GetValue(item);
+            var actual = property.GetValue(item);
 
             Assert.AreEqual(expectedInt, actual);
         }
@@ -37,12 +32,10 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructurePropertyTests
         [Test]
         public void GetIdValue_WhenNullAssignedNullableIntOnFirstLevel_ReturnsInt()
         {
-            var intPropertyInfo = typeof(NullableIdentityOnRoot).GetProperty("StructureId");
-            var intProperty = StructureProperty.CreateFrom(intPropertyInfo);
-
             var item = new NullableIdentityOnRoot { StructureId = null };
-
-            var actual = intProperty.GetValue(item);
+            var property = StructurePropertyTestFactory.GetPropertyByPath<NullableIdentityOnRoot>("StructureId");
+            
+            var actual = property.GetValue(item);
 
             Assert.IsNull(actual);
         }

@@ -12,7 +12,7 @@ namespace PineCone.Structures.Schemas.MemberAccessors
             if (!property.IsRootMember)
                 throw new PineConeException(ExceptionMessages.ConcurrencyTokenAccessor_InvalidLevel.Inject(Property.Name));
 
-            if (property.PropertyType != TypeFor<Guid>.Type && property.PropertyType != TypeFor<int>.Type && property.PropertyType != TypeFor<long>.Type)
+            if (property.DataType != TypeFor<Guid>.Type && property.DataType != TypeFor<int>.Type && property.DataType != TypeFor<long>.Type)
                 throw new PineConeException(ExceptionMessages.ConcurrencyTokenAccessor_Invalid_Type.Inject(Property.Name));
         }
 

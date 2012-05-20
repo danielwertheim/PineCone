@@ -1,5 +1,4 @@
 using NUnit.Framework;
-using PineCone.Structures.Schemas.MemberAccessors;
 
 namespace PineCone.Tests.UnitTests.Structures.Schemas.MemberAccessors
 {
@@ -11,10 +10,9 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.MemberAccessors
         {
             const string newValue = "Test";
             var item = new Item { SingleSubItem = null };
-
-            var subItemProp = StructurePropertyTestHelper.GetProperty<Item>("SingleSubItem");
-
-            var indexAccessor = new IndexAccessor(subItemProp);
+            var subItemProp = StructurePropertyTestFactory.GetRawProperty<Item>("SingleSubItem");
+            var indexAccessor = IndexAccessorTestFactory.CreateFor(subItemProp);
+            
             indexAccessor.SetValue(item, new SubItem { Value = newValue });
 
             Assert.AreEqual(newValue, item.SingleSubItem.Value);
@@ -25,14 +23,12 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.MemberAccessors
         {
             const string newValue = "Test";
             var item = new Item
-                       {
-                           SingleSubItem = new SubItem { Value = null }
-                       };
+            {
+                SingleSubItem = new SubItem { Value = null }
+            };
+            var valueProp = StructurePropertyTestFactory.GetPropertyByPath<Item>("SingleSubItem.Value");
+            var indexAccessor = IndexAccessorTestFactory.CreateFor(valueProp);
 
-            var subItemProp = StructurePropertyTestHelper.GetProperty<Item>("SingleSubItem");
-            var valueProp = StructurePropertyTestHelper.GetProperty<SubItem>("Value", subItemProp);
-
-            var indexAccessor = new IndexAccessor(valueProp);
             indexAccessor.SetValue(item, newValue);
 
             Assert.AreEqual(newValue, item.SingleSubItem.Value);
@@ -46,11 +42,9 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.MemberAccessors
             {
                 SingleSubItem = new SubItem { Value = "Not" + newValue }
             };
-
-            var subItemProp = StructurePropertyTestHelper.GetProperty<Item>("SingleSubItem");
-            var valueProp = StructurePropertyTestHelper.GetProperty<SubItem>("Value", subItemProp);
-
-            var indexAccessor = new IndexAccessor(valueProp);
+            var valueProp = StructurePropertyTestFactory.GetPropertyByPath<Item>("SingleSubItem.Value");
+            var indexAccessor = IndexAccessorTestFactory.CreateFor(valueProp);
+            
             indexAccessor.SetValue(item, newValue);
 
             Assert.AreEqual(newValue, item.SingleSubItem.Value);

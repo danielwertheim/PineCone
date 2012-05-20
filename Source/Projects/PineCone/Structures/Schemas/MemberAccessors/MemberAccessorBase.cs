@@ -13,7 +13,7 @@ namespace PineCone.Structures.Schemas.MemberAccessors
 
         public Type DataType
         {
-            get { return Property.PropertyType; }
+            get { return Property.DataType; }
         }
 
         protected MemberAccessorBase(IStructureProperty property)

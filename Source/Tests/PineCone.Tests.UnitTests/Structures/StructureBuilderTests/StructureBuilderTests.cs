@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Moq;
+using NCore;
 using NUnit.Framework;
 using PineCone.Serializers;
 using PineCone.Structures;
@@ -156,16 +157,58 @@ namespace PineCone.Tests.UnitTests.Structures.StructureBuilderTests
 		[Test]
 		public void CreateStructure_WhenStructureContainsStructWithValue_ValueOfStructIsRepresentedInIndex()
 		{
-			var schema = StructureSchemaTestFactory.CreateRealFrom<StructContainer>();
-			var item = new StructContainer { Content = "My content" };
+			var schema = StructureSchemaTestFactory.CreateRealFrom<IHaveStruct>();
+			var item = new IHaveStruct { Content = "My content" };
 
 			var structure = Builder.CreateStructure(item, schema);
 
 			Assert.AreEqual(2, structure.Indexes.Count);
 			Assert.AreEqual("Content", structure.Indexes[1].Path);
-			Assert.AreEqual(typeof(Text), structure.Indexes[1].DataType);
-			Assert.AreEqual(new Text("My content"), structure.Indexes[1].Value);
+			Assert.AreEqual(typeof(MyText), structure.Indexes[1].DataType);
+			Assert.AreEqual(new MyText("My content"), structure.Indexes[1].Value);
 		}
+
+        [Test]
+        public void CreateStructure_WhenStructureContainsTimeStamp_TimeStampMemberIsAssignedAValue()
+        {
+            var fixedDateTime = new DateTime(2001, 01, 02, 03, 04, 05);
+            SysDateTime.NowFn = () => fixedDateTime;
+            var schema = StructureSchemaTestFactory.CreateRealFrom<IHaveTimeStamp>();
+            var item = new IHaveTimeStamp();
+
+            var structure = Builder.CreateStructure(item, schema);
+
+            Assert.AreEqual("TimeStamp", structure.Indexes[1].Path);
+            Assert.AreEqual(fixedDateTime, structure.Indexes[1].Value);
+        }
+
+        [Test]
+        public void CreateStructure_WhenStructureContainsNullableTimeStamp_TimeStampMemberIsAssignedAValue()
+        {
+            var fixedDateTime = new DateTime(2001, 01, 02, 03, 04, 05);
+            SysDateTime.NowFn = () => fixedDateTime;
+            var schema = StructureSchemaTestFactory.CreateRealFrom<IHaveNullableTimeStamp>();
+            var item = new IHaveNullableTimeStamp();
+
+            var structure = Builder.CreateStructure(item, schema);
+
+            Assert.AreEqual("TimeStamp", structure.Indexes[1].Path);
+            Assert.AreEqual(fixedDateTime, structure.Indexes[1].Value);
+        }
+
+        [Test]
+        public void CreateStructure_WhenStructureContainsConcurrencyTokenOfGuid_ItIsPresentInSchemaAsWellAsInStructure()
+        {
+            var schema = StructureSchemaTestFactory.CreateRealFrom<IHaveConcurrencyTokenOfGuid>();
+            var item = new IHaveConcurrencyTokenOfGuid();
+
+            var structure = Builder.CreateStructure(item, schema);
+
+            Assert.IsTrue(schema.HasConcurrencyToken);
+            Assert.AreEqual(2, structure.Indexes.Count);
+            Assert.AreEqual("StructureId", structure.Indexes[0].Path);
+            Assert.AreEqual("ConcurrencyToken", structure.Indexes[1].Path);
+        }
 
         private class TestItemForFirstLevel
 		{
@@ -186,34 +229,52 @@ namespace PineCone.Tests.UnitTests.Structures.StructureBuilderTests
 			public int IntValue { get; set; }
 		}
 
-		private class StructContainer
+		private class IHaveStruct
 		{
 			public Guid StructureId { get; set; }
 
-			public Text Content { get; set; }
+			public MyText Content { get; set; }
 		}
 
+        private class IHaveTimeStamp
+        {
+            public Guid StructureId { get; set; }
+            public DateTime TimeStamp { get; set; }
+        }
+
+        private class IHaveNullableTimeStamp
+        {
+            public Guid StructureId { get; set; }
+            public DateTime? TimeStamp { get; set; }
+        }
+
+        private class IHaveConcurrencyTokenOfGuid
+        {
+            public Guid StructureId { get; set; }
+            public Guid ConcurrencyToken { get; set; }
+        }
+
 		[Serializable]
-		private struct Text
+		private struct MyText
 		{
 			private readonly string _value;
 
-			public Text(string value)
+			public MyText(string value)
 			{
 				_value = value;
 			}
 
-			public static Text Parse(string value)
+			public static MyText Parse(string value)
 			{
-				return value == null ? null : new Text(value);
+				return value == null ? null : new MyText(value);
 			}
 
-			public static implicit operator Text(string value)
+			public static implicit operator MyText(string value)
 			{
-				return new Text(value);
+				return new MyText(value);
 			}
 
-			public static implicit operator string(Text item)
+			public static implicit operator string(MyText item)
 			{
 				return item._value;
 			}

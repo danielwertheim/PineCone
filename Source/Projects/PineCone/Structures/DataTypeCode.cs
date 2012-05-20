@@ -1,5 +1,4 @@
 using System;
-using NCore.Reflections;
 
 namespace PineCone.Structures
 {
@@ -13,35 +12,7 @@ namespace PineCone.Structures
 		DateTime,
 		Guid,
 		String,
+        Text,
 		Enum
-	}
-
-	public static class DataTypeExtensions
-	{
-		public static DataTypeCode ToDataTypeCode(this Type type)
-		{
-			if (type.IsAnyIntegerNumberType())
-				return DataTypeCode.IntegerNumber;
-
-			if (type.IsAnyFractalNumberType())
-				return DataTypeCode.FractalNumber;
-
-			if (type.IsAnyBoolType())
-				return DataTypeCode.Bool;
-
-			if (type.IsAnyDateTimeType())
-				return DataTypeCode.DateTime;
-
-			if (type.IsAnyGuidType())
-				return DataTypeCode.Guid;
-
-			if (type.IsStringType())
-				return DataTypeCode.String;
-
-			if (type.IsAnyEnumType())
-				return DataTypeCode.Enum;
-
-			return DataTypeCode.Unknown;
-		}
 	}
 }

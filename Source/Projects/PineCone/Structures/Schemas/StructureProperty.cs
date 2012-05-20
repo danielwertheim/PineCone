@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Reflection;
 using EnsureThat;
 using NCore;
 using NCore.Reflections;
@@ -43,31 +42,27 @@ namespace PineCone.Structures.Schemas
 
         public bool IsReadOnly { get; private set; }
 
-        public StructureProperty(PropertyInfo property, DynamicGetter getter, DynamicSetter setter = null, UniqueMode? uniqueMode = null)
-            : this(null, property, getter, setter, uniqueMode)
-        { }
-
-        public StructureProperty(IStructureProperty parent, PropertyInfo property, DynamicGetter getter, DynamicSetter setter = null, UniqueMode? uniqueMode = null)
+        public StructureProperty(StructurePropertyInfo info, DynamicGetter getter, DynamicSetter setter = null)
         {
-            Ensure.That(property, "property").IsNotNull();
-            Ensure.That(getter, "getter").IsNotNull();
+            Ensure.That(info, "info").IsNotNull();
 
             _getter = getter;
             _setter = setter;
 
-            Parent = parent;
-            Name = property.Name;
-            DataType = property.PropertyType;
-            DataTypeCode = property.PropertyType.ToDataTypeCode();
-            IsRootMember = parent == null;
+            Parent = info.Parent;
+            Name = info.Name;
+            DataType = info.DataType;
+            DataTypeCode = info.DataTypeCode;
+            IsRootMember = info.Parent == null;
             IsReadOnly = _setter == null;
-            UniqueMode = uniqueMode;
+            UniqueMode = info.UniqueMode;
 
+            //TODO: Move to Factory. What do we need IsEnum etc. for
             var isSimpleOrValueType = DataType.IsSimpleType() || DataType.IsValueType;
             IsEnumerable = !isSimpleOrValueType && DataType.IsEnumerableType();
-            ElementDataType = IsEnumerable ? DataType.GetEnumerableElementType() : null;
-            ElementDataTypeCode = ElementDataType != null ? ElementDataType.ToDataTypeCode() : (DataTypeCode?)null;
             IsElement = Parent != null && (Parent.IsElement || Parent.IsEnumerable);
+            ElementDataType = IsEnumerable ? DataType.GetEnumerableElementType() : null;
+            //ElementDataTypeCode = ElementDataType != null ? ElementDataType.ToDataTypeCode() : (DataTypeCode?)null;
 
             if (IsUnique && !isSimpleOrValueType)
                 throw new PineConeException(ExceptionMessages.StructureProperty_Ctor_UniqueOnNonSimpleType);

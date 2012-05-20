@@ -54,18 +54,16 @@
     </Compile>
     <Compile Include="Annotations\UniqueAttribute.cs" />
     <Compile Include="Annotations\UniqueMode.cs" />
-    <Compile Include="Dynamic\DynamicDescriptor.cs" />
-    <Compile Include="Dynamic\DynamicMember.cs" />
-    <Compile Include="Dynamic\DynamicStructure.cs" />
-    <Compile Include="Dynamic\DynamicStructureBuilder.cs" />
     <Compile Include="Lists.cs" />
     <Compile Include="IPineConizer.cs" />
     <Compile Include="Structures\Schemas\IStructurePropertyFactory.cs" />
+    <Compile Include="Structures\Schemas\StructurePropertyFactoryRules.cs" />
     <Compile Include="Structures\Schemas\MemberAccessors\ConcurrencyTokenAccessor.cs" />
     <Compile Include="Structures\Schemas\MemberAccessors\IConcurrencyTokenAccessor.cs" />
     <Compile Include="Structures\Schemas\MemberAccessors\ITimeStampAccessor.cs" />
     <Compile Include="Structures\Schemas\MemberAccessors\TimeStampAccessor.cs" />
     <Compile Include="Structures\Schemas\StructurePropertyFactory.cs" />
+    <Compile Include="Structures\Schemas\StructurePropertyInfo.cs" />
     <Compile Include="Structures\Schemas\StructureTimeStampPropertyNames.cs" />
     <Compile Include="Structures\StructureIdInterval.cs" />
     <Compile Include="Structures\DataTypeCode.cs" />

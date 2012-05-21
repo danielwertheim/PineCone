@@ -11,7 +11,7 @@ namespace PineCone.Structures.Schemas
         IStructureProperty Parent { get; }
         bool IsRootMember { get; }
         bool IsUnique { get; }
-        UniqueMode? UniqueMode { get; }
+        UniqueModes? UniqueMode { get; }
         bool IsEnumerable { get; }
         bool IsElement { get; }
         Type ElementDataType { get; }

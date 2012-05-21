@@ -10,9 +10,9 @@ namespace PineCone.Structures.Schemas
         public readonly IStructureProperty Parent;
         public readonly string Name;
         public readonly Type DataType;
-        public readonly UniqueMode? UniqueMode;
+        public readonly UniqueModes? UniqueMode;
 
-        public StructurePropertyInfo(string name, Type dataType, IStructureProperty parent = null, UniqueMode? uniqueMode = null)
+        public StructurePropertyInfo(string name, Type dataType, IStructureProperty parent = null, UniqueModes? uniqueMode = null)
         {
             Ensure.That(name, "name").IsNotNullOrWhiteSpace();
             Ensure.That(dataType, "dataType").IsNotNull();

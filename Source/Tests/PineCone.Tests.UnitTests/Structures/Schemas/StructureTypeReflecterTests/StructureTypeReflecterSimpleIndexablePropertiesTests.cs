@@ -137,7 +137,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
 
             public DateTime DateOfBirth { get; set; }
 
-            [Unique(UniqueMode.PerInstance)]
+            [Unique(UniqueModes.PerInstance)]
             public decimal Wage { get; set; }
 
             public byte Byte { get; set; }
@@ -164,13 +164,13 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
 
         private class WithUniqueIndexes
         {
-            [Unique(UniqueMode.PerInstance)]
+            [Unique(UniqueModes.PerInstance)]
             public int UqInt { get; set; }
 
-            [Unique(UniqueMode.PerInstance)]
+            [Unique(UniqueModes.PerInstance)]
             public string UqString { get; set; }
 
-            [Unique(UniqueMode.PerInstance)]
+            [Unique(UniqueModes.PerInstance)]
             public WithSimpleProperties UqComplex1 { get; set; }
 
             public WithSimpleProperties UqComplex2 { get; set; }

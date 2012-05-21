@@ -73,22 +73,22 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
 
         private class WithSimpleUniques
         {
-            [Unique(UniqueMode.PerType)]
+            [Unique(UniqueModes.PerType)]
             public int UqIntOnLevel1 { get; set; }
 
-            [Unique(UniqueMode.PerInstance)]
+            [Unique(UniqueModes.PerInstance)]
             public string UqStringOnLevel1 { get; set; }
         }
 
         private class WithExplicitUniqueOnChildWithoutUniques
         {
-            [Unique(UniqueMode.PerInstance)]
+            [Unique(UniqueModes.PerInstance)]
             public ChildWithoutUnique Child { get; set; }
         }
 
         private class WithExplicitUniqueOnChildWithUniques
         {
-            [Unique(UniqueMode.PerInstance)]
+            [Unique(UniqueModes.PerInstance)]
             public ChildWithUnique Child { get; set; }
         }
 
@@ -99,13 +99,13 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
 
         private class WithUniqueEnumerableOfSimple
         {
-            [Unique(UniqueMode.PerInstance)]
+            [Unique(UniqueModes.PerInstance)]
             public IEnumerable<string> Items { get; set; }
         }
 
         private class WithUniqueEnumerableOfComplexWithUnique
         {
-            [Unique(UniqueMode.PerInstance)]
+            [Unique(UniqueModes.PerInstance)]
             public IEnumerable<ChildWithUnique> Items { get; set; }
         }
 
@@ -121,7 +121,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
 
         private class ChildWithUnique
         {
-            [Unique(UniqueMode.PerInstance)]
+            [Unique(UniqueModes.PerInstance)]
             public int Code { get; set; }
         }
     }

@@ -27,7 +27,7 @@ namespace PineCone.Structures.Schemas.MemberAccessors
             get { return Property.IsUnique; }
         }
 
-        public UniqueMode? UniqueMode
+        public UniqueModes? UniqueMode
         {
             get { return Property.UniqueMode; }
         }

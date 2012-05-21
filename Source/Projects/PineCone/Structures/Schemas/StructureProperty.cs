@@ -27,7 +27,7 @@ namespace PineCone.Structures.Schemas
             get { return UniqueMode.HasValue; }
         }
 
-        public UniqueMode? UniqueMode { get; private set; }
+        public UniqueModes? UniqueMode { get; private set; }
 
         public bool IsEnumerable { get; private set; }
 

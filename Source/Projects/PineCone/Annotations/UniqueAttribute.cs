@@ -5,9 +5,9 @@ namespace PineCone.Annotations
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
     public class UniqueAttribute : Attribute
     {
-        public UniqueMode Mode { get; private set; }
+        public UniqueModes Mode { get; private set; }
 
-        public UniqueAttribute(UniqueMode mode)
+        public UniqueAttribute(UniqueModes mode)
         {
             Mode = mode;
         }

@@ -6,7 +6,7 @@ namespace PineCone.Structures
 {
     internal static class UniqueModesExtensions
     {
-        internal static StructureIndexType ToStructureIndexType(this UniqueMode? uniqueMode)
+        internal static StructureIndexType ToStructureIndexType(this UniqueModes? uniqueMode)
         {
             if (uniqueMode == null)
                 return StructureIndexType.Normal;
@@ -14,12 +14,12 @@ namespace PineCone.Structures
             return uniqueMode.Value.ToStructureIndexType();
         }
 
-        internal static StructureIndexType ToStructureIndexType(this UniqueMode uniqueMode)
+        internal static StructureIndexType ToStructureIndexType(this UniqueModes uniqueMode)
         {
-            if (uniqueMode == UniqueMode.PerInstance)
+            if (uniqueMode == UniqueModes.PerInstance)
                 return StructureIndexType.UniquePerInstance;
 
-            if (uniqueMode == UniqueMode.PerType)
+            if (uniqueMode == UniqueModes.PerType)
                 return StructureIndexType.UniquePerType;
 
             throw new NotSupportedException(ExceptionMessages.UniqueModesCantBeMapped);

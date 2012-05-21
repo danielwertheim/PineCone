@@ -53,7 +53,7 @@
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Annotations\UniqueAttribute.cs" />
-    <Compile Include="Annotations\UniqueMode.cs" />
+    <Compile Include="Annotations\UniqueModes.cs" />
     <Compile Include="Lists.cs" />
     <Compile Include="IPineConizer.cs" />
     <Compile Include="Structures\Schemas\DataTypeConverter.cs" />

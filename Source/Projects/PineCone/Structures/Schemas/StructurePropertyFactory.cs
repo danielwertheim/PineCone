@@ -34,11 +34,11 @@ namespace PineCone.Structures.Schemas
                 GetUniqueMode(propertyInfo));
         }
 
-        protected virtual UniqueMode? GetUniqueMode(PropertyInfo propertyInfo)
+        protected virtual UniqueModes? GetUniqueMode(PropertyInfo propertyInfo)
         {
             var uniqueAttribute = (UniqueAttribute)propertyInfo.GetCustomAttributes(UniqueAttributeType, true).FirstOrDefault();
 
-            UniqueMode? uniqueMode = null;
+            UniqueModes? uniqueMode = null;
             if (uniqueAttribute != null)
                 uniqueMode = uniqueAttribute.Mode;
 

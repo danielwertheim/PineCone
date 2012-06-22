@@ -16,7 +16,7 @@
 	<requireLicenseAcceptance>false</requireLicenseAcceptance>
 	<tags>indexing,structures,key-value,hierarcial-data</tags>
 	<dependencies>
-      <dependency id="Ensure.That" version="0.7.0" />
+      <dependency id="Ensure.That" version="0.8.0" />
 	  <dependency id="NCore" version="0.28.0" />
 	</dependencies>
   </metadata>

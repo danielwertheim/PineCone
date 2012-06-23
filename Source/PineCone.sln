@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{DE508E74-C9A8-4617-A293-AF1FA476CAEE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PineCone.TestUtils", "Tests\PineCone.TestUtils\PineCone.TestUtils.csproj", "{5CAC205F-5470-44A6-878F-F33768415D25}"

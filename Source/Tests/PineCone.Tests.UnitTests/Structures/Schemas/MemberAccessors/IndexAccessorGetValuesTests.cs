@@ -110,10 +110,24 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.MemberAccessors
             CollectionAssert.AreEqual(new[] { initialValue }, retrievedValues);
         }
 
+        [Test]
+        public void GetValues_FromAssignedUInt_ReturnsAssignedInt()
+        {
+            const uint initialValue = 12345;
+            var item = new Dummy { UIntProp = initialValue };
+            var property = StructurePropertyTestFactory.GetPropertyByPath<Dummy>("UIntProp");
+            var indexAccessor = IndexAccessorTestFactory.CreateFor(property);
+
+            var retrievedValues = indexAccessor.GetValues(item);
+
+            CollectionAssert.AreEqual(new[] { initialValue }, retrievedValues);
+        }
+
         private class Dummy
         {
             public string StringProp { get; set; }
             public int IntProp { get; set; }
+            public uint UIntProp { get; set; }
             public decimal DecimalProp { get; set; }
             public DateTime DateTimeProp { get; set; }
             public bool BoolProp { get; set; }

@@ -104,6 +104,18 @@ namespace PineCone.Tests.UnitTests.Structures.StructureBuilderTests
 			Assert.AreEqual(42, actual);
 		}
 
+        [Test]
+        public void CreateStructure_WhenUIntOnFirstLevel_ReturnsSimpleValue()
+        {
+            var schema = StructureSchemaTestFactory.CreateRealFrom<TestItemForFirstLevel>();
+            var item = new TestItemForFirstLevel { UIntValue = 42 };
+
+            var structure = Builder.CreateStructure(item, schema);
+
+            var actual = structure.Indexes.Single(si => si.Path == "UIntValue").Value;
+            Assert.AreEqual(42, actual);
+        }
+
 		[Test]
 		public void CreateStructure_WhenIntOnSecondLevel_ReturnsSimpleValue()
 		{
@@ -215,6 +227,7 @@ namespace PineCone.Tests.UnitTests.Structures.StructureBuilderTests
 			public Guid StructureId { get; set; }
 
 			public int IntValue { get; set; }
+            public uint UIntValue { get; set; }
 		}
 
 		private class TestItemForSecondLevel

@@ -25,11 +25,25 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas
             return property.Object;
         }
 
+        [Test]
+        [TestCase(typeof(ushort))]
+        [TestCase(typeof(ushort?))]
+        [TestCase(typeof(uint))]
+        [TestCase(typeof(uint?))]
+        [TestCase(typeof(ulong))]
+        [TestCase(typeof(ulong?))]
+        public void Convert_TypeIsUnsignedIntegerFamily_ReturnsUnsignedIntegerNumber(Type type)
+        {
+            Assert.AreEqual(DataTypeCode.UnsignedIntegerNumber, _converter.Convert(CreateProperty(type)));
+        }
+
 		[Test]
+        [TestCase(typeof(short))]
+        [TestCase(typeof(short?))]
 		[TestCase(typeof(int))]
 		[TestCase(typeof(int?))]
-		[TestCase(typeof(short))]
-		[TestCase(typeof(short?))]
+        [TestCase(typeof(long))]
+        [TestCase(typeof(long?))]
 		public void Convert_TypeIsIntegerFamily_ReturnsIntegerNumber(Type type)
 		{
 			Assert.AreEqual(DataTypeCode.IntegerNumber, _converter.Convert(CreateProperty(type)));

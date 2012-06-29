@@ -1,14 +1,25 @@
 using System;
 using System.Linq;
+using EnsureThat;
 using NCore.Reflections;
 
 namespace PineCone.Structures.Schemas
 {
     public class DataTypeConverter : IDataTypeConverter
     {
-        public Func<string, bool> MemberNameIsForTextType { get; set; }
+        private Func<string, bool> _memberNameIsForTextType;
 
         public static readonly string[] DefaultTextDataTypeConventions = new[] { "Text", "Content", "Description" };
+        
+        public Func<string, bool> MemberNameIsForTextType
+        {
+            get { return _memberNameIsForTextType; }
+            set
+            {
+                Ensure.That(value, "MemberNameIsForTextType").IsNotNull();
+                _memberNameIsForTextType = value;
+            }
+        }
 
         public DataTypeConverter()
         {
@@ -27,8 +38,11 @@ namespace PineCone.Structures.Schemas
 
         public virtual DataTypeCode Convert(Type dataType, string memberName)
         {
-            if (dataType.IsAnyIntegerNumberType())
+            if (dataType.IsAnySignedIntegerNumberType())
                 return DataTypeCode.IntegerNumber;
+
+            if (dataType.IsAnyUnsignedType())
+                return DataTypeCode.UnsignedIntegerNumber;
 
             if (dataType.IsAnyFractalNumberType())
                 return DataTypeCode.FractalNumber;

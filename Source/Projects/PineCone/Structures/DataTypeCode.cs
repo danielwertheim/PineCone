@@ -7,6 +7,7 @@ namespace PineCone.Structures
 	{
 		Unknown,
 		IntegerNumber,
+        UnsignedIntegerNumber,
 		FractalNumber,
 		Bool,
 		DateTime,

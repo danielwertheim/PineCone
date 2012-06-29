@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using EnsureThat;
 using NCore.Reflections;
 
 namespace PineCone.Structures.Schemas
@@ -35,10 +36,13 @@ namespace PineCone.Structures.Schemas
             return Convert(property.ElementDataType ?? property.DataType, property.Name);
         }
 
-        public virtual DataTypeCode Convert(Type dataType, string memberName)
+        protected virtual DataTypeCode Convert(Type dataType, string memberName)
         {
-            if (dataType.IsAnyIntegerNumberType())
+            if (dataType.IsAnySignedIntegerNumberType())
                 return DataTypeCode.IntegerNumber;
+
+            if (dataType.IsAnyUnsignedType())
+                return DataTypeCode.UnsignedIntegerNumber;
 
             if (dataType.IsAnyFractalNumberType())
                 return DataTypeCode.FractalNumber;

@@ -36,7 +36,7 @@ namespace PineCone.Structures.Schemas
             return Convert(property.ElementDataType ?? property.DataType, property.Name);
         }
 
-        protected virtual DataTypeCode Convert(Type dataType, string memberName)
+        public virtual DataTypeCode Convert(Type dataType, string memberName)
         {
             if (dataType.IsAnySignedIntegerNumberType())
                 return DataTypeCode.IntegerNumber;

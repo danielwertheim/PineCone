@@ -6,9 +6,19 @@ namespace PineCone.Structures.Schemas
 {
     public class DataTypeConverter : IDataTypeConverter
     {
-        public Func<string, bool> MemberNameIsForTextType { get; set; }
+        private Func<string, bool> _memberNameIsForTextType;
 
         public static readonly string[] DefaultTextDataTypeConventions = new[] { "Text", "Content", "Description" };
+        
+        public Func<string, bool> MemberNameIsForTextType
+        {
+            get { return _memberNameIsForTextType; }
+            set
+            {
+                Ensure.That(value, "MemberNameIsForTextType").IsNotNull();
+                _memberNameIsForTextType = value;
+            }
+        }
 
         public DataTypeConverter()
         {

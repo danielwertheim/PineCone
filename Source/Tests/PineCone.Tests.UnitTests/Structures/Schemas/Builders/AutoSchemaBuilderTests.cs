@@ -22,7 +22,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.Builders
         private IStructureType GetStructureTypeFor<T>()
             where T : class
         {
-            return _structureTypeFactory.CreateFor(TypeFor<T>.Type);
+            return _structureTypeFactory.CreateFor(typeof(T));
         }
 
         [Test]

@@ -15,7 +15,7 @@ require 'albacore'
 @env_projectnamePineCone = 'PineCone'
 
 @env_buildfolderpath = 'build'
-@env_version = "3.4.1"
+@env_version = "3.5.0"
 @env_buildversion = @env_version + (ENV['env_buildnumber'].to_s.empty? ? "" : ".#{ENV['env_buildnumber'].to_s}")
 @env_buildconfigname = ENV['env_buildconfigname'].to_s.empty? ? "Release" : ENV['env_buildconfigname'].to_s
 @env_buildname = "#{@env_solutionname}-v#{@env_buildversion}-#{@env_buildconfigname}"
@@ -37,7 +37,7 @@ task :testIt => [:unittests]
 
 task :zipIt => [:zipPineCone]
 
-task :packIt => [:packPineConeNuGet]
+task :packIt => [:packPineConeNuGet, :packPineConeSourceNuGet]
 #--------------------------------------
 # Albacore tasks
 #--------------------------------------
@@ -91,4 +91,9 @@ end
 exec :packPineConeNuGet do |cmd|
 	cmd.command = "NuGet.exe"
 	cmd.parameters = "pack #{@env_projectnamePineCone}.nuspec -version #{@env_version} -basepath #{pineConeOutputPath} -outputdirectory #{@env_buildfolderpath}"
+end
+
+exec :packPineConeSourceNuGet do |cmd|
+  cmd.command = "NuGet.exe"
+  cmd.parameters = "pack #{@env_projectnamePineCone}.Source.nuspec -version #{@env_version} -basepath #{@env_solutionfolderpath} -outputdirectory #{@env_buildfolderpath}"
 end

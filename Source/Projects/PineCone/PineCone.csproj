@@ -40,9 +40,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Ensure.That.0.8.1\lib\net40\EnsureThat.dll</HintPath>
     </Reference>
-    <Reference Include="NCore, Version=0.30.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\NCore.0.30.0\lib\net40\NCore.dll</HintPath>
+    <Reference Include="NCore">
+      <HintPath>..\..\packages\NCore.0.31.0\lib\net40\NCore.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -129,7 +128,6 @@
     <Compile Include="Structures\StructureIndexType.cs" />
     <Compile Include="Structures\UniqueModesExtensions.cs" />
     <Compile Include="Sys.cs" />
-    <Compile Include="TypeFor.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\ExceptionMessages.resx">
@@ -140,12 +138,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="..\..\License-PineCone.txt">
-      <Link>License-PineCone.txt</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -40,8 +40,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Ensure.That.0.9.0\lib\net40\EnsureThat.dll</HintPath>
     </Reference>
-    <Reference Include="NCore">
-      <HintPath>..\..\packages\NCore.0.31.0\lib\net40\NCore.dll</HintPath>
+    <Reference Include="NCore, Version=0.32.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\NCore.0.32.0\lib\net40\NCore.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

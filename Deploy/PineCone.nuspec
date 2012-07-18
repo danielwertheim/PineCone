@@ -17,7 +17,7 @@
 	<tags>indexing,structures,key-value,hierarcial-data</tags>
 	<dependencies>
       <dependency id="Ensure.That" version="0.9.0" />
-	  <dependency id="NCore" version="0.31.0" />
+	  <dependency id="NCore" version="0.32.0" />
 	</dependencies>
   </metadata>
   <files>

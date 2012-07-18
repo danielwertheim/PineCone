@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <package>
   <metadata>
-    <id>PineCone</id>    
-    <title>PineCone</title>
+    <id>PineCone.Source</id>    
+    <title>PineCone (source)</title>
 	<version>$version$</version>
 	<authors>danielwertheim</authors>
 	<copyright>Daniel Wertheim</copyright>
@@ -16,12 +16,12 @@
 	<requireLicenseAcceptance>false</requireLicenseAcceptance>
 	<tags>indexing,structures,key-value,hierarcial-data</tags>
 	<dependencies>
-      <dependency id="Ensure.That" version="0.9.0" />
-	  <dependency id="NCore" version="0.32.0" />
+      <dependency id="Ensure.That.Source" version="0.9.0" />
+	  <dependency id="NCore.Source" version="0.32.0" />
 	</dependencies>
   </metadata>
   <files>
-	<file src="**\PineCone.dll" target="lib\net40\"/>
-	<file src="**\PineCone.xml" target="lib\net40\"/>
+	<file src="Projects\PineCone\**\*.cs" target="Content\net40\PineCone" exclude="Projects\PineCone\Properties\**\*.cs;Projects\PineCone\Resources\**\*.*" />
+	<file src="Projects\PineCone\Resources\*.resx" target="Content\net40\PineCone\Resources" />
   </files>
 </package>

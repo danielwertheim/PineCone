@@ -4,9 +4,9 @@ using PineCone.Resources;
 
 namespace PineCone.Structures
 {
-    internal static class UniqueModesExtensions
+    public static class UniqueModesExtensions
     {
-        internal static StructureIndexType ToStructureIndexType(this UniqueModes? uniqueMode)
+        public static StructureIndexType ToStructureIndexType(this UniqueModes? uniqueMode)
         {
             if (uniqueMode == null)
                 return StructureIndexType.Normal;
@@ -14,7 +14,7 @@ namespace PineCone.Structures
             return uniqueMode.Value.ToStructureIndexType();
         }
 
-        internal static StructureIndexType ToStructureIndexType(this UniqueModes uniqueMode)
+        public static StructureIndexType ToStructureIndexType(this UniqueModes uniqueMode)
         {
             if (uniqueMode == UniqueModes.PerInstance)
                 return StructureIndexType.UniquePerInstance;

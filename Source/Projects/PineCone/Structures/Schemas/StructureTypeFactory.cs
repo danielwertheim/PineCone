@@ -18,7 +18,7 @@ namespace PineCone.Structures.Schemas
 
         public virtual IStructureType CreateFor<T>() where T : class 
         {
-            return CreateFor(TypeFor<T>.Type);
+            return CreateFor(typeof(T));
         }
 
         public virtual IStructureType CreateFor(Type type)

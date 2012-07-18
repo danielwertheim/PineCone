@@ -31,7 +31,7 @@ namespace PineCone.Structures.Schemas
 
         public IStructureSchema GetSchema<T>() where T : class 
         {
-            return GetSchema(TypeFor<T>.Type);
+            return GetSchema(typeof(T));
         }
 
         public IStructureSchema GetSchema(Type type)

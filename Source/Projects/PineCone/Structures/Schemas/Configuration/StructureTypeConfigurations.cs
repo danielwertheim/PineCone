@@ -31,8 +31,8 @@ namespace PineCone.Structures.Schemas.Configuration
         public IStructureTypeConfig GetConfiguration(Type type)
         {
             return _configurations.ContainsKey(type)
-                       ? _configurations[type]
-                       : null;
+                ? _configurations[type]
+                : null;
         }
 
         public IStructureTypeConfig GetConfiguration<T>() where T : class

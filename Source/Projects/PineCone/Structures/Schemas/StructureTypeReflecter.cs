@@ -248,7 +248,7 @@ namespace PineCone.Structures.Schemas
             var filteredProperties = properties.Where(p =>
                 !p.PropertyType.IsSimpleType() &&
                 !p.PropertyType.IsEnumerableType() &&
-                GetIdProperty(p.PropertyType) == null);
+                !HasIdProperty(p.PropertyType));
 
             if (nonIndexablePaths != null && nonIndexablePaths.Any())
                 filteredProperties = filteredProperties.Where(p => !nonIndexablePaths.Contains(

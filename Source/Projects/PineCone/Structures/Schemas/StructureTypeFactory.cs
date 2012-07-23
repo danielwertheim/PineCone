@@ -24,9 +24,9 @@ namespace PineCone.Structures.Schemas
         public virtual IStructureType CreateFor(Type type)
         {
             var config = Configurations.GetConfiguration(type);
-
-            //Scenario: Index ALL which is the default behavior
-            if (config == null || config.IsEmpty)
+            var shouldIndexAllMembers = config == null || config.IsEmpty;
+            
+            if (shouldIndexAllMembers)
                 return new StructureType(
                     type,
                     Reflecter.GetIdProperty(type),
@@ -34,14 +34,15 @@ namespace PineCone.Structures.Schemas
                     Reflecter.GetTimeStampProperty(type),
                     Reflecter.GetIndexableProperties(type).ToArray());
 
+            var shouldIndexAllMembersExcept = config.MemberPathsNotBeingIndexed.Count > 0;
             return new StructureType(
                 type,
                 Reflecter.GetIdProperty(type),
                 Reflecter.GetConcurrencyTokenProperty(type),
                 Reflecter.GetTimeStampProperty(type),
-                ((config.MemberPathsNotBeingIndexed.Count > 0)
-                ? Reflecter.GetIndexablePropertiesExcept(type, config.MemberPathsNotBeingIndexed) //Scenario: Index ALL EXCEPT
-                : Reflecter.GetSpecificIndexableProperties(type, config.MemberPathsBeingIndexed)).ToArray());//Scenario: Index only THIS
+                (shouldIndexAllMembersExcept
+                    ? Reflecter.GetIndexablePropertiesExcept(type, config.MemberPathsNotBeingIndexed)
+                    : Reflecter.GetSpecificIndexableProperties(type, config.MemberPathsBeingIndexed)).ToArray());
         }
     }
 }

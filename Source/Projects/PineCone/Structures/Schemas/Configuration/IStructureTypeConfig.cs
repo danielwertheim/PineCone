@@ -8,9 +8,11 @@ namespace PineCone.Structures.Schemas.Configuration
     {
         Type Type { get; }
         bool IsEmpty { get; }
+        bool IncludeNestedStructureMembers { get; }
         ISet<string> MemberPathsBeingIndexed { get; }
         ISet<string> MemberPathsNotBeingIndexed { get; }
 
+        IStructureTypeConfig AllowNestedStructures();
         IStructureTypeConfig OnlyIndexThis(params string[] memberPaths);
         IStructureTypeConfig DoNotIndexThis(params string[] memberPaths);
     }

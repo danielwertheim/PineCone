@@ -30,7 +30,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.Configuration
         {
             var configs = new StructureTypeConfigurations();
 
-            configs.NewForType(typeof (Dummy));
+            configs.NewForType(typeof(Dummy));
 
             Assert.AreEqual(1, configs.Items.Count());
         }
@@ -51,7 +51,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.Configuration
             var configs = new StructureTypeConfigurations();
             configs.NewForType(typeof(Dummy));
 
-            var ex = Assert.Throws<ArgumentException>(() => configs.NewForType(typeof (Dummy)));
+            var ex = Assert.Throws<ArgumentException>(() => configs.NewForType(typeof(Dummy)));
 
             Assert.AreEqual("An item with the same key has already been added.", ex.Message);
         }
@@ -68,19 +68,19 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.Configuration
         }
 
         [Test]
-        public void GetConfigurations_WhenRegisreredViaNonGenericVersion_ConfigurationIsReturned()
+        public void GetConfigurations_WhenRegistreredViaNonGenericVersion_ConfigurationIsReturned()
         {
             var configs = new StructureTypeConfigurations();
             configs.NewForType(typeof(Dummy));
 
-            var config = configs.GetConfiguration(typeof (Dummy));
+            var config = configs.GetConfiguration(typeof(Dummy));
 
             Assert.IsNotNull(config);
             Assert.AreEqual(typeof(Dummy), config.Type);
         }
 
         [Test]
-        public void GetConfigurations_WhenRegisreredViaGenericVersion_ConfigurationIsReturned()
+        public void GetConfigurations_WhenRegistreredViaGenericVersion_ConfigurationIsReturned()
         {
             var configs = new StructureTypeConfigurations();
             configs.NewForType<Dummy>();
@@ -92,7 +92,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.Configuration
         }
 
         [Test]
-        public void Generic_GetConfigurations_WhenRegisreredViaNonGenericVersion_ConfigurationIsReturned()
+        public void Generic_GetConfigurations_WhenRegistreredViaNonGenericVersion_ConfigurationIsReturned()
         {
             var configs = new StructureTypeConfigurations();
             configs.NewForType(typeof(Dummy));
@@ -104,7 +104,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.Configuration
         }
 
         [Test]
-        public void Generic_GetConfigurations_WhenRegisreredViaGenericVersion_ConfigurationIsReturned()
+        public void Generic_GetConfigurations_WhenRegistreredViaGenericVersion_ConfigurationIsReturned()
         {
             var configs = new StructureTypeConfigurations();
             configs.NewForType<Dummy>();
@@ -120,7 +120,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.Configuration
         {
             var configs = new StructureTypeConfigurations();
 
-            var config = configs.GetConfiguration(typeof (Dummy));
+            var config = configs.GetConfiguration(typeof(Dummy));
 
             Assert.IsNull(config);
         }
@@ -135,9 +135,26 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.Configuration
             Assert.IsNull(config);
         }
 
-        private class Dummy
+        [Test]
+        public void AllowNestedStructures_WhenCalled_IncludeNestedStructureMembersBecomesTrue()
         {
-            
+            var configs = new StructureTypeConfigurations();
+
+            var config = configs.NewForType(typeof(Dummy)).AllowNestedStructures();
+
+            Assert.IsTrue(config.IncludeNestedStructureMembers);
         }
+
+        //[Test]
+        //public void Generic_AllowNestedStructures_WhenCalled_IncludeNestedStructureMembersBecomesTrue()
+        //{
+        //    var configs = new StructureTypeConfigurations();
+
+        //    var config = configs.NewForType<Dummy>().AllowNestedStructures();
+
+        //    Assert.IsTrue(config.IncludeNestedStructureMembers);
+        //}
+
+        private class Dummy { }
     }
 }

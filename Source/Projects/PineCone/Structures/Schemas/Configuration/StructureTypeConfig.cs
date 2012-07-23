@@ -20,6 +20,8 @@ namespace PineCone.Structures.Schemas.Configuration
             get { return MemberPathsBeingIndexed.Count < 1 && MemberPathsNotBeingIndexed.Count < 1; }
         }
 
+        public bool IncludeNestedStructureMembers { get; private set; }
+
         public ISet<string> MemberPathsBeingIndexed
         {
             get { return _memberPathsBeingIndexed; }
@@ -38,6 +40,13 @@ namespace PineCone.Structures.Schemas.Configuration
 
             _memberPathsBeingIndexed = new HashSet<string>();
             _memberPathsNotBeingIndexed = new HashSet<string>();
+        }
+
+        public IStructureTypeConfig AllowNestedStructures()
+        {
+            IncludeNestedStructureMembers = true;
+
+            return this;
         }
 
         public IStructureTypeConfig OnlyIndexThis(params string[] memberPaths)

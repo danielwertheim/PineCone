@@ -54,7 +54,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas
 		public void GetSchema_WhenCustomConfigurationExists_ReturnsSchemaWithCorrectIndexAccessor()
 		{
 			var pineConizer = new PineConizer();
-			pineConizer.Schemas.StructureTypeFactory.Configurations.NewForType<FooCustomer>().OnlyIndexThis("CustomerNo");
+			pineConizer.Schemas.StructureTypeFactory.Configurations.Configure<FooCustomer>(cfg => cfg.OnlyIndexThis("CustomerNo"));
 
 			var schema = pineConizer.Schemas.GetSchema<FooCustomer>();
 
@@ -65,7 +65,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas
 		public void GetSchema_WhenCustomConfigurationExists_ViaLambdas_ReturnsSchemaWithCorrectIndexAccessor()
 		{
 			var pineConizer = new PineConizer();
-			pineConizer.Schemas.StructureTypeFactory.Configurations.NewForType<FooCustomer>().OnlyIndexThis(c => c.CustomerNo);
+			pineConizer.Schemas.StructureTypeFactory.Configurations.Configure<FooCustomer>(cfg => cfg.OnlyIndexThis(c => c.CustomerNo));
 
 			var schema = pineConizer.Schemas.GetSchema<FooCustomer>();
 
@@ -76,7 +76,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas
 		public void GetSchema_WhenCustomConfigurationExists_ViaNonGenericConfig_ReturnsSchemaWithCorrectIndexAccessor()
 		{
 			var pineConizer = new PineConizer();
-			pineConizer.Schemas.StructureTypeFactory.Configurations.NewForType(typeof(FooCustomer)).OnlyIndexThis("CustomerNo");
+            pineConizer.Schemas.StructureTypeFactory.Configurations.Configure(typeof(FooCustomer), cfg => cfg.OnlyIndexThis("CustomerNo"));
 
 			var schema = pineConizer.Schemas.GetSchema<FooCustomer>();
 

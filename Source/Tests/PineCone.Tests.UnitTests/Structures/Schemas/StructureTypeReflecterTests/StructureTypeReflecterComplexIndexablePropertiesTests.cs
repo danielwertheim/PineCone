@@ -47,6 +47,16 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
             Assert.AreEqual(0, properties.Count());
         }
 
+        [Test]
+        public void GetComplexProperties_WhenItIsContainedStructure_and_contained_structures_are_allowed_Contained_members_are_extracted()
+        {
+            var properties = _reflecter.InvokeGetComplexIndexablePropertyInfos(
+                typeof(WithContainedStructure).GetProperties(StructureTypeReflecter.PropertyBindingFlags));
+
+            Assert.AreEqual(1, properties.Count());
+            Assert.IsNotNull(properties.SingleOrDefault(p => p.Name == "NestedValue"));
+        }
+
         private class Item
         {
             public int Value { get; set; }
@@ -85,7 +95,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
         {
             public int StructureId { get; set; }
 
-            public int Value { get; set; }
+            public int NestedValue { get; set; }
         }
     }
 }

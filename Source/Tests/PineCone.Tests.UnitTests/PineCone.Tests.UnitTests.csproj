@@ -85,6 +85,7 @@
     </Compile>
     <Compile Include="PineConizerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Structures\Schemas\Configuration\StructureTypeConfiguratorTests.cs" />
     <Compile Include="Structures\Schemas\DataTypeConverterTests.cs" />
     <Compile Include="Structures\Schemas\Configuration\StructureTypeConfigurationsTests.cs" />
     <Compile Include="Structures\Schemas\Configuration\StuctureTypeConfigTests.cs" />

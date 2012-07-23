@@ -56,6 +56,8 @@
     <Compile Include="Annotations\UniqueModes.cs" />
     <Compile Include="Lists.cs" />
     <Compile Include="IPineConizer.cs" />
+    <Compile Include="Structures\Schemas\Configuration\IStructureTypeConfigurator.cs" />
+    <Compile Include="Structures\Schemas\Configuration\StructureTypeConfigurator.cs" />
     <Compile Include="Structures\Schemas\DataTypeConverter.cs" />
     <Compile Include="Structures\Schemas\IDataTypeConverter.cs" />
     <Compile Include="Structures\Schemas\IStructurePropertyFactory.cs" />

@@ -38,17 +38,17 @@ namespace PineCone.Structures.Schemas
             PropertyFactory = new StructurePropertyFactory();
         }
 
-        public bool HasIdProperty(Type type)
+        public virtual bool HasIdProperty(Type type)
         {
             return GetIdProperty(type) != null;
         }
 
-        public bool HasConcurrencyTokenProperty(Type type)
+        public virtual bool HasConcurrencyTokenProperty(Type type)
         {
             return GetConcurrencyTokenProperty(type) != null;
         }
 
-        public bool HasTimeStampProperty(Type type)
+        public virtual bool HasTimeStampProperty(Type type)
         {
             return GetTimeStampProperty(type) != null;
         }

@@ -48,7 +48,9 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
         }
 
         private class Item
-        {}
+        {
+            public int Value { get; set; }
+        }
 
         private class WithSimpleAndComplexProperties
         {
@@ -82,6 +84,8 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
         private class Structure
         {
             public int StructureId { get; set; }
+
+            public int Value { get; set; }
         }
     }
 }

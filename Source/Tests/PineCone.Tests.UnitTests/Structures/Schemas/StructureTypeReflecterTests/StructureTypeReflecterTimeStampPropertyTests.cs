@@ -7,62 +7,46 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
     [TestFixture]
     public class StructureTypeReflecterTimeStampPropertyTests : UnitTestBase
     {
-        private readonly IStructureTypeReflecter _reflecter = new StructureTypeReflecter();
-
         [Test]
         public void HasTimeStampProperty_WhenMemberExists_ReturnsTrue()
         {
-            var type = typeof(Model);
-
-            Assert.IsTrue(_reflecter.HasTimeStampProperty(type));
+            Assert.IsTrue(ReflecterFor<Model>().HasTimeStampProperty());
         }
 
         [Test]
         public void HasTimeStampProperty_WhenClassNamedMemberExists_ReturnsTrue()
         {
-            var type = typeof(ModelWithModelTimeStamp);
-
-            Assert.IsTrue(_reflecter.HasTimeStampProperty(type));
+            Assert.IsTrue(ReflecterFor<ModelWithModelTimeStamp>().HasTimeStampProperty());
         }
 
         [Test]
         public void HasTimeStampProperty_WhenInterfaceNamedMemberExists_ReturnsTrue()
         {
-            var type = typeof(IModel);
-
-            Assert.IsTrue(_reflecter.HasTimeStampProperty(type));
+            Assert.IsTrue(ReflecterFor<IModel>().HasTimeStampProperty());
         }
 
         [Test]
         public void HasTimeStampProperty_WhenStructureNamedMemberExists_ReturnsTrue()
         {
-            var type = typeof(ModelWithStructureTimeStamp);
-
-            Assert.IsTrue(_reflecter.HasTimeStampProperty(type));
+            Assert.IsTrue(ReflecterFor<ModelWithStructureTimeStamp>().HasTimeStampProperty());
         }
 
         [Test]
         public void HasTimeStampProperty_WhenModelWithNullableMemberExists_ReturnsTrue()
         {
-            var type = typeof(ModelWithNullableTimeStamp);
-
-            Assert.IsTrue(_reflecter.HasTimeStampProperty(type));
+            Assert.IsTrue(ReflecterFor<ModelWithNullableTimeStamp>().HasTimeStampProperty());
         }
 
         [Test]
         public void HasTimeStampProperty_WhenMemberDoesNotExists_ReturnsFalse()
         {
-            var type = typeof(ModelWithNoTimeStamp);
-
-            Assert.IsFalse(_reflecter.HasTimeStampProperty(type));
+            Assert.IsFalse(ReflecterFor<ModelWithNoTimeStamp>().HasTimeStampProperty());
         }
 
         [Test]
         public void GetTimeStampProperty_WhenMemberExists_ReturnsProperty()
         {
-            var type = typeof(Model);
-
-            var property = _reflecter.GetTimeStampProperty(type);
+            var property = ReflecterFor<Model>().GetTimeStampProperty();
 
             Assert.IsNotNull(property);
             Assert.AreEqual("TimeStamp", property.Name);
@@ -71,11 +55,14 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
         [Test]
         public void GetTimeStampProperty_WhenMemberDoesNotExist_ReturnsNull()
         {
-            var type = typeof(ModelWithNoTimeStamp);
-
-            var property = _reflecter.GetTimeStampProperty(type);
+            var property = ReflecterFor<ModelWithNoTimeStamp>().GetTimeStampProperty();
 
             Assert.IsNull(property);
+        }
+
+        private static IStructureTypeReflecter ReflecterFor<T>() where T : class
+        {
+            return new StructureTypeReflecter(typeof(T));
         }
 
         private class Model

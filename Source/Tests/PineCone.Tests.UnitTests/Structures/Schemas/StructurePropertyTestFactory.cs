@@ -5,21 +5,21 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas
 {
     internal static class StructurePropertyTestFactory
     {
-        private static readonly IStructureTypeReflecter Reflecter = new StructureTypeReflecter();
+        private static readonly IStructurePropertyFactory PropertyFactory = new StructurePropertyFactory();
 
         internal static IStructureProperty GetIdProperty<T>() where T : class 
         {
-            return Reflecter.GetIdProperty(typeof (T));
+            return new StructureTypeReflecter(typeof(T)).GetIdProperty();
         }
 
         internal static IStructureProperty GetPropertyByPath<T>(string path) where T : class 
         {
-            return Reflecter.GetIndexableProperties(typeof(T)).Single(i => i.Path == path);
+            return new StructureTypeReflecter(typeof(T)).GetIndexableProperties().Single(i => i.Path == path);
         }
 
         internal static IStructureProperty GetPropertyByName<T>(string name) where T : class 
         {
-            return Reflecter.GetIndexableProperties(typeof(T)).Single(i => i.Name == name);
+            return new StructureTypeReflecter(typeof(T)).GetIndexableProperties().Single(i => i.Name == name);
         }
 
         internal static IStructureProperty GetRawProperty<T>(string name) where T : class 
@@ -27,9 +27,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas
             var type = typeof(T);
             var propertyInfo = type.GetProperty(name);
 
-            var property = Reflecter.PropertyFactory.CreateRootPropertyFrom(propertyInfo);
-
-            return property;
+            return PropertyFactory.CreateRootPropertyFrom(propertyInfo);
         }
 
         internal static IStructureProperty GetRawProperty<T>(string name, IStructureProperty parent) where T : class 
@@ -37,9 +35,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas
             var type = typeof(T);
             var propertyInfo = type.GetProperty(name);
 
-            var property = Reflecter.PropertyFactory.CreateChildPropertyFrom(parent, propertyInfo);
-
-            return property;
+            return PropertyFactory.CreateChildPropertyFrom(parent, propertyInfo);
         }
     }
 }

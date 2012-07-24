@@ -9,77 +9,89 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
     [TestFixture]
     public class StructureTypeReflecterEnumerableIndexablePropertiesTests : UnitTestBase
     {
-        private readonly TestableReflecter _reflecter = new TestableReflecter();
-
         [Test]
-        public void GetEnumerableIndexablePropertyInfos_WhenNoEnumerableIndexesExists_ReturnsEmptyList()
+        public void GetIndexableProperties_WhenIListOfTIndexesExists_ReturnsTheElementMembers()
         {
-            var properties = _reflecter.InvokeGetEnumerableIndexablePropertyInfos(
-                typeof(WithNoEnumerableMembers).GetProperties(StructureTypeReflecter.PropertyBindingFlags));
+            var props = ReflecterFor<WithCollectionIndexes>().GetIndexableProperties();
 
-            CollectionAssert.IsEmpty(properties);
+            Assert.IsTrue(props.Any(p => p.Path == "IList1.ElementInt1"));
         }
 
         [Test]
-        public void GetEnumerableIndexablePropertyInfos_WhenIListOfTIndexesExists_ReturnsTheMember()
+        public void GetIndexableProperties_WhenIEnumerableOfTIndexesExists_ReturnsTheElementMembers()
         {
-            var properties = _reflecter.InvokeGetEnumerableIndexablePropertyInfos(
-                typeof(WithCollectionIndexes).GetProperties(StructureTypeReflecter.PropertyBindingFlags))
-                    .Where(p => p.Name == "IList1")
-                    .SingleOrDefault();
+            var props = ReflecterFor<WithCollectionIndexes>().GetIndexableProperties();
 
-            Assert.IsNotNull(properties);
+            Assert.IsTrue(props.Any(p => p.Path == "IEnumerable1.ElementInt1"));
         }
 
         [Test]
-        public void GetEnumerableIndexablePropertyInfos_WhenIEnumerableOfTIndexesExists_ReturnsTheMember()
+        public void GetIndexableProperties_WhenEnumerableOfBytes_NoPropertiesAreReturned()
         {
-            var properties = _reflecter.InvokeGetEnumerableIndexablePropertyInfos(
-                typeof(WithCollectionIndexes).GetProperties(StructureTypeReflecter.PropertyBindingFlags))
-                    .Where(p => p.Name == "IEnumerable1")
-                    .SingleOrDefault();
+            var props = ReflecterFor<WithEnumerableBytes>().GetIndexableProperties();
 
-            Assert.IsNotNull(properties);
+            Assert.IsFalse(props.Any());
         }
 
         [Test]
-        public void GetEnumerableIndexablePropertyInfos_WhenIEnumerableOfTIndexesExists_DoesNotReturnTheElementMembers()
+        public void GetIndexableProperties_WhenArrayOfStrings_OnlyReturnsPropertyForAccessingTheStringArray()
         {
-            var properties = _reflecter.InvokeGetEnumerableIndexablePropertyInfos(
-                typeof(WithCollectionIndexes).GetProperties(StructureTypeReflecter.PropertyBindingFlags))
-                    .Where(p => p.Name == "ElementInt1")
-                    .SingleOrDefault();
+            var properties = ReflecterFor<WithArrayOfStrings>().GetIndexableProperties();
+            var arrayIndex = properties.SingleOrDefault(p => p.Path == "Values");
 
-            Assert.IsNull(properties);
+            Assert.AreEqual(1, properties.Count());
+            Assert.IsNotNull(arrayIndex);
         }
 
         [Test]
-        public void GetEnumerableIndexablePropertyInfos_WhenEnumerableOfBytes_NoPropertiesAreReturned()
+        public void GetIndexableProperties_WhenArrayOfIntegers_OnlyReturnsPropertyForAccessingTheStringArray()
         {
-            var properties = _reflecter.InvokeGetEnumerableIndexablePropertyInfos(
-                typeof(WithEnumarbleBytes).GetProperties(StructureTypeReflecter.PropertyBindingFlags));
+            var properties = ReflecterFor<WithArrayOfIntegers>().GetIndexableProperties();
+            var arrayIndex = properties.SingleOrDefault(p => p.Path == "Values");
 
-            Assert.AreEqual(0, properties.Count());
+            Assert.AreEqual(1, properties.Count());
+            Assert.IsNotNull(arrayIndex);
         }
 
-        private class WithEnumarbleBytes
+        [Test]
+        public void GetIndexableProperties_WhenWithNestedArrayOfStrings_OnlyReturnsPropertyForAccessingTheStringArray()
+        {
+            var properties = ReflecterFor<WithNestedArrayOfStrings>().GetIndexableProperties();
+            var arrayIndex = properties.SingleOrDefault(p => p.Path == "Item.Values");
+
+            Assert.AreEqual(1, properties.Count());
+            Assert.IsNotNull(arrayIndex);
+        }
+
+        [Test]
+        public void GetIndexableProperties_WhenWithArrayOfNestedArrayOfStrings_OnlyReturnsPropertyForAccessingTheStringArray()
+        {
+            var properties = ReflecterFor<WithArrayOfNestedArrayOfStrings>().GetIndexableProperties();
+            var arrayIndex = properties.SingleOrDefault(p => p.Path == "Items.Values");
+
+            Assert.AreEqual(1, properties.Count());
+            Assert.IsNotNull(arrayIndex);
+        }
+
+        private static IStructureTypeReflecter ReflecterFor<T>() where T : class
+        {
+            return new StructureTypeReflecter(typeof(T));
+        }
+
+        private class WithEnumerableBytes
         {
             public byte[] Bytes1 { get; set; }
-
             public IEnumerable<byte> Bytes2 { get; set; }
-
             public IList<byte> Bytes3 { get; set; }
-
             public List<byte> Bytes4 { get; set; }
-
             public ICollection<byte> Bytes5 { get; set; }
-
             public Collection<byte> Bytes6 { get; set; }
         }
 
-        private class WithNoEnumerableMembers
+        private class WithCollectionIndexes
         {
-            public int Int1 { get; set; }
+            public IEnumerable<Element> IEnumerable1 { get; set; }
+            public IList<Element> IList1 { get; set; }
         }
 
         private class Element
@@ -87,13 +99,24 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
             public int ElementInt1 { get; set; }
         }
 
-        private class WithCollectionIndexes
+        private class WithArrayOfStrings
         {
-            public int Int1 { get; set; }
+            public string[] Values { get; set; }
+        }
 
-            public IEnumerable<Element> IEnumerable1 { get; set; }
+        private class WithArrayOfIntegers
+        {
+            public int[] Values { get; set; }
+        }
 
-            public IList<Element> IList1 { get; set; }
+        private class WithNestedArrayOfStrings
+        {
+            public WithArrayOfStrings Item { get; set; }
+        }
+
+        private class WithArrayOfNestedArrayOfStrings
+        {
+            public WithArrayOfStrings[] Items { get; set; }
         }
     }
 }

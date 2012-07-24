@@ -9,79 +9,71 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
     [TestFixture]
     public class StructureTypeReflecterComplexIndexablePropertiesTests : UnitTestBase
     {
-        private readonly TestableReflecter _reflecter = new TestableReflecter();
-
         [Test]
-        public void GetComplexIndexableProperties_WhenRootWithSimpleAndComplexProperties_ReturnsOnlyComplexProperties()
+        public void GetIndexableProperties_WhenItemWithComplexProperty_ReturnsComplexProperties()
         {
-            var properties = _reflecter.InvokeGetComplexIndexablePropertyInfos(
-                typeof(WithSimpleAndComplexProperties).GetProperties(StructureTypeReflecter.PropertyBindingFlags));
-
-            Assert.AreEqual(1, properties.Count());
-        }
-
-        [Test]
-        public void GetComplexProperties_WhenRootWithUniqeAndNonUniqueComplexProperties_ReturnsComplexUniqueProperties()
-        {
-            var properties = _reflecter.InvokeGetComplexIndexablePropertyInfos(
-                typeof(WithUniqueAndNonUniqueComplexProperties).GetProperties(StructureTypeReflecter.PropertyBindingFlags));
+            var properties = ReflecterFor<WithComplexProperty>().GetIndexableProperties();
 
             Assert.AreEqual(2, properties.Count());
+            Assert.IsTrue(properties.Any(p => p.Path == "Complex.IntValue"));
+            Assert.IsTrue(properties.Any(p => p.Path == "Complex.StringValue"));
         }
 
         [Test]
-        public void GetComplexProperties_WhenRootWithEnumerable_EnumerableMemberIsNotReturnedAsComplex()
+        public void GetIndexableProperties_WhenRootWithUniqeAndNonUniqueComplexProperties_ReturnsBothComplexUniqueAndNonUniqueProperties()
         {
-            var properties = _reflecter.InvokeGetComplexIndexablePropertyInfos(
-                typeof(WithEnumerable).GetProperties(StructureTypeReflecter.PropertyBindingFlags));
+            var properties = ReflecterFor<WithUniqueAndNonUniqueComplexProperties>().GetIndexableProperties();
 
-            Assert.AreEqual(0, properties.Count());
+            Assert.AreEqual(4, properties.Count());
+            Assert.IsTrue(properties.Any(p => p.Path == "UqComplex.IntValue"));
+            Assert.IsTrue(properties.Any(p => p.Path == "UqComplex.StringValue"));
+            Assert.IsTrue(properties.Any(p => p.Path == "NonUqComplex.IntValue"));
+            Assert.IsTrue(properties.Any(p => p.Path == "NonUqComplex.StringValue"));
         }
 
         [Test]
-        public void GetComplexProperties_WhenItIsContainedStructure_NotExtracted()
+        public void GetIndexableProperties_WhenRootWithEnumerable_EnumerableMemberIsNotReturnedAsComplex()
         {
-            var properties = _reflecter.InvokeGetComplexIndexablePropertyInfos(
-                typeof(WithContainedStructure).GetProperties(StructureTypeReflecter.PropertyBindingFlags));
+            var properties = ReflecterFor<WithEnumerableOfComplex>().GetIndexableProperties();
 
-            Assert.AreEqual(0, properties.Count());
+            Assert.AreEqual(2, properties.Count());
+            Assert.IsTrue(properties.Any(p => p.Path == "Items.IntValue"));
+            Assert.IsTrue(properties.Any(p => p.Path == "Items.StringValue"));
         }
 
-        private class Item
-        {}
-
-        private class WithSimpleAndComplexProperties
+        private static IStructureTypeReflecter ReflecterFor<T>() where T : class
         {
-            public string SimpleStringProperty { get; set; }
-
-            public int SimpleIntProperty { get; set; }
-
-            public Item ComplexProperty { get; set; }
+            return new StructureTypeReflecter(typeof(T));
+        }
+        
+        private class WithComplexProperty
+        {
+            public Item Complex { get; set; }
         }
 
         private class WithUniqueAndNonUniqueComplexProperties
         {
+            public ItemWithUniques UqComplex { get; set; }
+            public Item NonUqComplex { get; set; }
+        }
+
+        private class WithEnumerableOfComplex
+        {
+            public IEnumerable<Item> Items { get; set; }
+        }
+
+        private class Item
+        {
+            public int IntValue { get; set; }
+            public string StringValue { get; set; }
+        }
+
+        private class ItemWithUniques
+        {
             [Unique(UniqueModes.PerInstance)]
-            public Item UqComplex1 { get; set; }
-
-            public Item UqComplex2 { get; set; }
-        }
-
-        private class WithEnumerable
-        {
-            public IEnumerable<Item> Dummies { get; set; }
-        }
-
-        private class WithContainedStructure
-        {
-            public int StructureId { get; set; }
-
-            public Structure ContainedStructure { get; set; }
-        }
-
-        private class Structure
-        {
-            public int StructureId { get; set; }
+            public int IntValue { get; set; }
+            [Unique(UniqueModes.PerType)]
+            public string StringValue { get; set; }
         }
     }
 }

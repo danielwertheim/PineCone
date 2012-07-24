@@ -5,28 +5,25 @@ namespace PineCone.Structures.Schemas
 {
     /// <summary>
     /// Responsible for identifying the Properties that should be used as
-    /// StructureId, TimeStamp, ConcurrencyToken and plain indexes.
+    /// StructureId, TimeStamp, ConcurrencyToken and plain indexes for a
+    /// certain structure type.
     /// </summary>
     public interface IStructureTypeReflecter
     {
-        IStructurePropertyFactory PropertyFactory { get; set; }
+        Type StructureType { get; }
 
-        bool HasIdProperty(Type type);
+        IStructurePropertyFactory PropertyFactory { set; }
 
-        bool HasConcurrencyTokenProperty(Type type);
+        bool HasIdProperty();
+        bool HasConcurrencyTokenProperty();
+        bool HasTimeStampProperty();
 
-        bool HasTimeStampProperty(Type type);
-
-        IStructureProperty GetIdProperty(Type type);
-
-        IStructureProperty GetConcurrencyTokenProperty(Type type);
-
-        IStructureProperty GetTimeStampProperty(Type type);
-
-		IStructureProperty[] GetIndexableProperties(Type type);
-						  
-		IStructureProperty[] GetIndexablePropertiesExcept(Type type, ICollection<string> nonIndexablePaths);
-						  
-		IStructureProperty[] GetSpecificIndexableProperties(Type type, ICollection<string> indexablePaths);
+        IStructureProperty GetIdProperty();
+        IStructureProperty GetConcurrencyTokenProperty();
+        IStructureProperty GetTimeStampProperty();
+        
+        IStructureProperty[] GetIndexableProperties();
+		IStructureProperty[] GetIndexablePropertiesExcept(ICollection<string> nonIndexablePaths);
+        IStructureProperty[] GetSpecificIndexableProperties(ICollection<string> indexablePaths);
     }
 }

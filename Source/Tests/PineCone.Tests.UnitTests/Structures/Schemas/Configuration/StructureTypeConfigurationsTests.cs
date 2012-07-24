@@ -20,70 +20,64 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.Configuration
         public void IsEmpty_WhenSpecificConfigurationExists_ReturnsTrue()
         {
             var configs = new StructureTypeConfigurations();
-            configs.NewForType<Dummy>();
+            configs.Configure<Dummy>(cfg => { });
 
             Assert.IsFalse(configs.IsEmpty);
         }
 
         [Test]
-        public void NewForType_WhenNeverCalledBefore_ConfigurationIsAdded()
+        public void Configure_WhenNeverCalledBefore_ConfigurationIsAdded()
         {
             var configs = new StructureTypeConfigurations();
 
-            configs.NewForType(typeof (Dummy));
+            configs.Configure(typeof(Dummy), cfg => { });
 
             Assert.AreEqual(1, configs.Items.Count());
         }
 
         [Test]
-        public void Generic_NewForType_WhenNeverCalledBefore_ConfigurationIsAdded()
+        public void Generic_Configure_WhenNeverCalledBefore_ConfigurationIsAdded()
         {
             var configs = new StructureTypeConfigurations();
 
-            configs.NewForType<Dummy>();
+            configs.Configure<Dummy>(cfg => { });
 
             Assert.AreEqual(1, configs.Items.Count());
         }
 
         [Test]
-        public void NewForType_WhenCalledTwice_ThrowsException()
+        public void Configure_WhenCalledTwice_StillHasOneConfig()
         {
             var configs = new StructureTypeConfigurations();
-            configs.NewForType(typeof(Dummy));
+            IStructureTypeConfig config1 = null;
+            IStructureTypeConfig config2 = null;
 
-            var ex = Assert.Throws<ArgumentException>(() => configs.NewForType(typeof (Dummy)));
+            configs.Configure(typeof(Dummy), cfg => { config1 = cfg.Config; });
+            configs.Configure(typeof(Dummy), cfg => { config2 = cfg.Config; });
 
-            Assert.AreEqual("An item with the same key has already been added.", ex.Message);
+            Assert.AreSame(config1, config2);
+            Assert.AreEqual(1, configs.Items.Count());
         }
 
         [Test]
-        public void Generic_NewForType_WhenCalledTwice_ThrowsException()
+        public void Generic_Configure_WhenCalledTwice_StillHasOneConfig()
         {
             var configs = new StructureTypeConfigurations();
-            configs.NewForType<Dummy>();
+            IStructureTypeConfig config1 = null;
+            IStructureTypeConfig config2 = null;
 
-            var ex = Assert.Throws<ArgumentException>(() => configs.NewForType<Dummy>());
+            configs.Configure<Dummy>(cfg => { config1 = cfg.Config; });
+            configs.Configure<Dummy>(cfg => { config2 = cfg.Config; });
 
-            Assert.AreEqual("An item with the same key has already been added.", ex.Message);
+            Assert.AreSame(config1, config2);
+            Assert.AreEqual(1, configs.Items.Count());
         }
 
         [Test]
-        public void GetConfigurations_WhenRegisreredViaNonGenericVersion_ConfigurationIsReturned()
+        public void GetConfigurations_WhenRegistreredViaNonGenericVersion_ConfigurationIsReturned()
         {
             var configs = new StructureTypeConfigurations();
-            configs.NewForType(typeof(Dummy));
-
-            var config = configs.GetConfiguration(typeof (Dummy));
-
-            Assert.IsNotNull(config);
-            Assert.AreEqual(typeof(Dummy), config.Type);
-        }
-
-        [Test]
-        public void GetConfigurations_WhenRegisreredViaGenericVersion_ConfigurationIsReturned()
-        {
-            var configs = new StructureTypeConfigurations();
-            configs.NewForType<Dummy>();
+            configs.Configure(typeof(Dummy), cfg => { });
 
             var config = configs.GetConfiguration(typeof(Dummy));
 
@@ -92,10 +86,22 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.Configuration
         }
 
         [Test]
-        public void Generic_GetConfigurations_WhenRegisreredViaNonGenericVersion_ConfigurationIsReturned()
+        public void GetConfigurations_WhenRegistreredViaGenericVersion_ConfigurationIsReturned()
         {
             var configs = new StructureTypeConfigurations();
-            configs.NewForType(typeof(Dummy));
+            configs.Configure<Dummy>(cfg => { });
+
+            var config = configs.GetConfiguration(typeof(Dummy));
+
+            Assert.IsNotNull(config);
+            Assert.AreEqual(typeof(Dummy), config.Type);
+        }
+
+        [Test]
+        public void Generic_GetConfigurations_WhenRegistreredViaNonGenericVersion_ConfigurationIsReturned()
+        {
+            var configs = new StructureTypeConfigurations();
+            configs.Configure(typeof(Dummy), cfg => { });
 
             var config = configs.GetConfiguration<Dummy>();
 
@@ -104,10 +110,10 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.Configuration
         }
 
         [Test]
-        public void Generic_GetConfigurations_WhenRegisreredViaGenericVersion_ConfigurationIsReturned()
+        public void Generic_GetConfigurations_WhenRegistreredViaGenericVersion_ConfigurationIsReturned()
         {
             var configs = new StructureTypeConfigurations();
-            configs.NewForType<Dummy>();
+            configs.Configure<Dummy>(cfg => { });
 
             var config = configs.GetConfiguration<Dummy>();
 
@@ -120,7 +126,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.Configuration
         {
             var configs = new StructureTypeConfigurations();
 
-            var config = configs.GetConfiguration(typeof (Dummy));
+            var config = configs.GetConfiguration(typeof(Dummy));
 
             Assert.IsNull(config);
         }
@@ -135,9 +141,6 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.Configuration
             Assert.IsNull(config);
         }
 
-        private class Dummy
-        {
-            
-        }
+        private class Dummy { }
     }
 }

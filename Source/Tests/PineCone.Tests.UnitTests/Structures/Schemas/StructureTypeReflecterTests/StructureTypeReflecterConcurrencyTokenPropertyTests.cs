@@ -7,31 +7,23 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
     [TestFixture]
     public class StructureTypeReflecterConcurrencyTokenPropertyTests : UnitTestBase
     {
-        private readonly IStructureTypeReflecter _reflecter = new StructureTypeReflecter();
-
         [Test]
         public void HasConcurrencyTokenProperty_WhenMemberExists_ReturnsTrue()
         {
-            var type = typeof (Model);
-
-            Assert.IsTrue(_reflecter.HasConcurrencyTokenProperty(type));
+            Assert.IsTrue(ReflecterFor<Model>().HasConcurrencyTokenProperty());
         }
 
         [Test]
         public void HasConcurrencyTokenProperty_WhenMemberDoesNotExists_ReturnsFalse()
         {
-            var type = typeof(ModelWithNoToken);
-
-            Assert.IsFalse(_reflecter.HasConcurrencyTokenProperty(type));
+            Assert.IsFalse(ReflecterFor<ModelWithNoToken>().HasConcurrencyTokenProperty());
         }
 
         [Test]
         public void GetConcurrencyTokenProperty_WhenMemberExists_ReturnsProperty()
         {
-            var type = typeof(Model);
+            var property = ReflecterFor<Model>().GetConcurrencyTokenProperty();
 
-            var property = _reflecter.GetConcurrencyTokenProperty(type);
-            
             Assert.IsNotNull(property);
             Assert.AreEqual("ConcurrencyToken", property.Name);
         }
@@ -39,11 +31,14 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
         [Test]
         public void GetConcurrencyTokenProperty_WhenMemberDoesNotExist_ReturnsNull()
         {
-            var type = typeof(ModelWithNoToken);
-
-            var property = _reflecter.GetConcurrencyTokenProperty(type);
+            var property = ReflecterFor<ModelWithNoToken>().GetConcurrencyTokenProperty();
 
             Assert.IsNull(property);
+        }
+
+        private static IStructureTypeReflecter ReflecterFor<T>() where T : class
+        {
+            return new StructureTypeReflecter(typeof(T));
         }
 
         private class Model
@@ -53,7 +48,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
 
         private class ModelWithNoToken
         {
-             
+
         }
     }
 }

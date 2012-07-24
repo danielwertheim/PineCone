@@ -11,7 +11,6 @@ namespace PineCone.Structures.Schemas
     public interface IStructureTypeReflecter
     {
         Type StructureType { get; }
-
         IStructurePropertyFactory PropertyFactory { set; }
 
         bool HasIdProperty();

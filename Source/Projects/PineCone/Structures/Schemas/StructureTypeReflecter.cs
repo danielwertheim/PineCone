@@ -12,6 +12,7 @@ namespace PineCone.Structures.Schemas
     {
         protected const string ConcurrencyTokenMemberName = "ConcurrencyToken";
         protected static readonly string[] NonIndexableSystemMembers = new string[0];
+        protected readonly StructureTypeReflecterOptions Options;
 
         public const BindingFlags IdPropertyBindingFlags =
             BindingFlags.Public | BindingFlags.Instance | BindingFlags.GetProperty;
@@ -20,15 +21,16 @@ namespace PineCone.Structures.Schemas
             BindingFlags.Public | BindingFlags.Instance | BindingFlags.GetProperty;
 
         public Type StructureType { get; private set; }
-
+        
         public IStructurePropertyFactory PropertyFactory { protected get; set; }
 
-        public StructureTypeReflecter(Type structureType)
+        public StructureTypeReflecter(Type structureType, StructureTypeReflecterOptions options = null)
         {
             Ensure.That(structureType, "structureType").IsNotNull();
 
             StructureType = structureType;
             PropertyFactory = new StructurePropertyFactory();
+            Options = options ?? new StructureTypeReflecterOptions();
         }
 
         public virtual bool HasIdProperty()
@@ -216,10 +218,12 @@ namespace PineCone.Structures.Schemas
                     continue;
                 }
 
-                var elementProperties = GetIndexableProperties(enumerableProperty.ElementDataType,
-                                                               enumerableProperty,
-                                                               nonIndexablePaths,
-                                                               indexablePaths);
+                var elementProperties = GetIndexableProperties(
+                    enumerableProperty.ElementDataType,
+                    enumerableProperty,
+                    nonIndexablePaths,
+                    indexablePaths);
+
                 properties.AddRange(elementProperties);
             }
 
@@ -251,8 +255,10 @@ namespace PineCone.Structures.Schemas
 
             var filteredProperties = properties.Where(p =>
                 !p.PropertyType.IsSimpleType() &&
-                !p.PropertyType.IsEnumerableType() &&
-                GetIdProperty(p.PropertyType) == null); //TODO: Use AllowNestedStructures
+                !p.PropertyType.IsEnumerableType());
+
+            if (!Options.IncludeNestedStructureMembers)
+                filteredProperties = filteredProperties.Where(p => GetIdProperty(p.PropertyType) == null);
 
             if (nonIndexablePaths != null && nonIndexablePaths.Any())
                 filteredProperties = filteredProperties.Where(p => !nonIndexablePaths.Contains(

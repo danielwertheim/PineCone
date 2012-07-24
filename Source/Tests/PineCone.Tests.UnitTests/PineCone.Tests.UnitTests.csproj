@@ -88,7 +88,7 @@
     <Compile Include="Structures\Schemas\Configuration\StructureTypeConfiguratorTests.cs" />
     <Compile Include="Structures\Schemas\DataTypeConverterTests.cs" />
     <Compile Include="Structures\Schemas\Configuration\StructureTypeConfigurationsTests.cs" />
-    <Compile Include="Structures\Schemas\Configuration\StuctureTypeConfigTests.cs" />
+    <Compile Include="Structures\Schemas\Configuration\StructureTypeConfigTests.cs" />
     <Compile Include="Structures\Schemas\IndexAccessorTestFactory.cs" />
     <Compile Include="Structures\Schemas\MemberAccessors\ConcurrencyTokenAccessorTests.cs" />
     <Compile Include="Structures\Schemas\MemberAccessors\IndexAccessorGetValuesOnDeepGraphTests.cs" />
@@ -108,7 +108,7 @@
     <Compile Include="Structures\Schemas\StructureTypeReflecterTests\StructureTypeReflecterGetIndexablePropertiesExceptTests.cs" />
     <Compile Include="Structures\Schemas\StructureTypeReflecterTests\StructureTypeReflecterGetSpecificIndexablePropertiesTests.cs" />
     <Compile Include="Structures\IdGenerators\SequentialGuidStructureIdGeneratorTests.cs" />
-    <Compile Include="Structures\StructureTypeReflecterTimeStampPropertyTests.cs" />
+    <Compile Include="Structures\Schemas\StructureTypeReflecterTests\StructureTypeReflecterTimeStampPropertyTests.cs" />
     <Compile Include="Structures\StructureBuilderTests\StructureBuilderEnumerableTests.cs" />
     <Compile Include="Structures\StructureBuilderTests\StructureBuilderNullablesTests.cs" />
     <Compile Include="Structures\StructureBuilderTests\StructureBuilderPreservingIdsTests.cs" />

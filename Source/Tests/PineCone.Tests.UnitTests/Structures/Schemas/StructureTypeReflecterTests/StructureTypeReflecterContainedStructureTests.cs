@@ -18,15 +18,16 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
         [Test]
         public void GetIndexableProperties_When_contained_structure_and_contained_structures_are_allowed_Contained_members_are_extracted()
         {
-            var properties = ReflecterFor<WithContainedStructure>().GetIndexableProperties();
+            var properties = ReflecterFor<WithContainedStructure>(new StructureTypeReflecterOptions { IncludeNestedStructureMembers = true }).GetIndexableProperties();
 
-            Assert.AreEqual(1, properties.Count());
+            Assert.AreEqual(2, properties.Count());
+            Assert.IsNotNull(properties.SingleOrDefault(p => p.Path == "Contained.StructureId"));
             Assert.IsNotNull(properties.SingleOrDefault(p => p.Path == "Contained.NestedValue"));
         }
 
-        private static IStructureTypeReflecter ReflecterFor<T>() where T : class
+        private static IStructureTypeReflecter ReflecterFor<T>(StructureTypeReflecterOptions options = null) where T : class
         {
-            return new StructureTypeReflecter(typeof(T));
+            return new StructureTypeReflecter(typeof(T), options);
         }
 
         private class WithContainedStructure

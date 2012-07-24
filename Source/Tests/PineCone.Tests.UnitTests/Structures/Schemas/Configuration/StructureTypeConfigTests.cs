@@ -1,12 +1,11 @@
 using System;
-using System.Linq;
 using NUnit.Framework;
 using PineCone.Structures.Schemas.Configuration;
 
 namespace PineCone.Tests.UnitTests.Structures.Schemas.Configuration
 {
     [TestFixture]
-    public class StuctureTypeConfigTests : UnitTestBase
+    public class StructureTypeConfigTests : UnitTestBase
     {
         [Test]
         public void Ctor_WhenMissingType_ThrowsArgumentNullException()
@@ -49,6 +48,14 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.Configuration
             config.MemberPathsBeingIndexed.Add("Temp");
 
             Assert.IsFalse(config.IsEmpty);
+        }
+
+        [Test]
+        public void IncludeNestedStructureMembers_WhenDefault_Ctor_IsFalse()
+        {
+            var config = new StructureTypeConfig(typeof(Dummy));
+
+            Assert.IsFalse(config.IncludeNestedStructureMembers);
         }
 
         private class Dummy {}

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Linq;
-using NCore.Reflections;
 using NUnit.Framework;
-using PineCone.Annotations;
 using PineCone.Structures.Schemas;
 
 namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTests
@@ -10,170 +8,82 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
     [TestFixture]
     public class StructureTypeReflecterSimpleIndexablePropertiesTests : UnitTestBase
     {
-        private readonly TestableReflecter _reflecter = new TestableReflecter();
-
         [Test]
-        public void GetSimpleIndexableProperties_WhenMultiplePublicSimplePropertiesExistsAndNoExclusions_ReturnsAllPublicSimpleProperties()
+        public void GetIndexableProperties_WhenMultiplePublicSimplePropertiesExistsAndNoExclusions_ReturnsAllPublicSimpleProperties()
         {
-            var properties = _reflecter.InvokeGetSimpleIndexablePropertyInfos(
-                typeof(WithSimpleProperties).GetProperties(StructureTypeReflecter.PropertyBindingFlags));
+            var properties = ReflecterFor<WithSimpleProperties>().GetIndexableProperties();
 
-            var names = properties.Select(p => p.Name).ToArray();
-            Assert.AreEqual(6, properties.Count());
-            CollectionAssert.Contains(names, "StructureId");
-            CollectionAssert.Contains(names, "Age");
-            CollectionAssert.Contains(names, "Name");
-            CollectionAssert.Contains(names, "DateOfBirth");
-            CollectionAssert.Contains(names, "Wage");
-            CollectionAssert.Contains(names, "Byte");
+            var paths = properties.Select(p => p.Path).ToArray();
+            Assert.AreEqual(9, properties.Count());
+            CollectionAssert.Contains(paths, "GuidValue");
+            CollectionAssert.Contains(paths, "ShortValue");
+            CollectionAssert.Contains(paths, "IntValue");
+            CollectionAssert.Contains(paths, "LongValue");
+            CollectionAssert.Contains(paths, "StringValue");
+            CollectionAssert.Contains(paths, "DecimalValue");
+            CollectionAssert.Contains(paths, "DateTimeValue");
+            CollectionAssert.Contains(paths, "BoolValue");
+            CollectionAssert.Contains(paths, "ByteValue");
         }
 
         [Test]
-        public void GetSimpleIndexableProperties_WhenByteArray_NotReturned()
+        public void GetIndexableProperties_WhenMultiplePublicSimpleNullablePropertiesExistsAndNoExclusions_ReturnsAllPublicSimpleProperties()
         {
-            var properties = _reflecter.InvokeGetSimpleIndexablePropertyInfos(
-                typeof(WithNonSimpleProperties).GetProperties(StructureTypeReflecter.PropertyBindingFlags));
+            var properties = ReflecterFor<WithSimpleNullableProperties>().GetIndexableProperties();
+
+            var paths = properties.Select(p => p.Path).ToArray();
+            Assert.AreEqual(8, properties.Count());
+            CollectionAssert.Contains(paths, "GuidValue");
+            CollectionAssert.Contains(paths, "ShortValue");
+            CollectionAssert.Contains(paths, "IntValue");
+            CollectionAssert.Contains(paths, "LongValue");
+            CollectionAssert.Contains(paths, "DecimalValue");
+            CollectionAssert.Contains(paths, "DateTimeValue");
+            CollectionAssert.Contains(paths, "BoolValue");
+            CollectionAssert.Contains(paths, "ByteValue");
+        }
+
+        [Test]
+        public void GetIndexableProperties_WhenSimplePrivatePropertyExists_PrivatePropertyIsNotReturned()
+        {
+            var properties = ReflecterFor<WithPrivateProperty>().GetIndexableProperties();
 
             Assert.AreEqual(0, properties.Count());
         }
 
-        [Test]
-        public void GetSimpleIndexableProperties_WhenExclusionIsPassed_DoesNotReturnExcludedProperties()
+        private static IStructureTypeReflecter ReflecterFor<T>() where T : class
         {
-            var properties = _reflecter.InvokeGetSimpleIndexablePropertyInfos(
-                typeof(WithSimpleProperties).GetProperties(StructureTypeReflecter.PropertyBindingFlags),
-                null,
-                nonIndexablePaths: new[] { "StructureId", "Name" });
-
-            var names = properties.Select(p => p.Name).ToArray();
-            CollectionAssert.DoesNotContain(names, "StructureId");
-            CollectionAssert.DoesNotContain(names, "Name");
-        }
-
-        [Test]
-        public void GetSimpleIndexableProperties_WhenExclusionIsPassed_DoesReturnNonExcludedProperties()
-        {
-            var properties = _reflecter.InvokeGetSimpleIndexablePropertyInfos(
-                typeof(WithSimpleProperties).GetProperties(StructureTypeReflecter.PropertyBindingFlags),
-                null,
-                nonIndexablePaths: new[] { "StructureId", "Name" });
-
-            var names = properties.Select(p => p.Name).ToArray();
-            CollectionAssert.Contains(names, "Age");
-            CollectionAssert.Contains(names, "DateOfBirth");
-            CollectionAssert.Contains(names, "Wage");
-        }
-
-        [Test]
-        public void GetSimpleIndexableProperties_WhenSimplePrivatePropertyExists_PrivatePropertyIsNotReturned()
-        {
-            var properties = _reflecter.InvokeGetSimpleIndexablePropertyInfos(
-                typeof(WithPrivateProperty).GetProperties(StructureTypeReflecter.PropertyBindingFlags));
-
-            Assert.AreEqual(0, properties.Count());
-        }
-
-        [Test]
-        public void GetSimpleIndexableProperties_WhenSimpleAndComplexPropertiesExists_ReturnsOnlySimpleProperties()
-        {
-            var properties = _reflecter.InvokeGetSimpleIndexablePropertyInfos(
-                typeof(WithSimpleAndComplexProperties).GetProperties(StructureTypeReflecter.PropertyBindingFlags));
-
-            var complex = properties.Where(p => !p.PropertyType.IsSimpleType());
-            var names = properties.Select(p => p.Name).ToArray();
-            Assert.AreEqual(0, complex.Count());
-            Assert.AreEqual(2, properties.Count());
-            CollectionAssert.Contains(names, "SimpleIntProperty");
-            CollectionAssert.Contains(names, "SimpleStringProperty");
-        }
-
-        [Test]
-        public void GetSimpleIndexableProperties_WhenUniquesExists_ReturnsSimpleUniqueProperties()
-        {
-            var properties = _reflecter.InvokeGetSimpleIndexablePropertyInfos(
-                typeof(WithUniqueIndexes).GetProperties(StructureTypeReflecter.PropertyBindingFlags));
-
-            var names = properties.Select(p => p.Name).ToArray();
-            Assert.AreEqual(2, properties.Count());
-            CollectionAssert.Contains(names, "UqInt");
-            CollectionAssert.Contains(names, "UqString");
-        }
-
-        [Test]
-        public void GetSimpleIndexableProperties_WhenMultiplePublicNullableSimplePropertiesExistsAndNoExclusions_ReturnsAllPublicSimpleProperties()
-        {
-            var properties = _reflecter.InvokeGetSimpleIndexablePropertyInfos(
-                typeof(WithNullableValueTypes).GetProperties(StructureTypeReflecter.PropertyBindingFlags));
-
-            var names = properties.Select(p => p.Name).ToArray();
-            Assert.AreEqual(5, properties.Count());
-            CollectionAssert.Contains(names, "StructureId");
-            CollectionAssert.Contains(names, "NullableInt");
-            CollectionAssert.Contains(names, "NullableDecimal");
-            CollectionAssert.Contains(names, "NullableBool");
-            CollectionAssert.Contains(names, "NullableDateTime");
-        }
-
-        private class WithNullableValueTypes
-        {
-            public Guid StructureId { get; set; }
-
-            public int? NullableInt { get; set; }
-
-            public bool? NullableBool { get; set; }
-
-            public decimal? NullableDecimal { get; set; }
-
-            public DateTime? NullableDateTime { get; set; }
+            return new StructureTypeReflecter(typeof(T));
         }
 
         private class WithSimpleProperties
         {
-            public Guid StructureId { get; set; }
+            public Guid GuidValue { get; set; }
+            public short ShortValue { get; set; }
+            public int IntValue { get; set; }
+            public long LongValue { get; set; }
+            public string StringValue { get; set; }
+            public DateTime DateTimeValue { get; set; }
+            public decimal DecimalValue { get; set; }
+            public bool BoolValue { get; set; }
+            public byte ByteValue { get; set; }
+        }
 
-            public int Age { get; set; }
-
-            public string Name { get; set; }
-
-            public DateTime DateOfBirth { get; set; }
-
-            [Unique(UniqueModes.PerInstance)]
-            public decimal Wage { get; set; }
-
-            public byte Byte { get; set; }
+        private class WithSimpleNullableProperties
+        {
+            public Guid? GuidValue { get; set; }
+            public short? ShortValue { get; set; }
+            public int? IntValue { get; set; }
+            public long? LongValue { get; set; }
+            public DateTime? DateTimeValue { get; set; }
+            public decimal? DecimalValue { get; set; }
+            public bool? BoolValue { get; set; }
+            public byte? ByteValue { get; set; }
         }
 
         private class WithPrivateProperty
         {
             private int Int { get; set; }
-        }
-
-        private class WithNonSimpleProperties
-        {
-            public byte[] Bytes { get; set; }
-        }
-
-        private class WithSimpleAndComplexProperties
-        {
-            public string SimpleStringProperty { get; set; }
-
-            public int SimpleIntProperty { get; set; }
-
-            public WithSimpleProperties ComplexProperty { get; set; }
-        }
-
-        private class WithUniqueIndexes
-        {
-            [Unique(UniqueModes.PerInstance)]
-            public int UqInt { get; set; }
-
-            [Unique(UniqueModes.PerInstance)]
-            public string UqString { get; set; }
-
-            [Unique(UniqueModes.PerInstance)]
-            public WithSimpleProperties UqComplex1 { get; set; }
-
-            public WithSimpleProperties UqComplex2 { get; set; }
         }
     }
 }

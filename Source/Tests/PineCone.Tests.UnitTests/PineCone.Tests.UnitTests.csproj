@@ -107,8 +107,7 @@
     <Compile Include="Structures\Schemas\StructureTypeReflecterTests\StructureTypeReflecterGetIndexablePropertiesExceptTests.cs" />
     <Compile Include="Structures\Schemas\StructureTypeReflecterTests\StructureTypeReflecterGetSpecificIndexablePropertiesTests.cs" />
     <Compile Include="Structures\IdGenerators\SequentialGuidStructureIdGeneratorTests.cs" />
-    <Compile Include="Structures\Schemas\StructureTypeReflecterTests\StructureTypeReflecterTimeStampPropertyTests.cs" />
-    <Compile Include="Structures\Schemas\StructureTypeReflecterTests\TestableReflecter.cs" />
+    <Compile Include="Structures\StructureTypeReflecterTimeStampPropertyTests.cs" />
     <Compile Include="Structures\StructureBuilderTests\StructureBuilderEnumerableTests.cs" />
     <Compile Include="Structures\StructureBuilderTests\StructureBuilderNullablesTests.cs" />
     <Compile Include="Structures\StructureBuilderTests\StructureBuilderPreservingIdsTests.cs" />
@@ -134,7 +133,6 @@
     <Compile Include="Structures\StructureTests.cs" />
     <Compile Include="Structures\UniqueModesExtensions.cs" />
     <Compile Include="Structures\Schemas\StructureTypeReflecterTests\StructureTypeReflecterEnumerableIndexablePropertiesTests.cs" />
-    <Compile Include="Structures\Schemas\StructureTypeReflecterTests\StructureTypeReflecterIndexablePropertiesTests.cs" />
     <Compile Include="Structures\Schemas\StructureTypeReflecterTests\StructureTypeReflecterIdPropertyTests.cs" />
     <Compile Include="Structures\Schemas\StructureTypeReflecterTests\StructureTypeReflecterSimpleIndexablePropertiesTests.cs" />
     <Compile Include="Structures\Schemas\StructureTypeReflecterTests\StructureTypeReflecterUniquesPropertiesTests.cs" />

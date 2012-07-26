@@ -15,7 +15,7 @@ require 'albacore'
 @env_projectnamePineCone = 'PineCone'
 
 @env_buildfolderpath = 'build'
-@env_version = "4.0.0"
+@env_version = "4.1.0"
 @env_buildversion = @env_version + (ENV['env_buildnumber'].to_s.empty? ? "" : ".#{ENV['env_buildnumber'].to_s}")
 @env_buildconfigname = ENV['env_buildconfigname'].to_s.empty? ? "Release" : ENV['env_buildconfigname'].to_s
 @env_buildname = "#{@env_solutionname}-v#{@env_buildversion}-#{@env_buildconfigname}"

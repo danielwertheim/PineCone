@@ -6,7 +6,7 @@ using PineCone.Structures.Schemas;
 namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTests
 {
     [TestFixture]
-    public class StructureTypeReflecterSimpleIndexablePropertiesTests : UnitTestBase
+    public class StructureTypeReflecterSimpleIndexablePropertiesTests : StructureTypeReflecterTestsBase
     {
         [Test]
         public void GetIndexableProperties_WhenMultiplePublicSimplePropertiesExistsAndNoExclusions_ReturnsAllPublicSimpleProperties()
@@ -49,11 +49,6 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
             var properties = ReflecterFor<WithPrivateProperty>().GetIndexableProperties();
 
             Assert.AreEqual(0, properties.Count());
-        }
-
-        private static IStructureTypeReflecter ReflecterFor<T>() where T : class
-        {
-            return new StructureTypeReflecter(typeof(T));
         }
 
         private class WithSimpleProperties

@@ -7,7 +7,7 @@ using PineCone.Structures.Schemas;
 namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTests
 {
     [TestFixture]
-    public class StructureTypeReflecterComplexIndexablePropertiesTests : UnitTestBase
+    public class StructureTypeReflecterComplexIndexablePropertiesTests : StructureTypeReflecterTestsBase
     {
         [Test]
         public void GetIndexableProperties_WhenItemWithComplexProperty_ReturnsComplexProperties()
@@ -39,11 +39,6 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
             Assert.AreEqual(2, properties.Count());
             Assert.IsTrue(properties.Any(p => p.Path == "Items.IntValue"));
             Assert.IsTrue(properties.Any(p => p.Path == "Items.StringValue"));
-        }
-
-        private static IStructureTypeReflecter ReflecterFor<T>() where T : class
-        {
-            return new StructureTypeReflecter(typeof(T));
         }
         
         private class WithComplexProperty

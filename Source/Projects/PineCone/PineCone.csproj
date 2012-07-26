@@ -68,7 +68,6 @@
     <Compile Include="Structures\Schemas\StructurePropertyFactory.cs" />
     <Compile Include="Structures\Schemas\StructurePropertyInfo.cs" />
     <Compile Include="Structures\Schemas\StructureTimeStampPropertyNames.cs" />
-    <Compile Include="Structures\Schemas\StructureTypeReflecterOptions.cs" />
     <Compile Include="Structures\StructureIdInterval.cs" />
     <Compile Include="Structures\DataTypeCode.cs" />
     <Compile Include="Structures\IdGenerators\EmptyStructureIdGenerator.cs" />

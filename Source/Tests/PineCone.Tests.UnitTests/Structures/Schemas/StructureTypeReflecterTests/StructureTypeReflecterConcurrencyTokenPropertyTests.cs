@@ -1,11 +1,10 @@
 using System;
 using NUnit.Framework;
-using PineCone.Structures.Schemas;
 
 namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTests
 {
     [TestFixture]
-    public class StructureTypeReflecterConcurrencyTokenPropertyTests : UnitTestBase
+    public class StructureTypeReflecterConcurrencyTokenPropertyTests : StructureTypeReflecterTestsBase
     {
         [Test]
         public void HasConcurrencyTokenProperty_WhenMemberExists_ReturnsTrue()
@@ -34,11 +33,6 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
             var property = ReflecterFor<ModelWithNoToken>().GetConcurrencyTokenProperty();
 
             Assert.IsNull(property);
-        }
-
-        private static IStructureTypeReflecter ReflecterFor<T>() where T : class
-        {
-            return new StructureTypeReflecter(typeof(T));
         }
 
         private class Model

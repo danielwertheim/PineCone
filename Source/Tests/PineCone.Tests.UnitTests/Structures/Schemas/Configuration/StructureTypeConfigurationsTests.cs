@@ -126,19 +126,25 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.Configuration
         {
             var configs = new StructureTypeConfigurations();
 
-            var config = configs.GetConfiguration(typeof(Dummy));
+            var config = configs.GetConfiguration<Dummy>();
 
-            Assert.IsNull(config);
+            Assert.IsFalse(config.IncludeNestedStructureMembers);
+            Assert.IsTrue(config.IndexConfigIsEmpty);
+            Assert.IsFalse(config.MemberPathsBeingIndexed.Any());
+            Assert.IsFalse(config.MemberPathsNotBeingIndexed.Any());
         }
 
         [Test]
-        public void Generic_GetConfigurations_WhenNoConfigurationExists_ReturnsNull()
+        public void Generic_GetConfigurations_WhenNoConfigurationExists_ReturnsDefaultConfig()
         {
             var configs = new StructureTypeConfigurations();
 
             var config = configs.GetConfiguration<Dummy>();
 
-            Assert.IsNull(config);
+            Assert.IsFalse(config.IncludeNestedStructureMembers);
+            Assert.IsTrue(config.IndexConfigIsEmpty);
+            Assert.IsFalse(config.MemberPathsBeingIndexed.Any());
+            Assert.IsFalse(config.MemberPathsNotBeingIndexed.Any());
         }
 
         private class Dummy { }

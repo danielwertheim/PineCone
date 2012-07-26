@@ -1,6 +1,8 @@
+using System.Linq;
 using Moq;
 using NUnit.Framework;
 using PineCone.Structures.Schemas;
+using PineCone.Structures.Schemas.Configuration;
 
 namespace PineCone.Tests.UnitTests.Structures.Schemas
 {
@@ -81,8 +83,44 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas
             reflecterMock.Verify(m => m.GetSpecificIndexableProperties(new[] { "IncludeTEMP" }));
         }
 
+        [Test]
+        public void CreateFor_When_no_config_for_allowing_nested_structures_exists_It_should_not_include_nested_members()
+        {
+            var factory = new StructureTypeFactory();
+
+            var structureType = factory.CreateFor<WithContainedStructure>();
+
+            Assert.AreEqual(0, structureType.IndexableProperties.Length);
+            Assert.IsFalse(structureType.IndexableProperties.Any(p => p.Path == "Contained.StructureId"));
+            Assert.IsFalse(structureType.IndexableProperties.Any(p => p.Path == "Contained.NestedValue"));
+        }
+
+        [Test]
+        public void CreateFor_When_config_for_allowing_nested_structures_exists_It_should_include_nested_members()
+        {
+            var factory = new StructureTypeFactory();
+            factory.Configurations.Configure<WithContainedStructure>(cfg => cfg.AllowNestedStructures());
+
+            var structureType = factory.CreateFor<WithContainedStructure>();
+
+            Assert.AreEqual(2, structureType.IndexableProperties.Length);
+            Assert.IsTrue(structureType.IndexableProperties.Any(p => p.Path == "Contained.StructureId"));
+            Assert.IsTrue(structureType.IndexableProperties.Any(p => p.Path == "Contained.NestedValue"));
+        }
+
         private class MyClass
         {
+        }
+
+        private class WithContainedStructure
+        {
+            public Structure Contained { get; set; }
+        }
+
+        private class Structure
+        {
+            public int StructureId { get; set; }
+            public int NestedValue { get; set; }
         }
     }
 }

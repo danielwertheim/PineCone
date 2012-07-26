@@ -5,7 +5,7 @@ using PineCone.Structures.Schemas;
 namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTests
 {
     [TestFixture]
-    public class StructureTypeReflecterTimeStampPropertyTests : UnitTestBase
+    public class StructureTypeReflecterTimeStampPropertyTests : StructureTypeReflecterTestsBase
     {
         [Test]
         public void HasTimeStampProperty_WhenMemberExists_ReturnsTrue()
@@ -58,11 +58,6 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
             var property = ReflecterFor<ModelWithNoTimeStamp>().GetTimeStampProperty();
 
             Assert.IsNull(property);
-        }
-
-        private static IStructureTypeReflecter ReflecterFor<T>() where T : class
-        {
-            return new StructureTypeReflecter(typeof(T));
         }
 
         private class Model

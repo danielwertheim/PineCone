@@ -8,7 +8,7 @@ using PineCone.TestUtils;
 namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTests
 {
     [TestFixture]
-    public class StructureTypeReflecterUniquesPropertiesTests : UnitTestBase
+    public class StructureTypeReflecterUniquesPropertiesTests : StructureTypeReflecterTestsBase
     {
         [Test]
         public void GetIndexableProperties_WhenSimpleUniquesExistsOnRoot_ReturnsSimpleUniques()
@@ -67,11 +67,6 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
             var uniques = properties.Where(p => p.IsUnique).ToList();
             Assert.AreEqual(1, uniques.Count);
             Assert.AreEqual("Items.Code", uniques[0].Path);
-        }
-
-        private static IStructureTypeReflecter ReflecterFor<T>() where T : class
-        {
-            return new StructureTypeReflecter(typeof(T));
         }
 
         private class WithSimpleUniques

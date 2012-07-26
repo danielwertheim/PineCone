@@ -29,7 +29,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.Configuration
         {
             var config = new StructureTypeConfig(typeof (Dummy));
 
-            Assert.IsTrue(config.IsEmpty);
+            Assert.IsTrue(config.IndexConfigIsEmpty);
         }
 
         [Test]
@@ -38,7 +38,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.Configuration
             var config = new StructureTypeConfig(typeof(Dummy));
             config.MemberPathsNotBeingIndexed.Add("Temp");
 
-            Assert.IsFalse(config.IsEmpty);
+            Assert.IsFalse(config.IndexConfigIsEmpty);
         }
 
         [Test]
@@ -47,7 +47,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.Configuration
             var config = new StructureTypeConfig(typeof(Dummy));
             config.MemberPathsBeingIndexed.Add("Temp");
 
-            Assert.IsFalse(config.IsEmpty);
+            Assert.IsFalse(config.IndexConfigIsEmpty);
         }
 
         [Test]

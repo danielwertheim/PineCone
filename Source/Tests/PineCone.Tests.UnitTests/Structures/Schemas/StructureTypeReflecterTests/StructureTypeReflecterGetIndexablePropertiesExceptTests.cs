@@ -6,7 +6,7 @@ using PineCone.Structures.Schemas;
 namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTests
 {
     [TestFixture]
-    public class StructureTypeReflecterGetIndexablePropertiesExceptTests : UnitTestBase
+    public class StructureTypeReflecterGetIndexablePropertiesExceptTests : StructureTypeReflecterTestsBase
     {
         [Test]
         public void GetIndexablePropertiesExcept_WhenCalledWithNullExlcudes_ThrowsArgumentException()
@@ -63,11 +63,6 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
 
             Assert.AreEqual(1, properties.Count(p => p.Path.StartsWith("Nested")));
             Assert.AreEqual(1, properties.Count(p => p.Path == "Nested.Int1OnNested"));
-        }
-
-        private static IStructureTypeReflecter ReflecterFor<T>() where T : class
-        {
-            return new StructureTypeReflecter(typeof(T));
         }
 
         private class WithStructureId

@@ -7,7 +7,7 @@ using PineCone.Structures.Schemas;
 namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTests
 {
     [TestFixture]
-    public class StructureTypeReflecterEnumerableIndexablePropertiesTests : UnitTestBase
+    public class StructureTypeReflecterEnumerableIndexablePropertiesTests : StructureTypeReflecterTestsBase
     {
         [Test]
         public void GetIndexableProperties_WhenIListOfTIndexesExists_ReturnsTheElementMembers()
@@ -71,11 +71,6 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
 
             Assert.AreEqual(1, properties.Count());
             Assert.IsNotNull(arrayIndex);
-        }
-
-        private static IStructureTypeReflecter ReflecterFor<T>() where T : class
-        {
-            return new StructureTypeReflecter(typeof(T));
         }
 
         private class WithEnumerableBytes

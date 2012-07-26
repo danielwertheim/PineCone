@@ -6,7 +6,7 @@ using PineCone.Structures.Schemas;
 namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTests
 {
     [TestFixture]
-    public class StructureTypeReflecterIdPropertyTests : UnitTestBase
+    public class StructureTypeReflecterIdPropertyTests : StructureTypeReflecterTestsBase
     {
         [Test]
         public void HasIdProperty_WhenGuidIdPropertyExists_ReturnsTrue()
@@ -189,11 +189,6 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
                 .SingleOrDefault(p => p.Path == "StructureId");
 
             Assert.IsNotNull(property);
-        }
-
-        private static IStructureTypeReflecter ReflecterFor<T>() where T : class
-        {
-            return new StructureTypeReflecter(typeof(T));
         }
 
         private class WithNoId

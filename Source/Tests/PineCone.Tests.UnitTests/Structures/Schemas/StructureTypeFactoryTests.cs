@@ -2,7 +2,6 @@ using System.Linq;
 using Moq;
 using NUnit.Framework;
 using PineCone.Structures.Schemas;
-using PineCone.Structures.Schemas.Configuration;
 
 namespace PineCone.Tests.UnitTests.Structures.Schemas
 {
@@ -108,6 +107,18 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas
             Assert.IsTrue(structureType.IndexableProperties.Any(p => p.Path == "Contained.NestedValue"));
         }
 
+        [Test]
+        public void CreateFor_When_no_config_for_allowing_nested_structures_exists_It_should_extract_contained_structure_properties()
+        {
+            var factory = new StructureTypeFactory();
+
+            var structureType = factory.CreateFor<WithContainedStructures>();
+
+            Assert.AreEqual(2, structureType.ContainedStructureProperties.Length);
+            Assert.AreEqual(1, structureType.ContainedStructureProperties.Count(p => p.Path == "Contained1"));
+            Assert.AreEqual(1, structureType.ContainedStructureProperties.Count(p => p.Path == "Contained2"));
+        }
+
         private class MyClass
         {
         }
@@ -115,6 +126,12 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas
         private class WithContainedStructure
         {
             public Structure Contained { get; set; }
+        }
+
+        private class WithContainedStructures
+        {
+            public Structure Contained1 { get; set; }
+            public Structure Contained2 { get; set; }
         }
 
         private class Structure

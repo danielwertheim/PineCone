@@ -6,7 +6,7 @@ using NCore;
 using NCore.Reflections;
 using NUnit.Framework;
 
-namespace PineCone.TestUtils
+namespace PineCone.Tests.UnitTests
 {
     public static class CustomAssert
     {

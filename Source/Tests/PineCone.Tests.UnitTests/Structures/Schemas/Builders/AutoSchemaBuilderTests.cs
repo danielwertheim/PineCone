@@ -9,7 +9,6 @@ using PineCone.Resources;
 using PineCone.Structures.Schemas;
 using PineCone.Structures.Schemas.Builders;
 using PineCone.Structures.Schemas.MemberAccessors;
-using PineCone.TestUtils;
 
 namespace PineCone.Tests.UnitTests.Structures.Schemas.Builders
 {

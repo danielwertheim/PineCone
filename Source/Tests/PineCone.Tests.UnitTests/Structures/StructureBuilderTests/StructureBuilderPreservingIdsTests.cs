@@ -62,12 +62,17 @@ namespace PineCone.Tests.UnitTests.Structures.StructureBuilderTests
         public void CreateStructures_WhenSerializerIsSpecified_SerializerIsConsumed()
         {
             var schema = StructureSchemaTestFactory.CreateRealFrom<GuidItem>();
-            var serializer = new Mock<IStructureSerializer>();
-            Func<GuidItem, object> serializerFunc = s => s.StructureId + ";" + s.Value;
-            serializer.Setup<object>(s => s.Serialize(It.IsAny<GuidItem>())).Returns(serializerFunc);
+            var serializer = new FakeSerializer
+            {
+                OnSerialize = (i, s) =>
+                {
+                    var itm = (GuidItem)i;
+                    return itm.StructureId + ";" + itm.Value;
+                }
+            };
             var items = CreateGuidItems(3).ToArray();
 
-            Builder.StructureSerializer = serializer.Object;
+            Builder.StructureSerializer = serializer;
             var structures = Builder.CreateStructures(items, schema).ToList();
 
             Assert.AreEqual(3, structures.Count);

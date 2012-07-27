@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{DE508E74-C9A8-4617-A293-AF1FA476CAEE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PineCone.TestUtils", "Tests\PineCone.TestUtils\PineCone.TestUtils.csproj", "{5CAC205F-5470-44A6-878F-F33768415D25}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PineCone.Tests.UnitTests", "Tests\PineCone.Tests.UnitTests\PineCone.Tests.UnitTests.csproj", "{73C5C30B-36DE-4A5E-A64D-CD06A63A601C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PineCone", "Projects\PineCone\PineCone.csproj", "{D14FCD7E-6FE4-42EC-9084-27164A1F7D60}"
@@ -24,12 +22,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{5CAC205F-5470-44A6-878F-F33768415D25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5CAC205F-5470-44A6-878F-F33768415D25}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5CAC205F-5470-44A6-878F-F33768415D25}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{5CAC205F-5470-44A6-878F-F33768415D25}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5CAC205F-5470-44A6-878F-F33768415D25}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5CAC205F-5470-44A6-878F-F33768415D25}.Release|x86.ActiveCfg = Release|Any CPU
 		{73C5C30B-36DE-4A5E-A64D-CD06A63A601C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{73C5C30B-36DE-4A5E-A64D-CD06A63A601C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{73C5C30B-36DE-4A5E-A64D-CD06A63A601C}.Debug|x86.ActiveCfg = Debug|Any CPU
@@ -47,7 +39,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{5CAC205F-5470-44A6-878F-F33768415D25} = {DE508E74-C9A8-4617-A293-AF1FA476CAEE}
 		{73C5C30B-36DE-4A5E-A64D-CD06A63A601C} = {DE508E74-C9A8-4617-A293-AF1FA476CAEE}
 	EndGlobalSection
 EndGlobal

@@ -83,6 +83,7 @@
     <Compile Include="..\..\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="CustomAssert.cs" />
     <Compile Include="PineConizerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Structures\Schemas\Configuration\StructureTypeConfiguratorTests.cs" />
@@ -110,6 +111,7 @@
     <Compile Include="Structures\IdGenerators\SequentialGuidStructureIdGeneratorTests.cs" />
     <Compile Include="Structures\Schemas\StructureTypeReflecterTests\StructureTypeReflecterTestsBase.cs" />
     <Compile Include="Structures\Schemas\StructureTypeReflecterTests\StructureTypeReflecterTimeStampPropertyTests.cs" />
+    <Compile Include="FakeSerializer.cs" />
     <Compile Include="Structures\StructureBuilderTests\StructureBuilderEnumerableTests.cs" />
     <Compile Include="Structures\StructureBuilderTests\StructureBuilderNullablesTests.cs" />
     <Compile Include="Structures\StructureBuilderTests\StructureBuilderPreservingIdsTests.cs" />
@@ -144,10 +146,6 @@
     <ProjectReference Include="..\..\Projects\PineCone\PineCone.csproj">
       <Project>{D14FCD7E-6FE4-42EC-9084-27164A1F7D60}</Project>
       <Name>PineCone</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PineCone.TestUtils\PineCone.TestUtils.csproj">
-      <Project>{5CAC205F-5470-44A6-878F-F33768415D25}</Project>
-      <Name>PineCone.TestUtils</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

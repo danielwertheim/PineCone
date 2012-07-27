@@ -3,7 +3,6 @@ using System.Linq;
 using NUnit.Framework;
 using PineCone.Annotations;
 using PineCone.Structures.Schemas;
-using PineCone.TestUtils;
 
 namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTests
 {

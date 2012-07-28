@@ -51,11 +51,11 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.Configuration
         }
 
         [Test]
-        public void IncludeNestedStructureMembers_WhenDefault_Ctor_IsFalse()
+        public void IncludeContainedStructureMembers_WhenDefault_Ctor_IsFalse()
         {
             var config = new StructureTypeConfig(typeof(Dummy));
 
-            Assert.IsFalse(config.IncludeNestedStructureMembers);
+            Assert.IsFalse(config.IncludeContainedStructureMembers);
         }
 
         private class Dummy {}

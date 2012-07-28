@@ -140,35 +140,29 @@ namespace PineCone.Structures.Schemas
                 : PropertyFactory.CreateRootPropertyFrom(propertyInfo);
         }
 
-        public virtual IStructureProperty[] GetIndexableProperties(Type structureType, bool includeNestedStructureMembers)
+        public virtual IStructureProperty[] GetIndexableProperties(Type structureType, bool includeContainedStructureMembers)
         {
-            return GetIndexableProperties(structureType, null, includeNestedStructureMembers, NonIndexableSystemMembers, null);
+            return GetIndexableProperties(structureType, null, includeContainedStructureMembers, NonIndexableSystemMembers, null);
         }
 
-        public virtual IStructureProperty[] GetIndexablePropertiesExcept(Type structureType, bool includeNestedStructureMembers, ICollection<string> nonIndexablePaths)
+        public virtual IStructureProperty[] GetIndexablePropertiesExcept(Type structureType, bool includeContainedStructureMembers, ICollection<string> nonIndexablePaths)
         {
             Ensure.That(nonIndexablePaths, "nonIndexablePaths").HasItems();
 
-            return GetIndexableProperties(structureType, null, includeNestedStructureMembers, NonIndexableSystemMembers.MergeWith(nonIndexablePaths).ToArray(), null);
+            return GetIndexableProperties(structureType, null, includeContainedStructureMembers, NonIndexableSystemMembers.MergeWith(nonIndexablePaths).ToArray(), null);
         }
 
-        public virtual IStructureProperty[] GetSpecificIndexableProperties(Type structureType, bool includeNestedStructureMembers, ICollection<string> indexablePaths)
+        public virtual IStructureProperty[] GetSpecificIndexableProperties(Type structureType, bool includeContainedStructureMembers, ICollection<string> indexablePaths)
         {
             Ensure.That(indexablePaths, "indexablePaths").HasItems();
 
-            return GetIndexableProperties(structureType, null, includeNestedStructureMembers, NonIndexableSystemMembers, indexablePaths);
+            return GetIndexableProperties(structureType, null, includeContainedStructureMembers, NonIndexableSystemMembers, indexablePaths);
         }
 
         public virtual IStructureProperty[] GetContainedStructureProperties(Type structureType)
         {
-            var propertyInfos = GetIndexablePropertyInfos(structureType);
-
-            return GetContainedStructureProperties(propertyInfos);
-        }
-
-        protected virtual IStructureProperty[] GetContainedStructureProperties(PropertyInfo[] propertyInfos)
-        {
-            var complexPropertyInfos = GetComplexIndexablePropertyInfos(propertyInfos, true);
+            var propertyInfos = GetIndexablePropertyInfos(structureType, true);
+            var complexPropertyInfos = GetComplexIndexablePropertyInfos(propertyInfos);
 
             return complexPropertyInfos
                 .Where(p => GetIdProperty(p.PropertyType) != null)
@@ -178,26 +172,26 @@ namespace PineCone.Structures.Schemas
         protected virtual IStructureProperty[] GetIndexableProperties(
             IReflect type,
             IStructureProperty parent,
-            bool includeNestedStructureMembers,
+            bool includeContainedStructureMembers,
             ICollection<string> nonIndexablePaths,
             ICollection<string> indexablePaths)
         {
-            var initialPropertyInfos = GetIndexablePropertyInfos(type);
+            var initialPropertyInfos = GetIndexablePropertyInfos(type, includeContainedStructureMembers);
             if (initialPropertyInfos.Length == 0)
                 return new IStructureProperty[] { };
 
             var properties = new List<IStructureProperty>();
-            
+
             var simplePropertyInfos = GetSimpleIndexablePropertyInfos(initialPropertyInfos, parent, nonIndexablePaths, indexablePaths);
             properties.AddRange(simplePropertyInfos.Select(spi => PropertyFactory.CreateChildPropertyFrom(parent, spi)));
 
             initialPropertyInfos = initialPropertyInfos.Where(p => !simplePropertyInfos.Contains(p)).ToArray();
 
-            foreach (var complexPropertyInfo in GetComplexIndexablePropertyInfos(initialPropertyInfos, includeNestedStructureMembers, parent, nonIndexablePaths, indexablePaths))
+            foreach (var complexPropertyInfo in GetComplexIndexablePropertyInfos(initialPropertyInfos, parent, nonIndexablePaths, indexablePaths))
             {
                 var complexProperty = PropertyFactory.CreateChildPropertyFrom(parent, complexPropertyInfo);
                 var simpleComplexProps = GetIndexableProperties(
-                    complexProperty.DataType, complexProperty, includeNestedStructureMembers, nonIndexablePaths, indexablePaths);
+                    complexProperty.DataType, complexProperty, includeContainedStructureMembers, nonIndexablePaths, indexablePaths);
 
                 var beforeCount = properties.Count;
                 properties.AddRange(simpleComplexProps);
@@ -218,7 +212,7 @@ namespace PineCone.Structures.Schemas
                 var elementProperties = GetIndexableProperties(
                     enumerableProperty.ElementDataType,
                     enumerableProperty,
-                    includeNestedStructureMembers,
+                    includeContainedStructureMembers,
                     nonIndexablePaths,
                     indexablePaths);
 
@@ -228,9 +222,11 @@ namespace PineCone.Structures.Schemas
             return properties.ToArray();
         }
 
-        private static PropertyInfo[] GetIndexablePropertyInfos(IReflect type)
+        private PropertyInfo[] GetIndexablePropertyInfos(IReflect type, bool includeContainedStructureMembers)
         {
-            return type.GetProperties(PropertyBindingFlags);
+            return includeContainedStructureMembers
+                ? type.GetProperties(PropertyBindingFlags)
+                : type.GetProperties(PropertyBindingFlags).Where(p => HasIdProperty(p.PropertyType) == false).ToArray();
         }
 
         protected virtual PropertyInfo[] GetSimpleIndexablePropertyInfos(PropertyInfo[] properties, IStructureProperty parent = null, ICollection<string> nonIndexablePaths = null, ICollection<string> indexablePaths = null)
@@ -251,7 +247,7 @@ namespace PineCone.Structures.Schemas
             return filteredProperties.ToArray();
         }
 
-        protected virtual PropertyInfo[] GetComplexIndexablePropertyInfos(PropertyInfo[] properties, bool includeNestedStructureMembers, IStructureProperty parent = null, ICollection<string> nonIndexablePaths = null, ICollection<string> indexablePaths = null)
+        protected virtual PropertyInfo[] GetComplexIndexablePropertyInfos(PropertyInfo[] properties, IStructureProperty parent = null, ICollection<string> nonIndexablePaths = null, ICollection<string> indexablePaths = null)
         {
             if (properties.Length == 0)
                 return new PropertyInfo[0];
@@ -260,8 +256,8 @@ namespace PineCone.Structures.Schemas
                 !p.PropertyType.IsSimpleType() &&
                 !p.PropertyType.IsEnumerableType());
 
-            if (!includeNestedStructureMembers)
-                filteredProperties = filteredProperties.Where(p => GetIdProperty(p.PropertyType) == null);
+            //if (!includeContainedStructureMembers)
+            //    filteredProperties = filteredProperties.Where(p => GetIdProperty(p.PropertyType) == null);
 
             if (nonIndexablePaths != null && nonIndexablePaths.Any())
                 filteredProperties = filteredProperties.Where(p => !nonIndexablePaths.Contains(

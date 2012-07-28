@@ -32,7 +32,7 @@ namespace PineCone.Structures.Schemas
                     reflecter.GetIdProperty(structureType),
                     reflecter.GetConcurrencyTokenProperty(structureType),
                     reflecter.GetTimeStampProperty(structureType),
-                    reflecter.GetIndexableProperties(structureType, config.IncludeNestedStructureMembers),
+                    reflecter.GetIndexableProperties(structureType, config.IncludeContainedStructureMembers),
                     reflecter.GetContainedStructureProperties(structureType));
 
             var shouldIndexAllMembersExcept = config.MemberPathsNotBeingIndexed.Count > 0;
@@ -42,8 +42,8 @@ namespace PineCone.Structures.Schemas
                 reflecter.GetConcurrencyTokenProperty(structureType),
                 reflecter.GetTimeStampProperty(structureType),
                 (shouldIndexAllMembersExcept
-                    ? reflecter.GetIndexablePropertiesExcept(structureType, config.IncludeNestedStructureMembers, config.MemberPathsNotBeingIndexed)
-                    : reflecter.GetSpecificIndexableProperties(structureType, config.IncludeNestedStructureMembers, config.MemberPathsBeingIndexed)),
+                    ? reflecter.GetIndexablePropertiesExcept(structureType, config.IncludeContainedStructureMembers, config.MemberPathsNotBeingIndexed)
+                    : reflecter.GetSpecificIndexableProperties(structureType, config.IncludeContainedStructureMembers, config.MemberPathsBeingIndexed)),
                 reflecter.GetContainedStructureProperties(structureType));
         }
     }

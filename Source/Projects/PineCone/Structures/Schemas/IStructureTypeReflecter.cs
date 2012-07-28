@@ -20,9 +20,9 @@ namespace PineCone.Structures.Schemas
         IStructureProperty GetConcurrencyTokenProperty(Type structureType);
         IStructureProperty GetTimeStampProperty(Type structureType);
 
-        IStructureProperty[] GetIndexableProperties(Type structureType, bool includeNestedStructureMembers);
-		IStructureProperty[] GetIndexablePropertiesExcept(Type structureType, bool includeNestedStructureMembers, ICollection<string> nonIndexablePaths);
-        IStructureProperty[] GetSpecificIndexableProperties(Type structureType, bool includeNestedStructureMembers, ICollection<string> indexablePaths);
+        IStructureProperty[] GetIndexableProperties(Type structureType, bool includeContainedStructureMembers);
+		IStructureProperty[] GetIndexablePropertiesExcept(Type structureType, bool includeContainedStructureMembers, ICollection<string> nonIndexablePaths);
+        IStructureProperty[] GetSpecificIndexableProperties(Type structureType, bool includeContainedStructureMembers, ICollection<string> indexablePaths);
         IStructureProperty[] GetContainedStructureProperties(Type structureType);
     }
 }

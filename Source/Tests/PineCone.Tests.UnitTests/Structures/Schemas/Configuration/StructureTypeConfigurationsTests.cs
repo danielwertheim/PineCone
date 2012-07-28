@@ -128,7 +128,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.Configuration
 
             var config = configs.GetConfiguration<Dummy>();
 
-            Assert.IsFalse(config.IncludeNestedStructureMembers);
+            Assert.IsFalse(config.IncludeContainedStructureMembers);
             Assert.IsTrue(config.IndexConfigIsEmpty);
             Assert.IsFalse(config.MemberPathsBeingIndexed.Any());
             Assert.IsFalse(config.MemberPathsNotBeingIndexed.Any());
@@ -141,7 +141,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.Configuration
 
             var config = configs.GetConfiguration<Dummy>();
 
-            Assert.IsFalse(config.IncludeNestedStructureMembers);
+            Assert.IsFalse(config.IncludeContainedStructureMembers);
             Assert.IsTrue(config.IndexConfigIsEmpty);
             Assert.IsFalse(config.MemberPathsBeingIndexed.Any());
             Assert.IsFalse(config.MemberPathsNotBeingIndexed.Any());

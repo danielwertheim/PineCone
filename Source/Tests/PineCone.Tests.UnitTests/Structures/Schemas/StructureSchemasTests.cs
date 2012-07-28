@@ -12,7 +12,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas
         [Test]
         public void GetSchema_InvokedUsingGenerics_WillGenerateSchema()
         {
-            var schemas = new StructureSchemas(new StructureTypeFactory(), new AutoSchemaBuilder());
+            var schemas = new StructureSchemas(new StructureTypeFactory(), new AutoStructureSchemaBuilder());
 
             var schema = schemas.GetSchema<X>();
 
@@ -22,7 +22,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas
         [Test]
         public void GetSchema_InvokedUsingType_WillGenerateSchema()
         {
-            var schemas = new StructureSchemas(new StructureTypeFactory(), new AutoSchemaBuilder());
+            var schemas = new StructureSchemas(new StructureTypeFactory(), new AutoStructureSchemaBuilder());
 
             var schema = schemas.GetSchema(typeof(X));
 
@@ -32,7 +32,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas
         [Test]
         public void GetSchemas_WhenEmpty_YieldsEmptyStream()
         {
-            var schemas = new StructureSchemas(new StructureTypeFactory(), new AutoSchemaBuilder());
+            var schemas = new StructureSchemas(new StructureTypeFactory(), new AutoStructureSchemaBuilder());
 
             var numOfSchemas = schemas.GetSchemas().Count();
 
@@ -42,7 +42,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas
         [Test]
         public void GetSchemas_WhenContainingASchema_YieldsOneSchema()
         {
-            var schemas = new StructureSchemas(new StructureTypeFactory(), new AutoSchemaBuilder());
+            var schemas = new StructureSchemas(new StructureTypeFactory(), new AutoStructureSchemaBuilder());
             var schema = schemas.GetSchema<X>();
 
             var fetchedSchema = schemas.GetSchemas().First();

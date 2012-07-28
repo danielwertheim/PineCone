@@ -40,7 +40,7 @@ namespace PineCone.Tests.UnitTests.Structures.StructureBuilderTests
             var schema = StructureSchemaTestFactory.CreateRealFrom<GuidItem>();
 
             Builder.StructureIdGenerator = idGeneratorMock.Object;
-            var structure = Builder.CreateStructure(item, schema);
+            Builder.CreateStructure(item, schema);
 
             idGeneratorMock.Verify(m => m.Generate(schema), Times.Never());
         }

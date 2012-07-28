@@ -2,7 +2,6 @@
 using System.Linq;
 using NUnit.Framework;
 using PineCone.Annotations;
-using PineCone.Structures.Schemas;
 
 namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTests
 {
@@ -12,7 +11,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
         [Test]
         public void GetIndexableProperties_WhenItemWithComplexProperty_ReturnsComplexProperties()
         {
-            var properties = ReflecterFor<WithComplexProperty>().GetIndexableProperties();
+            var properties = ReflecterFor().GetIndexableProperties(typeof(WithComplexProperty), false);
 
             Assert.AreEqual(2, properties.Count());
             Assert.IsTrue(properties.Any(p => p.Path == "Complex.IntValue"));
@@ -22,7 +21,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
         [Test]
         public void GetIndexableProperties_WhenRootWithUniqeAndNonUniqueComplexProperties_ReturnsBothComplexUniqueAndNonUniqueProperties()
         {
-            var properties = ReflecterFor<WithUniqueAndNonUniqueComplexProperties>().GetIndexableProperties();
+            var properties = ReflecterFor().GetIndexableProperties(typeof(WithUniqueAndNonUniqueComplexProperties), false);
 
             Assert.AreEqual(4, properties.Count());
             Assert.IsTrue(properties.Any(p => p.Path == "UqComplex.IntValue"));
@@ -34,7 +33,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
         [Test]
         public void GetIndexableProperties_WhenRootWithEnumerable_EnumerableMemberIsNotReturnedAsComplex()
         {
-            var properties = ReflecterFor<WithEnumerableOfComplex>().GetIndexableProperties();
+            var properties = ReflecterFor().GetIndexableProperties(typeof(WithEnumerableOfComplex), false);
 
             Assert.AreEqual(2, properties.Count());
             Assert.IsTrue(properties.Any(p => p.Path == "Items.IntValue"));

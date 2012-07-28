@@ -10,7 +10,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
         [Test]
         public void GetIndexableProperties_WhenMultiplePublicSimplePropertiesExistsAndNoExclusions_ReturnsAllPublicSimpleProperties()
         {
-            var properties = ReflecterFor<WithSimpleProperties>().GetIndexableProperties();
+            var properties = ReflecterFor().GetIndexableProperties(typeof(WithSimpleProperties), false);
 
             var paths = properties.Select(p => p.Path).ToArray();
             Assert.AreEqual(9, properties.Count());
@@ -28,7 +28,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
         [Test]
         public void GetIndexableProperties_WhenMultiplePublicSimpleNullablePropertiesExistsAndNoExclusions_ReturnsAllPublicSimpleProperties()
         {
-            var properties = ReflecterFor<WithSimpleNullableProperties>().GetIndexableProperties();
+            var properties = ReflecterFor().GetIndexableProperties(typeof(WithSimpleNullableProperties), false);
 
             var paths = properties.Select(p => p.Path).ToArray();
             Assert.AreEqual(8, properties.Count());
@@ -45,7 +45,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
         [Test]
         public void GetIndexableProperties_WhenSimplePrivatePropertyExists_PrivatePropertyIsNotReturned()
         {
-            var properties = ReflecterFor<WithPrivateProperty>().GetIndexableProperties();
+            var properties = ReflecterFor().GetIndexableProperties(typeof(WithPrivateProperty), false);
 
             Assert.AreEqual(0, properties.Count());
         }

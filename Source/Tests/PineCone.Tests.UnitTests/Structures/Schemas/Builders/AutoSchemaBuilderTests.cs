@@ -16,7 +16,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.Builders
     public class AutoSchemaBuilderTests : UnitTestBase
     {
         private readonly IStructureTypeFactory _structureTypeFactory = new StructureTypeFactory();
-        private readonly ISchemaBuilder _schemaBuilder = new AutoSchemaBuilder();
+        private readonly IStructureSchemaBuilder _structureSchemaBuilder = new AutoStructureSchemaBuilder();
 
         private IStructureType GetStructureTypeFor<T>()
             where T : class
@@ -30,7 +30,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.Builders
             const string expectedName = "WithIdAndIndexableFirstLevelMembers";
             var structureType = GetStructureTypeFor<WithIdAndIndexableFirstLevelMembers>();
 
-            var schema = _schemaBuilder.CreateSchema(structureType);
+            var schema = _structureSchemaBuilder.CreateSchema(structureType);
 
             Assert.AreEqual(expectedName, schema.Name);
         }
@@ -40,7 +40,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.Builders
         {
             var structureType = GetStructureTypeFor<WithFirstSecondAndThirdLevelMembers>();
 
-            var schema = _schemaBuilder.CreateSchema(structureType);
+            var schema = _structureSchemaBuilder.CreateSchema(structureType);
 
             var hasSecondLevelAccessors = schema.IndexAccessors.Any(iac => HasLevel(iac, 1));
             Assert.IsTrue(hasSecondLevelAccessors);
@@ -51,7 +51,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.Builders
         {
             var structureType = GetStructureTypeFor<WithFirstSecondAndThirdLevelMembers>();
 
-            var schema = _schemaBuilder.CreateSchema(structureType);
+            var schema = _structureSchemaBuilder.CreateSchema(structureType);
 
             var secondLevelItems = schema.IndexAccessors.Where(iac => HasLevel(iac, 1));
             CustomAssert.ForAll(secondLevelItems, iac => iac.Path.StartsWith("SecondLevelItem."));
@@ -62,7 +62,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.Builders
         {
             var structureType = GetStructureTypeFor<WithFirstSecondAndThirdLevelMembers>();
 
-            var schema = _schemaBuilder.CreateSchema(structureType);
+            var schema = _structureSchemaBuilder.CreateSchema(structureType);
 
             var hasThirdLevelAccessors = schema.IndexAccessors.Any(iac => HasLevel(iac, 2));
             Assert.IsTrue(hasThirdLevelAccessors);
@@ -73,7 +73,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.Builders
         {
             var structureType = GetStructureTypeFor<WithFirstSecondAndThirdLevelMembers>();
 
-            var schema = _schemaBuilder.CreateSchema(structureType);
+            var schema = _structureSchemaBuilder.CreateSchema(structureType);
 
             var thirdLevelItems = schema.IndexAccessors.Where(iac => HasLevel(iac, 2));
             CustomAssert.ForAll(thirdLevelItems, iac => iac.Path.StartsWith("SecondLevelItem.ThirdLevelItem."));
@@ -84,7 +84,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.Builders
         {
             var structureType = GetStructureTypeFor<WithFirstSecondAndThirdLevelMembers>();
 
-            var schema = _schemaBuilder.CreateSchema(structureType);
+            var schema = _structureSchemaBuilder.CreateSchema(structureType);
 
             var hasThirdLevelAccessors = schema.IndexAccessors.Any(iac => HasLevel(iac, 2) && iac.Path == "SecondLevelItem.ThirdLevelItem.Numbers");
             Assert.IsTrue(hasThirdLevelAccessors);
@@ -95,7 +95,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.Builders
         {
 			var structureType = GetStructureTypeFor<WithNoId>();
 
-            var ex = Assert.Throws<PineConeException>(() => _schemaBuilder.CreateSchema(structureType));
+            var ex = Assert.Throws<PineConeException>(() => _structureSchemaBuilder.CreateSchema(structureType));
 
             var expectedMessage = string.Format(ExceptionMessages.AutoSchemaBuilder_MissingIdMember, "WithNoId");
             Assert.AreEqual(expectedMessage, ex.Message);
@@ -106,7 +106,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.Builders
         {
             var structureType = GetStructureTypeFor<WithGuidId>();
 
-            var schema = _schemaBuilder.CreateSchema(structureType);
+            var schema = _structureSchemaBuilder.CreateSchema(structureType);
 
             Assert.IsNotNull(schema.IdAccessor);
         }
@@ -116,7 +116,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.Builders
 		{
 			var structureType = GetStructureTypeFor<WithCustomIdOfTypeName>();
 
-			var schema = _schemaBuilder.CreateSchema(structureType);
+			var schema = _structureSchemaBuilder.CreateSchema(structureType);
 
 			Assert.IsNotNull(schema.IdAccessor);
 		}
@@ -126,7 +126,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.Builders
 		{
 			var structureType = GetStructureTypeFor<WithId>();
 
-			var schema = _schemaBuilder.CreateSchema(structureType);
+			var schema = _structureSchemaBuilder.CreateSchema(structureType);
 
 			Assert.IsNotNull(schema.IdAccessor);
 		}
@@ -136,7 +136,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.Builders
         {
             var structureType = GetStructureTypeFor<WithIdAndIndexableFirstLevelMembers>();
 
-            var schema = _schemaBuilder.CreateSchema(structureType);
+            var schema = _structureSchemaBuilder.CreateSchema(structureType);
 
             CollectionAssert.IsNotEmpty(schema.IndexAccessors);
         }
@@ -157,7 +157,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.Builders
             });
 
             var ex = Assert.Throws<PineConeException>(
-                () => _schemaBuilder.CreateSchema(structureType.Object));
+                () => _structureSchemaBuilder.CreateSchema(structureType.Object));
 
             var expectedMessage = string.Format(ExceptionMessages.AutoSchemaBuilder_MissingIndexableMembers, "TmpType");
             Assert.AreEqual(expectedMessage, ex.Message);
@@ -179,7 +179,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.Builders
             });
 
             var ex = Assert.Throws<PineConeException>(
-                () => _schemaBuilder.CreateSchema(structureType.Object));
+                () => _structureSchemaBuilder.CreateSchema(structureType.Object));
 
             var expectedMessage = string.Format(ExceptionMessages.AutoSchemaBuilder_MissingIndexableMembers, "TmpType");
             Assert.AreEqual(expectedMessage, ex.Message);
@@ -190,7 +190,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.Builders
         {
             var structureType = GetStructureTypeFor<WithGuidId>();
 
-            var schema = _schemaBuilder.CreateSchema(structureType);
+            var schema = _structureSchemaBuilder.CreateSchema(structureType);
 
             Assert.AreEqual(typeof(Guid), schema.IdAccessor.DataType);
             Assert.IsNotNull(schema.IdAccessor);
@@ -201,7 +201,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.Builders
         {
             var structureType = GetStructureTypeFor<WithByte>();
 
-            var schema = _schemaBuilder.CreateSchema(structureType);
+            var schema = _structureSchemaBuilder.CreateSchema(structureType);
 
             var byteIac = schema.IndexAccessors.SingleOrDefault(iac => iac.Path == "Byte");
             Assert.IsNotNull(byteIac);
@@ -213,7 +213,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.Builders
         {
             var structureType = GetStructureTypeFor<WithNullableByte>();
 
-            var schema = _schemaBuilder.CreateSchema(structureType);
+            var schema = _structureSchemaBuilder.CreateSchema(structureType);
 
             var byteIac = schema.IndexAccessors.SingleOrDefault(iac => iac.Path == "Byte");
             Assert.IsNotNull(byteIac);
@@ -225,7 +225,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.Builders
         {
             var structureType = GetStructureTypeFor<WithBytes>();
 
-            var schema = _schemaBuilder.CreateSchema(structureType);
+            var schema = _structureSchemaBuilder.CreateSchema(structureType);
 
             Assert.AreEqual(1, schema.IndexAccessors.Count(iac => iac.Path != StructureIdPropertyNames.Default));
             Assert.IsTrue(schema.IndexAccessors[1].Path.StartsWith("DummyMember"));
@@ -236,7 +236,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.Builders
 		{
 			var structureType = GetStructureTypeFor<WithStruct>();
 
-			var schema = _schemaBuilder.CreateSchema(structureType);
+			var schema = _structureSchemaBuilder.CreateSchema(structureType);
 
 			Assert.AreEqual(2, schema.IndexAccessors.Count);
 			Assert.AreEqual("Content", schema.IndexAccessors[1].Path);
@@ -248,7 +248,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.Builders
         {
             var structureType = GetStructureTypeFor<WithTimeStamp>();
 
-            var schema = _schemaBuilder.CreateSchema(structureType);
+            var schema = _structureSchemaBuilder.CreateSchema(structureType);
 
             Assert.AreEqual(2, schema.IndexAccessors.Count);
             Assert.IsTrue(schema.HasTimeStamp);
@@ -264,7 +264,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.Builders
         {
             var structureType = GetStructureTypeFor<WithNullableTimeStamp>();
 
-            var schema = _schemaBuilder.CreateSchema(structureType);
+            var schema = _structureSchemaBuilder.CreateSchema(structureType);
 
             Assert.AreEqual(2, schema.IndexAccessors.Count);
             Assert.IsTrue(schema.HasTimeStamp);
@@ -280,7 +280,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.Builders
         {
             var structureType = GetStructureTypeFor<WithConcurrencyToken>();
 
-            var schema = _schemaBuilder.CreateSchema(structureType);
+            var schema = _structureSchemaBuilder.CreateSchema(structureType);
 
             Assert.AreEqual(2, schema.IndexAccessors.Count);
             Assert.AreEqual("StructureId", schema.IndexAccessors[0].Path);

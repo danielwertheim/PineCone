@@ -2,7 +2,6 @@
 using System.Linq;
 using NUnit.Framework;
 using PineCone.Annotations;
-using PineCone.Structures.Schemas;
 
 namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTests
 {
@@ -12,7 +11,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
         [Test]
         public void GetIndexableProperties_WhenSimpleUniquesExistsOnRoot_ReturnsSimpleUniques()
         {
-            var properties = ReflecterFor<WithSimpleUniques>().GetIndexableProperties();
+            var properties = ReflecterFor().GetIndexableProperties(typeof(WithSimpleUniques), false);
 
             Assert.AreEqual(2, properties.Count());
 
@@ -24,20 +23,20 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
         public void GetIndexableProperties_WhenRootWithExplicitUniqueOnChildWithNoUniques_ThrowsPineConeException()
         {
             Assert.Throws<PineConeException>(
-                () => ReflecterFor<WithExplicitUniqueOnChildWithoutUniques>().GetIndexableProperties());
+                () => ReflecterFor().GetIndexableProperties(typeof(WithExplicitUniqueOnChildWithoutUniques), false));
         }
 
         [Test]
         public void GetIndexableProperties_WhenRootWithExplicitUniqueOnChildWithUniques_ThrowsPineConeException()
         {
             Assert.Throws<PineConeException>(
-                () => ReflecterFor<WithExplicitUniqueOnChildWithUniques>().GetIndexableProperties());
+                () => ReflecterFor().GetIndexableProperties(typeof(WithExplicitUniqueOnChildWithUniques), false));
         }
 
         [Test]
         public void GetIndexableProperties_WhenRootWithImplicitUniqueOnChildWithUniques_ChildUniquesAreExtracted()
         {
-            var properties = ReflecterFor<WithImplicitUniqueOnChildWithUniques>().GetIndexableProperties();
+            var properties = ReflecterFor().GetIndexableProperties(typeof(WithImplicitUniqueOnChildWithUniques), false);
 
             var uniques = properties.Where(p => p.IsUnique).ToList();
             Assert.AreEqual(1, uniques.Count);
@@ -48,20 +47,20 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
         public void GetIndexableProperties_WhenRootWithUniqueEnumerableOfSimple_ThrowsPineConeException()
         {
             Assert.Throws<PineConeException>(
-                () => ReflecterFor<WithUniqueEnumerableOfSimple>().GetIndexableProperties());
+                () => ReflecterFor().GetIndexableProperties(typeof(WithUniqueEnumerableOfSimple), false));
         }
 
         [Test]
         public void GetIndexableProperties_WhenRootWithUniqueEnumerableOfComplexWithUnique_ThrowsPineConeException()
         {
             Assert.Throws<PineConeException>(
-                () => ReflecterFor<WithUniqueEnumerableOfComplexWithUnique>().GetIndexableProperties());
+                () => ReflecterFor().GetIndexableProperties(typeof(WithUniqueEnumerableOfComplexWithUnique), false));
         }
 
         [Test]
         public void GetIndexableProperties_WhenRootWithEnumerableOfComplexWithUnique_UniqueIsExtracted()
         {
-            var properties = ReflecterFor<WithEnumerableOfComplexWithUnique>().GetIndexableProperties();
+            var properties = ReflecterFor().GetIndexableProperties(typeof(WithEnumerableOfComplexWithUnique), false);
 
             var uniques = properties.Where(p => p.IsUnique).ToList();
             Assert.AreEqual(1, uniques.Count);

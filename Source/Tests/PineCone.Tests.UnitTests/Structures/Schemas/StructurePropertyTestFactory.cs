@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using PineCone.Structures.Schemas;
-using PineCone.Structures.Schemas.Configuration;
 
 namespace PineCone.Tests.UnitTests.Structures.Schemas
 {
@@ -10,17 +9,17 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas
 
         internal static IStructureProperty GetIdProperty<T>() where T : class 
         {
-            return ReflecterFor<T>().GetIdProperty();
+            return ReflecterFor().GetIdProperty(typeof(T));
         }
 
         internal static IStructureProperty GetPropertyByPath<T>(string path) where T : class 
         {
-            return ReflecterFor<T>().GetIndexableProperties().Single(i => i.Path == path);
+            return ReflecterFor().GetIndexableProperties(typeof(T), false).Single(i => i.Path == path);
         }
 
         internal static IStructureProperty GetPropertyByName<T>(string name) where T : class 
         {
-            return ReflecterFor<T>().GetIndexableProperties().Single(i => i.Name == name);
+            return ReflecterFor().GetIndexableProperties(typeof(T), false).Single(i => i.Name == name);
         }
 
         internal static IStructureProperty GetRawProperty<T>(string name) where T : class 
@@ -39,9 +38,9 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas
             return PropertyFactory.CreateChildPropertyFrom(parent, propertyInfo);
         }
 
-        private static IStructureTypeReflecter ReflecterFor<T>() where T : class
+        private static IStructureTypeReflecter ReflecterFor()
         {
-            return new StructureTypeReflecter(new StructureTypeConfig(typeof(T)));
+            return new StructureTypeReflecter();
         }
     }
 }

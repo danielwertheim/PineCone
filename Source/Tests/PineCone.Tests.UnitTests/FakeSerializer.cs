@@ -8,9 +8,9 @@ namespace PineCone.Tests.UnitTests
     {
         public Func<object, IStructureSchema, string> OnSerialize;
 
-        public string Serialize<T>(T item, IStructureSchema structureSchema) where T : class
+        public string Serialize<T>(T structure, IStructureSchema structureSchema) where T : class
         {
-            return OnSerialize(item, structureSchema);
+            return OnSerialize(structure, structureSchema);
         }
     }
 }

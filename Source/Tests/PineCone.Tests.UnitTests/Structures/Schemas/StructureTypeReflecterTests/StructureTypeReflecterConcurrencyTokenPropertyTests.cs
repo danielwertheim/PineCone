@@ -9,19 +9,19 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
         [Test]
         public void HasConcurrencyTokenProperty_WhenMemberExists_ReturnsTrue()
         {
-            Assert.IsTrue(ReflecterFor<Model>().HasConcurrencyTokenProperty());
+            Assert.IsTrue(ReflecterFor().HasConcurrencyTokenProperty(typeof(Model)));
         }
 
         [Test]
         public void HasConcurrencyTokenProperty_WhenMemberDoesNotExists_ReturnsFalse()
         {
-            Assert.IsFalse(ReflecterFor<ModelWithNoToken>().HasConcurrencyTokenProperty());
+            Assert.IsFalse(ReflecterFor().HasConcurrencyTokenProperty(typeof(ModelWithNoToken)));
         }
 
         [Test]
         public void GetConcurrencyTokenProperty_WhenMemberExists_ReturnsProperty()
         {
-            var property = ReflecterFor<Model>().GetConcurrencyTokenProperty();
+            var property = ReflecterFor().GetConcurrencyTokenProperty(typeof(Model));
 
             Assert.IsNotNull(property);
             Assert.AreEqual("ConcurrencyToken", property.Name);
@@ -30,7 +30,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
         [Test]
         public void GetConcurrencyTokenProperty_WhenMemberDoesNotExist_ReturnsNull()
         {
-            var property = ReflecterFor<ModelWithNoToken>().GetConcurrencyTokenProperty();
+            var property = ReflecterFor().GetConcurrencyTokenProperty(typeof(ModelWithNoToken));
 
             Assert.IsNull(property);
         }

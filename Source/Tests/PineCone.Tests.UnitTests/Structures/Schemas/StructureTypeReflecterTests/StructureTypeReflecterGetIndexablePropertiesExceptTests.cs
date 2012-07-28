@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using NUnit.Framework;
-using PineCone.Structures.Schemas;
 
 namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTests
 {
@@ -11,7 +10,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
         [Test]
         public void GetIndexablePropertiesExcept_WhenCalledWithNullExlcudes_ThrowsArgumentException()
         {
-            var ex = Assert.Throws<ArgumentException>(() => ReflecterFor<WithStructureId>().GetIndexablePropertiesExcept(null));
+            var ex = Assert.Throws<ArgumentException>(() => ReflecterFor().GetIndexablePropertiesExcept(typeof(WithStructureId), false, null));
 
             Assert.AreEqual("nonIndexablePaths", ex.ParamName);
         }
@@ -19,7 +18,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
         [Test]
         public void GetIndexablePropertiesExcept_WhenCalledWithNoExlcudes_ThrowsArgumentNullException()
         {
-            var ex = Assert.Throws<ArgumentException>(() => ReflecterFor<WithStructureId>().GetIndexablePropertiesExcept(new string[] { }));
+            var ex = Assert.Throws<ArgumentException>(() => ReflecterFor().GetIndexablePropertiesExcept(typeof(WithStructureId), false, new string[] { }));
 
             Assert.AreEqual("nonIndexablePaths", ex.ParamName);
         }
@@ -27,7 +26,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
         [Test]
         public void GetIndexablePropertiesExcept_WhenExcludingStructureId_PropertyIsNotReturned()
         {
-            var properties = ReflecterFor<WithStructureId>().GetIndexablePropertiesExcept(new[] { "StructureId" });
+            var properties = ReflecterFor().GetIndexablePropertiesExcept(typeof(WithStructureId), false, new[] { "StructureId" });
 
             Assert.IsNull(properties.SingleOrDefault(p => p.Path == "StructureId"));
         }
@@ -35,7 +34,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
         [Test]
         public void GetIndexablePropertiesExcept_WhenBytesArrayExists_PropertyIsNotReturned()
         {
-            var properties = ReflecterFor<WithStructureId>().GetIndexablePropertiesExcept(new[] { "" });
+            var properties = ReflecterFor().GetIndexablePropertiesExcept(typeof(WithStructureId), false, new[] { "" });
 
             Assert.IsNull(properties.SingleOrDefault(p => p.Path == "Bytes1"));
         }
@@ -43,7 +42,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
         [Test]
         public void GetIndexablePropertiesExcept_WhenExcludingAllProperties_NoPropertiesAreReturned()
         {
-            var properties = ReflecterFor<WithStructureId>().GetIndexablePropertiesExcept(new[] { "StructureId", "Bool1", "DateTime1", "String1", "Nested", "Nested.Int1OnNested", "Nested.String1OnNested" });
+            var properties = ReflecterFor().GetIndexablePropertiesExcept(typeof(WithStructureId), false, new[] { "StructureId", "Bool1", "DateTime1", "String1", "Nested", "Nested.Int1OnNested", "Nested.String1OnNested" });
 
             Assert.AreEqual(0, properties.Count());
         }
@@ -51,7 +50,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
         [Test]
         public void GetIndexablePropertiesExcept_WhenExcludingComplexNested_NoNestedPropertiesAreReturned()
         {
-            var properties = ReflecterFor<WithStructureId>().GetIndexablePropertiesExcept(new[] { "Nested" });
+            var properties = ReflecterFor().GetIndexablePropertiesExcept(typeof(WithStructureId), false, new[] { "Nested" });
 
             Assert.AreEqual(0, properties.Count(p => p.Path.StartsWith("Nested")));
         }
@@ -59,7 +58,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
         [Test]
         public void GetIndexablePropertiesExcept_WhenExcludingNestedSimple_OtherSimpleNestedPropertiesAreReturned()
         {
-            var properties = ReflecterFor<WithStructureId>().GetIndexablePropertiesExcept(new[] { "Nested.String1OnNested" });
+            var properties = ReflecterFor().GetIndexablePropertiesExcept(typeof(WithStructureId), false, new[] { "Nested.String1OnNested" });
 
             Assert.AreEqual(1, properties.Count(p => p.Path.StartsWith("Nested")));
             Assert.AreEqual(1, properties.Count(p => p.Path == "Nested.Int1OnNested"));

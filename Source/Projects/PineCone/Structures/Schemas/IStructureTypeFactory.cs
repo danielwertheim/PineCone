@@ -9,6 +9,6 @@ namespace PineCone.Structures.Schemas
         IStructureTypeConfigurations Configurations { get; set; }
 
         IStructureType CreateFor<T>() where T : class;
-        IStructureType CreateFor(Type type);
+        IStructureType CreateFor(Type structureType);
     }
 }

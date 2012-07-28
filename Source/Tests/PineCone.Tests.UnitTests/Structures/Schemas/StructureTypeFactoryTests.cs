@@ -13,13 +13,13 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas
         {
             var type = typeof(MyClass);
             var reflecterMock = new Mock<IStructureTypeReflecter>();
-            reflecterMock.Setup(m => m.GetIdProperty()).Returns(() =>
+            reflecterMock.Setup(m => m.GetIdProperty(type)).Returns(() =>
             {
                 var idProperty = new Mock<IStructureProperty>();
 
                 return idProperty.Object;
             });
-            reflecterMock.Setup(m => m.GetIndexableProperties()).Returns(() =>
+            reflecterMock.Setup(m => m.GetIndexableProperties(type, false)).Returns(() =>
             {
                 var indexProperty = new Mock<IStructureProperty>();
 
@@ -29,7 +29,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas
             var factory = new StructureTypeFactory(t => reflecterMock.Object);
             factory.CreateFor(type);
 
-            reflecterMock.Verify(m => m.GetIndexableProperties());
+            reflecterMock.Verify(m => m.GetIndexableProperties(type, false));
         }
 
         [Test]
@@ -37,13 +37,13 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas
         {
             var type = typeof(MyClass);
             var reflecterMock = new Mock<IStructureTypeReflecter>();
-            reflecterMock.Setup(m => m.GetIdProperty()).Returns(() =>
+            reflecterMock.Setup(m => m.GetIdProperty(type)).Returns(() =>
             {
                 var idProperty = new Mock<IStructureProperty>();
 
                 return idProperty.Object;
             });
-            reflecterMock.Setup(m => m.GetIndexablePropertiesExcept(new[] { "ExcludeTEMP" })).Returns(() =>
+            reflecterMock.Setup(m => m.GetIndexablePropertiesExcept(type, false, new[] { "ExcludeTEMP" })).Returns(() =>
             {
                 var indexProperty = new Mock<IStructureProperty>();
 
@@ -54,7 +54,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas
             factory.Configurations.Configure(type, cfg => cfg.DoNotIndexThis("ExcludeTEMP"));
             factory.CreateFor(type);
 
-            reflecterMock.Verify(m => m.GetIndexablePropertiesExcept(new[] { "ExcludeTEMP" }));
+            reflecterMock.Verify(m => m.GetIndexablePropertiesExcept(type, false, new[] { "ExcludeTEMP" }));
         }
 
         [Test]
@@ -62,13 +62,13 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas
         {
             var type = typeof(MyClass);
             var reflecterMock = new Mock<IStructureTypeReflecter>();
-            reflecterMock.Setup(m => m.GetIdProperty()).Returns(() =>
+            reflecterMock.Setup(m => m.GetIdProperty(type)).Returns(() =>
             {
                 var idProperty = new Mock<IStructureProperty>();
 
                 return idProperty.Object;
             });
-            reflecterMock.Setup(m => m.GetSpecificIndexableProperties(new[] { "IncludeTEMP" })).Returns(() =>
+            reflecterMock.Setup(m => m.GetSpecificIndexableProperties(type, false, new[] { "IncludeTEMP" })).Returns(() =>
             {
                 var indexProperty = new Mock<IStructureProperty>();
 
@@ -79,7 +79,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas
             factory.Configurations.Configure(type, cfg => cfg.OnlyIndexThis("IncludeTEMP"));
             factory.CreateFor(type);
 
-            reflecterMock.Verify(m => m.GetSpecificIndexableProperties(new[] { "IncludeTEMP" }));
+            reflecterMock.Verify(m => m.GetSpecificIndexableProperties(type, false, new[] { "IncludeTEMP" }));
         }
 
         [Test]

@@ -10,20 +10,19 @@ namespace PineCone.Structures.Schemas
     /// </summary>
     public interface IStructureTypeReflecter
     {
-        Type StructureType { get; }
         IStructurePropertyFactory PropertyFactory { set; }
 
-        bool HasIdProperty();
-        bool HasConcurrencyTokenProperty();
-        bool HasTimeStampProperty();
+        bool HasIdProperty(Type structureType);
+        bool HasConcurrencyTokenProperty(Type structureType);
+        bool HasTimeStampProperty(Type structureType);
 
-        IStructureProperty GetIdProperty();
-        IStructureProperty GetConcurrencyTokenProperty();
-        IStructureProperty GetTimeStampProperty();
-        
-        IStructureProperty[] GetIndexableProperties();
-		IStructureProperty[] GetIndexablePropertiesExcept(ICollection<string> nonIndexablePaths);
-        IStructureProperty[] GetSpecificIndexableProperties(ICollection<string> indexablePaths);
-        IStructureProperty[] GetContainedStructureProperties();
+        IStructureProperty GetIdProperty(Type structureType);
+        IStructureProperty GetConcurrencyTokenProperty(Type structureType);
+        IStructureProperty GetTimeStampProperty(Type structureType);
+
+        IStructureProperty[] GetIndexableProperties(Type structureType, bool includeNestedStructureMembers);
+		IStructureProperty[] GetIndexablePropertiesExcept(Type structureType, bool includeNestedStructureMembers, ICollection<string> nonIndexablePaths);
+        IStructureProperty[] GetSpecificIndexableProperties(Type structureType, bool includeNestedStructureMembers, ICollection<string> indexablePaths);
+        IStructureProperty[] GetContainedStructureProperties(Type structureType);
     }
 }

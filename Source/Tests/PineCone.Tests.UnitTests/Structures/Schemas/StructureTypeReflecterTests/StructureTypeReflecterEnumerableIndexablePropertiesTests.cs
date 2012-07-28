@@ -12,7 +12,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
         [Test]
         public void GetIndexableProperties_WhenIListOfTIndexesExists_ReturnsTheElementMembers()
         {
-            var props = ReflecterFor<WithCollectionIndexes>().GetIndexableProperties();
+            var props = ReflecterFor().GetIndexableProperties(typeof(WithCollectionIndexes), false);
 
             Assert.IsTrue(props.Any(p => p.Path == "IList1.ElementInt1"));
         }
@@ -20,7 +20,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
         [Test]
         public void GetIndexableProperties_WhenIEnumerableOfTIndexesExists_ReturnsTheElementMembers()
         {
-            var props = ReflecterFor<WithCollectionIndexes>().GetIndexableProperties();
+            var props = ReflecterFor().GetIndexableProperties(typeof(WithCollectionIndexes), false);
 
             Assert.IsTrue(props.Any(p => p.Path == "IEnumerable1.ElementInt1"));
         }
@@ -28,7 +28,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
         [Test]
         public void GetIndexableProperties_WhenEnumerableOfBytes_NoPropertiesAreReturned()
         {
-            var props = ReflecterFor<WithEnumerableBytes>().GetIndexableProperties();
+            var props = ReflecterFor().GetIndexableProperties(typeof(WithEnumerableBytes), false);
 
             Assert.IsFalse(props.Any());
         }
@@ -36,7 +36,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
         [Test]
         public void GetIndexableProperties_WhenArrayOfStrings_OnlyReturnsPropertyForAccessingTheStringArray()
         {
-            var properties = ReflecterFor<WithArrayOfStrings>().GetIndexableProperties();
+            var properties = ReflecterFor().GetIndexableProperties(typeof(WithArrayOfStrings), false);
             var arrayIndex = properties.SingleOrDefault(p => p.Path == "Values");
 
             Assert.AreEqual(1, properties.Count());
@@ -46,7 +46,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
         [Test]
         public void GetIndexableProperties_WhenArrayOfIntegers_OnlyReturnsPropertyForAccessingTheStringArray()
         {
-            var properties = ReflecterFor<WithArrayOfIntegers>().GetIndexableProperties();
+            var properties = ReflecterFor().GetIndexableProperties(typeof(WithArrayOfIntegers), false);
             var arrayIndex = properties.SingleOrDefault(p => p.Path == "Values");
 
             Assert.AreEqual(1, properties.Count());
@@ -56,7 +56,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
         [Test]
         public void GetIndexableProperties_WhenWithNestedArrayOfStrings_OnlyReturnsPropertyForAccessingTheStringArray()
         {
-            var properties = ReflecterFor<WithNestedArrayOfStrings>().GetIndexableProperties();
+            var properties = ReflecterFor().GetIndexableProperties(typeof(WithNestedArrayOfStrings), false);
             var arrayIndex = properties.SingleOrDefault(p => p.Path == "Item.Values");
 
             Assert.AreEqual(1, properties.Count());
@@ -66,7 +66,7 @@ namespace PineCone.Tests.UnitTests.Structures.Schemas.StructureTypeReflecterTest
         [Test]
         public void GetIndexableProperties_WhenWithArrayOfNestedArrayOfStrings_OnlyReturnsPropertyForAccessingTheStringArray()
         {
-            var properties = ReflecterFor<WithArrayOfNestedArrayOfStrings>().GetIndexableProperties();
+            var properties = ReflecterFor().GetIndexableProperties(typeof(WithArrayOfNestedArrayOfStrings), false);
             var arrayIndex = properties.SingleOrDefault(p => p.Path == "Items.Values");
 
             Assert.AreEqual(1, properties.Count());

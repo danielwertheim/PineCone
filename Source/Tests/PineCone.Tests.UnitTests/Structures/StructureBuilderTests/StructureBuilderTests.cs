@@ -4,7 +4,7 @@ using System.Linq;
 using Moq;
 using NCore;
 using NUnit.Framework;
-using PineCone.Serializers;
+using PineCone.Annotations;
 using PineCone.Structures;
 using PineCone.Structures.Schemas;
 
@@ -228,6 +228,32 @@ namespace PineCone.Tests.UnitTests.Structures.StructureBuilderTests
             Assert.AreEqual("ConcurrencyToken", structure.Indexes[1].Path);
         }
 
+        [Test]
+        public void CreateStructure_When_structure_has_null_collection_It_should_create_structure_with_index_for_other_members()
+        {
+            var schema = StructureSchemaTestFactory.CreateRealFrom<WithNullCollection>();
+            var item = new WithNullCollection {Temp = "Foo", Values = null};
+
+            var structure = Builder.CreateStructure(item, schema);
+
+            Assert.AreEqual(2, structure.Indexes.Count);
+            Assert.AreEqual("StructureId", structure.Indexes[0].Path);
+            Assert.AreEqual("Temp", structure.Indexes[1].Path);
+        }
+
+        [Test]
+        public void CreateStructure_When_structure_has_null_collection_with_uniques_It_should_create_structure_with_index_for_other_members()
+        {
+            var schema = StructureSchemaTestFactory.CreateRealFrom<WithNullUniquesCollection>();
+            var item = new WithNullUniquesCollection { Temp = "Foo", Values = null };
+
+            var structure = Builder.CreateStructure(item, schema);
+
+            Assert.AreEqual(2, structure.Indexes.Count);
+            Assert.AreEqual("StructureId", structure.Indexes[0].Path);
+            Assert.AreEqual("Temp", structure.Indexes[1].Path);
+        }
+
         private class TestItemForFirstLevel
         {
             public Guid StructureId { get; set; }
@@ -271,6 +297,31 @@ namespace PineCone.Tests.UnitTests.Structures.StructureBuilderTests
         {
             public Guid StructureId { get; set; }
             public Guid ConcurrencyToken { get; set; }
+        }
+
+        public class WithNullCollection
+        {
+            public Guid StructureId { get; set; }
+            public List<Item> Values { get; set; }
+            public string Temp { get; set; }
+        }
+
+        public class Item
+        {
+            public string Value { get; set; }
+        }
+
+        public class WithNullUniquesCollection
+        {
+            public Guid StructureId { get; set; }
+            public List<UniqueItem> Values { get; set; }
+            public string Temp { get; set; }
+        }
+
+        public class UniqueItem
+        {
+            [Unique(UniqueModes.PerType)]
+            public string Value { get; set; }
         }
 
         [Serializable]

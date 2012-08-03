@@ -244,8 +244,21 @@ namespace PineCone.Tests.UnitTests.Structures.StructureBuilderTests
         [Test]
         public void CreateStructure_When_structure_has_null_collection_with_uniques_It_should_create_structure_with_index_for_other_members()
         {
-            var schema = StructureSchemaTestFactory.CreateRealFrom<WithNullUniquesCollection>();
-            var item = new WithNullUniquesCollection { Temp = "Foo", Values = null };
+            var schema = StructureSchemaTestFactory.CreateRealFrom<WithCollectionOfUniques>();
+            var item = new WithCollectionOfUniques { Temp = "Foo", Values = null };
+
+            var structure = Builder.CreateStructure(item, schema);
+
+            Assert.AreEqual(2, structure.Indexes.Count);
+            Assert.AreEqual("StructureId", structure.Indexes[0].Path);
+            Assert.AreEqual("Temp", structure.Indexes[1].Path);
+        }
+
+        [Test]
+        public void CreateStructure_When_structure_has_empty_collection_with_uniques_It_should_create_structure_with_index_for_other_members()
+        {
+            var schema = StructureSchemaTestFactory.CreateRealFrom<WithCollectionOfUniques>();
+            var item = new WithCollectionOfUniques { Temp = "Foo", Values = new List<UniqueItem>() };
 
             var structure = Builder.CreateStructure(item, schema);
 
@@ -311,7 +324,7 @@ namespace PineCone.Tests.UnitTests.Structures.StructureBuilderTests
             public string Value { get; set; }
         }
 
-        public class WithNullUniquesCollection
+        public class WithCollectionOfUniques
         {
             public Guid StructureId { get; set; }
             public List<UniqueItem> Values { get; set; }
